@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitsblatt: Dynamische Array-Verwaltung</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo-placeholder {
+            background: #eee;
+            color: #999;
+            width: 150px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 0.9em;
+            margin: 0 auto 20px auto;
+            border: 2px dashed #ccc;
+        }
+        
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .lernziele {
+            background: #f0f7ff;
+            border-left: 4px solid #2a5298;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .lernziele h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .lernziele ul {
+            margin-left: 20px;
+        }
+        
+        .lernziele li {
+            margin: 8px 0;
+        }
+        
+        .phase {
+            margin: 40px 0;
+            padding: 25px;
+            background: #fafafa;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .phase-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .phase-title {
+            flex: 1;
+        }
+        
+        .phase-title h2 {
+            color: #1e3c72;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .phase-subtitle {
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .toggle-icon {
+            font-size: 1.5em;
+            color: #667eea;
+            transition: transform 0.3s;
+        }
+        
+        .phase-content {
+            display: block;
+        }
+        
+        .phase.collapsed .phase-content {
+            display: none;
+        }
+        
+        .phase.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+        
+        /* CSS-Klasse hier umbenannt */
+        .gedankenbox, .hinweis, .warnung, .code-aufgabe {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        /* CSS-Klasse hier umbenannt */
+        .gedankenbox {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        /* CSS-Klasse hier umbenannt */
+        .gedankenbox h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .hinweis {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .hinweis h3 {
+            color: #0c5460;
+            margin-bottom: 10px;
+        }
+        
+        .warnung {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .warnung h3 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .code-aufgabe {
+            background: #e7f3ff;
+            border-left: 4px solid #2a5298;
+        }
+        
+        .code-aufgabe h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+        
+        .frage {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+        
+        .frage-text {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1e3c72;
+        }
+        
+        .antwort-optionen {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .antwort-option {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        .antwort-option:hover {
+            background: #f0f7ff;
+            border-color: #667eea;
+        }
+        
+        .antwort-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .antwort-option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+        
+        .antwort-option.wrong {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px 5px 10px 0;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+        
+        .code-input {
+            width: 100%;
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.95em;
+            resize: vertical;
+        }
+        
+        .code-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .progress-bar {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 15px 30px;
+            border-bottom: 2px solid #e0e0e0;
+            z-index: 100;
+        }
+        
+        .progress-track {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+            border-radius: 5px;
+        }
+        
+        .progress-text {
+            text-align: center;
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .checklist {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .checklist li {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 5px;
+            border: 2px solid #ddd;
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .checklist li::before {
+            content: "☐";
+            position: absolute;
+            left: 12px;
+            font-size: 1.3em;
+            color: #999;
+        }
+        
+        .checklist li.checked::before {
+            content: "✓";
+            color: #28a745;
+        }
+        
+        .differenzierung {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .differenzierung h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">Ihr Logo hier</div>
+            <h1>Dynamische Array-Verwaltung im Sonnensystem</h1>
+            <p>Von statischen zu dynamischen Datenstrukturen</p>
+        </header>
+        
+        <div class="progress-bar">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Fortschritt: 0%</div>
+        </div>
+        
+        <div class="content">
+            <div class="lernziele">
+                <h2>Lernziele dieser Stunde</h2>
+                <ul>
+                    <li>Verstehen, wie man ein statisches Array dynamisch verwalten kann</li>
+                    <li>Implementierung von <code>addHimmelskoerper()</code> und <code>getHimmelskoerper()</code></li>
+                    <li>Verwendung einer "Füllstandsanzeige" (Pegel) für Arrays</li>
+                    <li>Integration einer interaktiven GUI-Kontrollleiste (Swing)</li>
+                </ul>
+            </div>
+            
+            <div class="phase" data-phase="1">
+                <div class="phase-header" onclick="togglePhase(1)">
+                    <div class="phase-number">1</div>
+                    <div class="phase-title">
+                        <h2>Problemanalyse: Das statische Array</h2>
+                        <div class="phase-subtitle">Warum brauchen wir eine dynamische Verwaltung?</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="gedankenbox">
+                        <h3>Denke nach!</h3>
+                        <p>Schaue dir die aktuelle <code>urknall()</code>-Methode in der Sonnensystem-Klasse an. Welche Probleme siehst du bei der Verwaltung der Himmelskörper?</p>
+                    </div>
+                    
+                    <div class="frage" data-question="1">
+                        <div class="frage-text">Was passiert derzeit, wenn du mehr als 10 Himmelskörper hinzufügen möchtest?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Das Array wird automatisch größer</div>
+                            <div class="antwort-option" data-answer="b">b) Es gibt einen ArrayIndexOutOfBoundsException</div>
+                            <div class="antwort-option" data-answer="c">c) Die alten Himmelskörper werden überschrieben</div>
+                            <div class="antwort-option" data-answer="d">d) Es passiert gar nichts</div>
+                        </div>
+                        <button onclick="checkAnswer(1, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Das Problem verstehen</h3>
+                        <p>Aktuell wird das Array mit fester Größe erstellt:</p>
+                        <pre>objekte = new Himmelskoerper[10];</pre>
+                        <p>Du musst immer wissen, an welcher Position im Array noch Platz ist. Das ist unpraktisch und fehleranfällig!</p>
+                    </div>
+                    
+                    <div class="frage" data-question="2">
+                        <div class="frage-text">Wie könnten wir verfolgen, wie viele Himmelskörper bereits im Array gespeichert sind?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Eine Zählvariable (Pegel) verwenden</div>
+                            <div class="antwort-option" data-answer="b">b) Das gesamte Array jedes Mal durchsuchen</div>
+                            <div class="antwort-option" data-answer="c">c) Die length-Eigenschaft des Arrays verwenden</div>
+                            <div class="antwort-option" data-answer="d">d) Gar nicht, das ist nicht möglich</div>
+                        </div>
+                        <button onclick="checkAnswer(2, 'a')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(1)">Phase 1 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="2">
+                <div class="phase-header" onclick="togglePhase(2)">
+                    <div class="phase-number">2</div>
+                    <div class="phase-title">
+                        <h2>Die Pegel-Variable einführen</h2>
+                        <div class="phase-subtitle">Eine Füllstandsanzeige für unser Array</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Das Konzept des Pegels</h3>
+                        <p>Ein <strong>Pegel</strong> (auch "Index" oder "Füllstand" genannt) ist eine Zählvariable, die anzeigt, wie viele Elemente aktuell im Array gespeichert sind.</p>
+                        <p><strong>Beispiel:</strong> Wenn <code>pegel = 3</code>, dann sind die Positionen 0, 1 und 2 belegt, und die nächste freie Position ist Index 3.</p>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Aufräumen: <code>anzahlObjekte</code> ersetzen</h3>
+                        <p>In deiner <code>Sonnensystem.java</code>-Klasse findest du wahrscheinlich noch die Variable <code>int anzahlObjekte;</code>. Diese wird nicht mehr benötigt und kann gelöscht werden.</p>
+                        <p>Ersetze sie direkt durch die neue Instanzvariable für den Pegel:</p>
+                        <pre>public class Sonnensystem implements ActionListener {
+    // ... andere Variablen
+    private Himmelskoerper[] objekte;
+    private int pegel; // NEU (ersetzt anzahlObjekte)
+    
+    public Sonnensystem() {
+        objekte = new Himmelskoerper[10];
+        pegel = 0; // WICHTIG: Initialisieren!
+    }
+    // ...
+}</pre>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: Pegel-Variable deklarieren</h3>
+                        <p>Falls du es nicht schon im Schritt vorher getan hast: Füge in der Klasse <code>Sonnensystem</code> die Instanzvariable <code>pegel</code> vom Typ <code>int</code> hinzu und initialisiere sie im Konstruktor mit <code>0</code>.</p>
+                        
+                        <textarea class="code-input" id="code2" placeholder="Schreibe hier deine Deklaration, falls nötig..."></textarea>
+                        <button onclick="checkCode(2)">Code überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(2)">Phase 2 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="3">
+                <div class="phase-header" onclick="togglePhase(3)">
+                    <div class="phase-number">3</div>
+                    <div class="phase-title">
+                        <h2>Die addHimmelskoerper()-Methode</h2>
+                        <div class="phase-subtitle">Himmelskörper dynamisch hinzufügen</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Was soll die Methode tun?</h3>
+                        <p>Die Methode <code>addHimmelskoerper(Himmelskoerper hk)</code> soll:</p>
+                        <ul class="checklist">
+                            <li>Einen übergebenen Himmelskörper entgegennehmen</li>
+                            <li>Prüfen, ob noch Platz im Array ist</li>
+                            <li>Den Himmelskörper an die nächste freie Position setzen</li>
+                            <li>Den Pegel erhöhen</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="frage" data-question="3">
+                        <div class="frage-text">An welche Array-Position muss der neue Himmelskörper gespeichert werden?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) objekte[0]</div>
+                            <div class="antwort-option" data-answer="b">b) objekte[pegel]</div>
+                            <div class="antwort-option" data-answer="c">c) objekte[pegel - 1]</div>
+                            <div class="antwort-option" data-answer="d">d) objekte[objekte.length]</div>
+                        </div>
+                        <button onclick="checkAnswer(3, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="warnung">
+                        <h3>Achtung: Array-Grenzen!</h3>
+                        <p>Bevor du einen Himmelskörper hinzufügst, musst du prüfen, ob <code>pegel < objekte.length</code> ist. Sonst bekommst du einen <code>ArrayIndexOutOfBoundsException</code>!</p>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: addHimmelskoerper() implementieren</h3>
+                        <p>Implementiere die Methode mit folgenden Schritten:</p>
+                        <ol>
+                            <li>Prüfe, ob noch Platz im Array ist</li>
+                            <li>Falls ja: Füge den Himmelskörper hinzu und erhöhe den Pegel</li>
+                            <li>Falls nein: Gib eine Fehlermeldung aus</li>
+                        </ol>
+                        
+                        <textarea class="code-input" id="code3" placeholder="public void addHimmelskoerper(Himmelskoerper hk) {
+    // Dein Code hier
+}"></textarea>
+                        <button onclick="showSolution(3)">Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(3)">Phase 3 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="4">
+                <div class="phase-header" onclick="togglePhase(4)">
+                    <div class="phase-number">4</div>
+                    <div class="phase-title">
+                        <h2>Die getHimmelskoerper()-Methode</h2>
+                        <div class="phase-subtitle">Zugriff auf einen bestimmten Himmelskörper</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="gedankenbox">
+                        <h3>Überlege zuerst!</h3>
+                        <p>Was soll die Methode <code>getHimmelskoerper(int index)</code> zurückgeben? Welchen Rückgabetyp braucht sie?</p>
+                    </div>
+                    
+                    <div class="frage" data-question="4">
+                        <div class="frage-text">Was sollte passieren, wenn jemand einen ungültigen Index übergibt (z.B. -1 oder 100)?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Das Programm sollte abstürzen</div>
+                            <div class="antwort-option" data-answer="b">b) null zurückgeben oder eine Fehlermeldung ausgeben</div>
+                            <div class="antwort-option" data-answer="c">c) Automatisch Index 0 verwenden</div>
+                            <div class="antwort-option" data-answer="d">d) Einfach ignorieren</div>
+                        </div>
+                        <button onclick="checkAnswer(4, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Wichtige Prüfungen</h3>
+                        <p>Die Methode muss prüfen:</p>
+                        <ul>
+                            <li>Ist der Index ≥ 0?</li>
+                            <li>Ist der Index < pegel? (nicht < objekte.length!)</li>
+                        </ul>
+                        <p><strong>Warum < pegel?</strong> Weil wir nur auf die tatsächlich belegten Positionen zugreifen wollen!</p>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: getHimmelskoerper() implementieren</h3>
+                        <p>Implementiere die Methode mit Fehlerbehandlung:</p>
+                        
+                        <textarea class="code-input" id="code4" placeholder="public Himmelskoerper getHimmelskoerper(int index) {
+    // Dein Code hier
+}"></textarea>
+                        <button onclick="showSolution(4)">Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(4)">Phase 4 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="5">
+                <div class="phase-header" onclick="togglePhase(5)">
+                    <div class="phase-number">5</div>
+                    <div class="phase-title">
+                        <h2>urknall() umbauen</h2>
+                        <div class="phase-subtitle">Die neue Methode verwenden</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: urknall() vereinfachen</h3>
+                        <p>Statt direkt auf das Array zuzugreifen, nutze deine neuen Methoden. Der Trick ist: Du fügst ein Objekt hinzu und holst es dir sofort über <code>getHimmelskoerper()</code> mit dem entsprechenden Index (den du ja kennst), um seine Eigenschaften zu setzen.</p>
+
+                        <p><strong>Alt:</strong></p>
+                        <pre>objekte[0] = new Stern();
+objekte[0].setDurchmesser(50);
+
+objekte[1] = new Planet();
+objekte[1].setDurchmesser(20);
+//...</pre>
+                        
+                        <p><strong>Neu:</strong></p>
+                        <pre>addHimmelskoerper(new Stern());
+getHimmelskoerper(0).setDurchmesser(50);
+
+addHimmelskoerper(new Planet());
+getHimmelskoerper(1).setDurchmesser(20);
+//...</pre>
+
+                        <p>Schreibe die komplette <code>urknall()</code>-Methode neu, sodass alle Himmelskörper (auch die "Erde") über die <code>add/get</code>-Methoden erstellt werden.</p>
+                        
+                        <textarea class="code-input" id="code5" style="min-height: 250px;" placeholder="public void urknall() {
+    // Erstelle Stern und Planeten mit addHimmelskoerper()
+    // und konfiguriere sie mit getHimmelskoerper().
+    // ...
+    // GUI-Erstellung (Frame, Zeichenfläche) bleibt hier.
+}"></textarea>
+                    </div>
+                    
+                    <div class="gedankenbox">
+                        <h3>Denke nach!</h3>
+                        <p>In der `urknall`-Methode ist es einfach, die Indizes (0, 1, 2) von Hand zu schreiben. Wie könntest du (z.B. in einem Button-Listener) das *zuletzt hinzugefügte* Objekt bekommen, ohne den genauen Index zu kennen?</p>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer; color: #667eea; font-weight: 600;">Antwort anzeigen</summary>
+                            <p style="margin-top: 10px;">Der Pegel zeigt auf die *nächste* freie Stelle. Das zuletzt hinzugefügte Element befindet sich also immer bei Index <code>pegel - 1</code>. Mit <code>getHimmelskoerper(pegel - 1)</code> würdest du es bekommen!</p>
+                        </details>
+                    </div>
+                    
+                    <button onclick="completePhase(5)">Phase 5 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="6">
+                <div class="phase-header" onclick="togglePhase(6)">
+                    <div class="phase-number">6</div>
+                    <div class="phase-title">
+                        <h2>GUI-Kontrollleiste erstellen</h2>
+                        <div class="phase-subtitle">Eine interaktive Leiste hinzufügen</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    
+                    <div class="hinweis">
+                        <h3>Neues Konzept: LayoutManager</h3>
+                        <p>Wir verwenden <code>BorderLayout</code> für das Hauptfenster (CENTER, SOUTH) und <code>FlowLayout</code> für das Panel (Komponenten fließen von links nach rechts).</p>
+                    </div>
+                    
+                    <div class="warnung">
+                        <h3>Wichtig: Imports nicht vergessen!</h3>
+                        <p>Stelle sicher, dass du alle nötigen Klassen importierst:</p>
+                        <pre>import java.awt.BorderLayout;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JTextField; 
+import javax.swing.JLabel;</pre>
+                    </div>
+
+                    <div class="hinweis">
+                        <h3>Wichtig: Instanzvariablen</h3>
+                        <p>Damit unsere ActionListener (Phase 7) auf die Textfelder zugreifen können, müssen wir sie als **Instanzvariablen** (Attribute) in der <code>Sonnensystem</code>-Klasse deklarieren.</p>
+                        <pre>// Oben bei den Attributen der Klasse Sonnensystem:
+private Himmelskoerper[] objekte;
+private int pegel;
+// ...
+private JTextField durchmesserFeld; // NEU
+private JTextField orbitFeld; // NEU
+</pre>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: Kontroll-Panel erstellen</h3>
+                        <p>Füge in der <code>urknall()</code>-Methode (nach der Erstellung der Zeichenfläche) den Code für die GUI-Erweiterung hinzu.</p>
+                        
+                        <textarea class="code-input" id="code6" style="min-height: 300px;" placeholder="// In der urknall()-Methode...
+
+// 1. Panel für Buttons erstellen
+JPanel kontrollPanel = new JPanel(); // Hat automatisch FlowLayout
+
+// 2. Label und Textfeld für Durchmesser
+JLabel durchmesserLabel = new JLabel(&quot;Durchmesser:&quot;);
+this.durchmesserFeld = new JTextField(5); // 5 Spalten breit
+this.durchmesserFeld.setText(&quot;20&quot;); // Standardwert
+
+// 3. Label und Textfeld für Orbit
+JLabel orbitLabel = new JLabel(&quot;Orbit-Radius:&quot;);
+this.orbitFeld = new JTextField(5); // 5 Spalten breit
+this.orbitFeld.setText(&quot;250&quot;); // Standardwert
+
+// 4. Button erstellen
+JButton planetButton = new JButton(&quot;Planet hinzufügen&quot;);
+
+// 5. Komponenten zum Panel hinzufügen
+kontrollPanel.add(durchmesserLabel);
+kontrollPanel.add(this.durchmesserFeld);
+kontrollPanel.add(orbitLabel);
+kontrollPanel.add(this.orbitFeld);
+kontrollPanel.add(planetButton);
+
+// 6. Layout des Haupt-Frames setzen und Komponenten hinzufügen
+this.frame.setLayout(new BorderLayout());
+this.frame.add(zeichenflaeche, BorderLayout.CENTER);
+this.frame.add(kontrollPanel, BorderLayout.SOUTH);
+
+// WICHTIG: frame.pack() und setVisible(true) müssen
+// NACH dem Hinzufügen aller Komponenten erfolgen!
+"></textarea>
+                        <button onclick="showSolution(6)">Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(6)">Phase 6 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="7">
+                <div class="phase-header" onclick="togglePhase(7)">
+                    <div class="phase-number">7</div>
+                    <div class="phase-title">
+                        <h2>Button-Funktionalität implementieren</h2>
+                        <div class="phase-subtitle">Den ActionListener programmieren</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Text auslesen und umwandeln</h3>
+                        <p>Wir müssen jetzt *beide* Textfelder auslesen und die <code>Strings</code> in <code>double</code>-Werte umwandeln:</p>
+                        <pre>// Text aus Feld 1
+String dText = this.durchmesserFeld.getText();
+double durchmesser = Double.parseDouble(dText);
+
+// Text aus Feld 2
+String oText = this.orbitFeld.getText();
+double orbit = Double.parseDouble(oText);</pre>
+                    </div>
+
+                    <div class="warnung">
+                        <h3>Fehlerbehandlung mit try-catch</h3>
+                        <p>Was passiert, wenn ein Benutzer "Hallo" in eines der Felder eingibt? Das Programm stürzt ab. Wir fangen dies mit <code>try-catch</code> ab.</p>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: ActionListener implementieren</h3>
+                        <p>Füge für den "Planet hinzufügen"-Button einen ActionListener hinzu. Er soll:</p>
+                        <ol>
+                            <li>Beide Textfelder auslesen (Durchmesser & Orbit).</li>
+                            <li>Beide Texte in <code>double</code> umwandeln (mit <code>try-catch</code>!).</li>
+                            <li>Einen neuen <code>Planet</code> erstellen.</li>
+                            <li>Den eingelesenen Durchmesser und Orbit-Radius setzen.</li>
+                            <li>Sinnvolle Standardwerte für Farbe und Geschwindigkeit setzen.</li>
+                            <li>Das Objekt mit <code>addHimmelskoerper()</code> zum System hinzufügen.</li>
+                        </ol>
+                        
+                        <textarea class="code-input" id="code7" style="min-height: 350px;" placeholder="// ActionListener für den Button
+planetButton.addActionListener(e -> {
+    try {
+        // 1. & 2. Text auslesen und umwandeln
+        String dText = this.durchmesserFeld.getText();
+        double durchmesser = Double.parseDouble(dText);
+        
+        String oText = this.orbitFeld.getText();
+        double orbit = Double.parseDouble(oText);
+
+        // 3. & 4. & 5. Objekt erstellen und konfigurieren
+        Planet p = new Planet();
+        p.setDurchmesser(durchmesser); // Wert aus Textfeld 1
+        p.setOrbitRadius(orbit);     // Wert aus Textfeld 2
+        
+        p.setFarbe(&quot;rot&quot;);
+        p.setGeschwindigkeit(0.003 + Math.random() * 0.005); // Zufall
+        
+        // 6. Objekt hinzufügen
+        addHimmelskoerper(p);
+
+    } catch (NumberFormatException ex) {
+        System.out.println(&quot;Fehler: Bitte gültige Zahlen eingeben!&quot;);
+    }
+});
+"></textarea>
+                        <button onclick="showSolution(7)">Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(7)">Phase 7 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="8">
+                <div class="phase-header" onclick="togglePhase(8)">
+                    <div class="phase-number">8</div>
+                    <div class="phase-title">
+                        <h2>Testen und Debuggen</h2>
+                        <div class="phase-subtitle">Überprüfe deine Implementierung</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+
+                    <div class="code-aufgabe">
+                        <h3>Optimierung: Schleifen anpassen!</h3>
+                        <p>Bevor wir testen: Stelle sicher, dass deine Schleifen in <code>actionPerformed</code> und <code>paintComponent</code> nur noch bis <code>pegel</code> laufen.</p>
+                        <pre>// Alt: for (int i = 0; i < this.objekte.length; i++)
+// Neu:
+for (int i = 0; i < this.pegel; i++)</pre>
+                        <p>Entferne dabei auch die <code>if (objekte[i] != null)</code>-Prüfung!</p>
+                    </div>
+
+                    <div class="hinweis">
+                        <h3>Testplan</h3>
+                        <p>Teste dein Programm systematisch:</p>
+                    </div>
+                    
+                    <ul class="checklist" id="testChecklist">
+                        <li onclick="toggleCheck(this)">Das Fenster startet mit den ursprünglichen Himmelskörpern.</li>
+                        <li onclick="toggleCheck(this)">Die Kontrollleiste ist am unteren Rand sichtbar.</li>
+                        <li onclick="toggleCheck(this)">Standardwerte ("20", "250") sind in den Textfeldern voreingestellt.</li>
+                        <li onclick="toggleCheck(this)">Klick auf "Planet hinzufügen" fügt einen Planeten mit den Standardwerten hinzu.</li>
+                        <li onclick="toggleCheck(this)">Ändere den Durchmesser auf "50". Erscheint der neue Planet größer?</li>
+                        <li onclick="toggleCheck(this)">Ändere den Orbit auf "400". Erscheint der neue Planet weiter außen?</li>
+                        <li onclick="toggleCheck(this)">Gib "Hallo" in eines der Textfelder ein. Stürzt das Programm ab? (Sollte es nicht!)</li>
+                    </ul>
+                    
+                    <button onclick="completePhase(8)">Phase 8 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="9">
+                <div class="phase-header" onclick="togglePhase(9)">
+                    <div class="phase-number">⭐</div>
+                    <div class="phase-title">
+                        <h2>Differenzierung: Löschen-Funktion</h2>
+                        <div class="phase-subtitle">Für schnelle Schüler*innen</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="differenzierung">
+                        <h3>Erweiterungsaufgabe</h3>
+                        <p>Implementiere eine Methode <code>removeHimmelskoerper(int index)</code>, die einen Himmelskörper aus dem Array entfernt.</p>
+                    </div>
+                    
+                    <div class="gedankenbox">
+                        <h3>Denke nach!</h3>
+                        <p>Was muss beim Löschen passieren?</p>
+                        <ul>
+                            <li>Wie vermeidest du "Lücken" im Array?</li>
+                            <li>Müssen Elemente verschoben werden?</li>
+                            <li>Was passiert mit dem Pegel?</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Lösungs-Strategie</h3>
+                        <p>Es gibt zwei Ansätze:</p>
+                        <ol>
+                            <li><strong>Mit Verschieben:</strong> Alle Elemente nach dem gelöschten Element um eine Position nach vorne schieben</li>
+                            <li><strong>Swap mit letztem Element:</strong> Das zu löschende Element mit dem letzten Element tauschen und Pegel verringern</li>
+                        </ol>
+                        <p>Welcher Ansatz ist einfacher? Welcher erhält die Reihenfolge?</p>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe 1: removeHimmelskoerper() implementieren</h3>
+                        <textarea class="code-input" id="code9a" style="min-height: 250px;" placeholder="public void removeHimmelskoerper(int index) {
+    // Prüfe ob Index gültig ist
+    // Entferne Element
+    // Passe Pegel an
+}"></textarea>
+                        <button onclick="showSolution('9a')">Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe 2: Löschen-Button hinzufügen</h3>
+                        <p>Füge einen Button "Letzten löschen" zur Kontrollleiste hinzu, der den zuletzt hinzugefügten Himmelskörper entfernt.</p>
+                        <textarea class="code-input" id="code9b" style="min-height: 150px;" placeholder="// Button erstellen und ActionListener hinzufügen"></textarea>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="phase collapsed" data-phase="10">
+                <div class="phase-header" onclick="togglePhase(10)">
+                    <div class="phase-number">🎓</div>
+                    <div class="phase-title">
+                        <h2>Reflexion und Ausblick</h2>
+                        <div class="phase-subtitle">Was haben wir gelernt?</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="frage" data-question="10">
+                        <div class="frage-text">Was ist der Hauptvorteil der Pegel-Variable gegenüber der direkten Array-Manipulation?</div>
+                        <textarea class="code-input" placeholder="Deine Antwort..." style="min-height: 100px;"></textarea>
+                    </div>
+                    
+                    <div class="frage" data-question="11">
+                        <div class="frage-text">Welche Nachteile hat unsere aktuelle Lösung mit dem statischen Array noch?</div>
+                        <textarea class="code-input" placeholder="Deine Antwort..." style="min-height: 100px;"></textarea>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Ausblick: ArrayList</h3>
+                        <p>In den nächsten Stunden werden wir zu <code>ArrayList</code> wechseln. Der große Vorteil:</p>
+                        <ul>
+                            <li>✅ Keine feste Größe mehr</li>
+                            <li>✅ Automatische Verwaltung der Kapazität</li>
+                            <li>✅ Eingebaute Methoden wie <code>add()</code>, <code>remove()</code>, <code>get()</code></li>
+                            <li>✅ Kein Pegel mehr nötig - <code>size()</code> gibt die Anzahl zurück</li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="completePhase(10)">Arbeitsblatt abschließen 🎉</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        const progress = {
+            total: 10,
+            completed: []
+        };
+        
+        const solutions = {
+            3: `public void addHimmelskoerper(Himmelskoerper hk) {
+    if (pegel < objekte.length) {
+        objekte[pegel] = hk;
+        pegel++;
+    } else {
+        System.out.println("Fehler: Das Array ist voll!");
+    }
+}`,
+            4: `public Himmelskoerper getHimmelskoerper(int index) {
+    if (index >= 0 && index < pegel) {
+        return objekte[index];
+    } else {
+        System.out.println("Fehler: Ungültiger Index!");
+        return null;
+    }
+}`,
+            6: `// Oben bei den Attributen (Instanzvariablen):
+private JTextField durchmesserFeld;
+private JTextField orbitFeld;
+
+// In der urknall()-Methode:
+JPanel kontrollPanel = new JPanel();
+
+JLabel durchmesserLabel = new JLabel("Durchmesser:");
+this.durchmesserFeld = new JTextField(5);
+this.durchmesserFeld.setText("20");
+
+JLabel orbitLabel = new JLabel("Orbit-Radius:");
+this.orbitFeld = new JTextField(5);
+this.orbitFeld.setText("250");
+
+JButton planetButton = new JButton("Planet hinzufügen");
+
+kontrollPanel.add(durchmesserLabel);
+kontrollPanel.add(this.durchmesserFeld);
+kontrollPanel.add(orbitLabel);
+kontrollPanel.add(this.orbitFeld);
+kontrollPanel.add(planetButton);
+
+this.frame.setLayout(new BorderLayout());
+this.frame.add(zeichenflaeche, BorderLayout.CENTER);
+this.frame.add(kontrollPanel, BorderLayout.SOUTH);`,
+            7: `planetButton.addActionListener(e -> {
+    try {
+        String dText = this.durchmesserFeld.getText();
+        double durchmesser = Double.parseDouble(dText);
+        
+        String oText = this.orbitFeld.getText();
+        double orbit = Double.parseDouble(oText);
+
+        Planet p = new Planet();
+        p.setDurchmesser(durchmesser);
+        p.setOrbitRadius(orbit);
+        
+        p.setFarbe("rot");
+        p.setGeschwindigkeit(0.003 + Math.random() * 0.005);
+        
+        addHimmelskoerper(p);
+
+    } catch (NumberFormatException ex) {
+        System.out.println("Fehler: Bitte gültige Zahlen in beide Felder eingeben!");
+    }
+});`,
+            '9a': `public void removeHimmelskoerper(int index) {
+    if (index >= 0 && index < pegel) {
+        // Variante 1: Mit Verschieben (erhält Reihenfolge)
+        for (int i = index; i < pegel - 1; i++) {
+            objekte[i] = objekte[i + 1];
+        }
+        objekte[pegel - 1] = null;  // Letzte Position leeren
+        pegel--;
+        
+        /* Variante 2: Swap mit letztem Element (schneller)
+        objekte[index] = objekte[pegel - 1];
+        objekte[pegel - 1] = null;
+        pegel--;
+        */
+    } else {
+        System.out.println("Fehler: Ungültiger Index!");
+    }
+}`
+        };
+        
+        const correctAnswers = {
+            1: 'b',
+            2: 'a',
+            3: 'b',
+            4: 'b',
+            6: 'b' // Diese Frage existiert in dieser Version nicht mehr, aber wir lassen sie im JS
+        };
+        
+        const answerFeedback = {
+            1: {
+                correct: 'Genau! Wenn du versuchst, mehr als 10 Elemente einzufügen (Index > 9), bekommst du einen ArrayIndexOutOfBoundsException.',
+                wrong: 'Nicht ganz. Arrays haben eine feste Größe in Java. Wenn du versuchst, außerhalb der Grenzen zuzugreifen, gibt es einen Fehler.'
+            },
+            2: {
+                correct: 'Richtig! Eine Zählvariable (Pegel) speichert, wie viele Elemente aktuell im Array sind. Das ist effizient und einfach.',
+                wrong: 'Das wäre möglich, aber sehr ineffizient. Eine einfache Zählvariable ist die bessere Lösung.'
+            },
+            3: {
+                correct: 'Perfekt! Der Pegel zeigt immer auf die nächste freie Position. Bei pegel=3 sind Positionen 0,1,2 belegt, und 3 ist frei.',
+                wrong: 'Überlege noch mal: Wenn pegel=3, wie viele Elemente sind dann schon im Array?'
+            },
+            4: {
+                correct: 'Genau! Wir sollten null zurückgeben oder eine Fehlermeldung ausgeben. Das Programm sollte kontrolliert reagieren, nicht abstürzen.',
+                wrong: 'Denk daran: Guter Code sollte Fehler abfangen und nicht einfach abstürzen oder falsches Verhalten zeigen.'
+            }
+        };
+        
+        function togglePhase(phaseNum) {
+            const phase = document.querySelector(`[data-phase="${phaseNum}"]`);
+            phase.classList.toggle('collapsed');
+        }
+        
+        function checkAnswer(questionNum, correctAnswer) {
+            const question = document.querySelector(`[data-question="${questionNum}"]`);
+            const options = question.querySelectorAll('.antwort-option');
+            const feedback = question.querySelector('.feedback');
+            const button = question.querySelector('button');
+            
+            let selectedAnswer = null;
+            options.forEach(opt => {
+                if (opt.classList.contains('selected')) {
+                    selectedAnswer = opt.dataset.answer;
+                }
+            });
+            
+            if (!selectedAnswer) {
+                alert('Bitte wähle zuerst eine Antwort aus!');
+                return;
+            }
+            
+            const isCorrect = selectedAnswer === correctAnswer;
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.answer === correctAnswer) {
+                    opt.classList.add('correct');
+                } else if (opt.classList.contains('selected')) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+            feedback.textContent = isCorrect ? 
+                answerFeedback[questionNum].correct : 
+                answerFeedback[questionNum].wrong;
+            
+            button.disabled = true;
+        }
+        
+        document.querySelectorAll('.antwort-option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (this.style.pointerEvents === 'none') return;
+                
+                const question = this.closest('.frage');
+                question.querySelectorAll('.antwort-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+        
+        function checkCode(phaseNum) {
+            const textarea = document.getElementById(`code${phaseNum}`);
+            const feedback = textarea.nextElementSibling.nextElementSibling;
+            const code = textarea.value.trim();
+            
+            if (!code) {
+                alert('Bitte schreibe erst deinen Code!');
+                return;
+            }
+            
+            if (phaseNum === 2) {
+                if (code.includes('int pegel') && (code.includes('= 0') || !code.includes('='))) {
+                    feedback.className = 'feedback show correct';
+                    feedback.textContent = '✓ Sehr gut! Die Deklaration "private int pegel;" (mit Initialisierung im Konstruktor) ist korrekt!';
+                } else {
+                    feedback.className = 'feedback show wrong';
+                    feedback.textContent = 'Überprüfe: Hast du "int pegel" deklariert und im Konstruktor auf 0 initialisiert?';
+                }
+            }
+        }
+        
+        function showSolution(phaseNum) {
+            const textarea = document.getElementById(`code${phaseNum}`);
+            const feedback = textarea.nextElementSibling.nextElementSibling;
+            feedback.className = 'feedback show';
+            // Escape HTML characters for solution display
+            const solutionText = (solutions[phaseNum] || "Lösung nicht gefunden.")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+            feedback.innerHTML = '<strong>Musterlösung:</strong><pre>' + solutionText + '</pre>';
+        }
+        
+        function completePhase(phaseNum) {
+            if (!progress.completed.includes(phaseNum)) {
+                progress.completed.push(phaseNum);
+                updateProgress();
+            }
+            
+            // Öffne nächste Phase
+            if (phaseNum < 10) {
+                const nextPhase = document.querySelector(`[data-phase="${phaseNum + 1}"]`);
+                if (nextPhase && nextPhase.classList.contains('collapsed')) {
+                    nextPhase.classList.remove('collapsed');
+                    nextPhase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else if (phaseNum === 10) {
+                alert('🎉 Herzlichen Glückwunsch! Du hast das Arbeitsblatt abgeschlossen!');
+            }
+        }
+        
+        function updateProgress() {
+            const percentage = (progress.completed.length / progress.total) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = 
+                `Fortschritt: ${Math.round(percentage)}% (${progress.completed.length}/${progress.total} Phasen)`;
+        }
+        
+        function toggleCheck(element) {
+            element.classList.toggle('checked');
+        }
+        
+        // Initial progress
+        updateProgress();
+    </script>
+</body>
+</html>
