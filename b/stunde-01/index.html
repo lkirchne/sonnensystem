@@ -36,6 +36,7 @@
             text-align: center;
         }
 
+        /* --- CSS-REGEL WIE ANGEFORDERT GEÄNDERT --- */
         .logo-placeholder {
             color: #999;
             width: 230px;
@@ -73,11 +74,12 @@
             font-size: 1.4em;
         }
         
-        .lernziele ul {
+        .lernziele ul, .content ul {
             margin-left: 20px;
+            padding-left: 20px; /* Sorgt für Einrückung bei normalen Listen */
         }
         
-        .lernziele li {
+        .lernziele li, .content li {
             margin: 8px 0;
         }
         
@@ -145,20 +147,17 @@
             transform: rotate(-90deg);
         }
         
-        /* CSS-Klasse hier umbenannt */
         .gedankenbox, .hinweis, .warnung, .code-aufgabe {
             margin: 20px 0;
             padding: 20px;
             border-radius: 8px;
         }
         
-        /* CSS-Klasse hier umbenannt */
         .gedankenbox {
             background: #fff3cd;
             border-left: 4px solid #ffc107;
         }
         
-        /* CSS-Klasse hier umbenannt */
         .gedankenbox h3 {
             color: #856404;
             margin-bottom: 10px;
@@ -362,9 +361,11 @@
             font-size: 0.9em;
         }
         
+        /* Die .checklist-Klasse ist noch für Phase 8 und 10 vorhanden */
         .checklist {
             list-style: none;
             margin: 20px 0;
+            padding-left: 0; /* Checklist braucht keine doppelte Einrückung */
         }
         
         .checklist li {
@@ -539,7 +540,8 @@
                     <div class="hinweis">
                         <h3>Was soll die Methode tun?</h3>
                         <p>Die Methode <code>addHimmelskoerper(Himmelskoerper hk)</code> soll:</p>
-                        <ul class="checklist">
+                        
+                        <ul>
                             <li>Einen übergebenen Himmelskörper entgegennehmen</li>
                             <li>Prüfen, ob noch Platz im Array ist</li>
                             <li>Den Himmelskörper an die nächste freie Position setzen</li>
@@ -567,7 +569,7 @@
                     <div class="code-aufgabe">
                         <h3>Aufgabe: addHimmelskoerper() implementieren</h3>
                         <p>Implementiere die Methode mit folgenden Schritten:</p>
-                        <ol>
+                        <ol style="margin-left: 20px; padding-left: 20px;">
                             <li>Prüfe, ob noch Platz im Array ist</li>
                             <li>Falls ja: Füge den Himmelskörper hinzu und erhöhe den Pegel</li>
                             <li>Falls nein: Gib eine Fehlermeldung aus</li>
@@ -654,17 +656,11 @@
                         <p><strong>Alt:</strong></p>
                         <pre>objekte[0] = new Stern();
 objekte[0].setDurchmesser(50);
-
-objekte[1] = new Planet();
-objekte[1].setDurchmesser(20);
 //...</pre>
                         
                         <p><strong>Neu:</strong></p>
                         <pre>addHimmelskoerper(new Stern());
 getHimmelskoerper(0).setDurchmesser(50);
-
-addHimmelskoerper(new Planet());
-getHimmelskoerper(1).setDurchmesser(20);
 //...</pre>
 
                         <p>Schreibe die komplette <code>urknall()</code>-Methode neu, sodass alle Himmelskörper (auch die "Erde") über die <code>add/get</code>-Methoden erstellt werden.</p>
@@ -678,7 +674,7 @@ getHimmelskoerper(1).setDurchmesser(20);
                     </div>
                     
                     <div class="gedankenbox">
-                        <h3>Denke nach!</h3>
+                        <h3>Denke nach! (get(pegel-1))</h3>
                         <p>In der `urknall`-Methode ist es einfach, die Indizes (0, 1, 2) von Hand zu schreiben. Wie könntest du (z.B. in einem Button-Listener) das *zuletzt hinzugefügte* Objekt bekommen, ohne den genauen Index zu kennen?</p>
                         <details style="margin-top: 10px;">
                             <summary style="cursor: pointer; color: #667eea; font-weight: 600;">Antwort anzeigen</summary>
@@ -703,7 +699,22 @@ getHimmelskoerper(1).setDurchmesser(20);
                     
                     <div class="hinweis">
                         <h3>Neues Konzept: LayoutManager</h3>
-                        <p>Wir verwenden <code>BorderLayout</code> für das Hauptfenster (CENTER, SOUTH) und <code>FlowLayout</code> für das Panel (Komponenten fließen von links nach rechts).</p>
+                        <p>Bisher hat unser Fenster (<code>JFrame</code>) nur eine einzige Komponente angezeigt: die <code>Zeichenflaeche</code>.</p>
+                        <p>Sobald wir *mehrere* Komponenten (z.B. die Zeichenfläche UND eine Button-Leiste) hinzufügen wollen, müssen wir Java sagen, *wie* diese angeordnet werden sollen. Das ist die Aufgabe eines <strong>LayoutManagers</strong>.</p>
+                        <ul>
+                            <li><strong><code>BorderLayout</code>:</strong> Teilt das Fenster in 5 Zonen: NORTH, SOUTH, EAST, WEST und CENTER. Es ist perfekt, um die Hauptbereiche einer Anwendung zu definieren.</li>
+                            <li><strong><code>FlowLayout</code>:</strong> Ordnet Komponenten einfach nebeneinander, so wie Text in einem Texteditor (von links nach rechts). Es ist ideal für Button-Leisten.</li>
+                        </ul>
+
+                        <h4>Unser Plan:</h4>
+                        <ol style="margin-left: 20px; padding-left: 20px;">
+                            <li>Wir setzen das Layout des <code>JFrame</code> auf <code>BorderLayout</code>.</li>
+                            <li>Wir legen die <code>Zeichenflaeche</code> in die Mitte (<code>BorderLayout.CENTER</code>).</li>
+                            <li>Wir erstellen ein neues <code>JPanel</code> (einen "Container") für unsere Kontrollleiste.</li>
+                            <li>Dieses <code>JPanel</code> hat standardmäßig ein <code>FlowLayout</code>.</li>
+                            <li>Wir fügen alle Steuerelemente (Labels, Textfelder, Button) zu diesem Panel hinzu.</li>
+                            <li>Wir legen das <code>JPanel</code> in den Süden des Frames (<code>BorderLayout.SOUTH</code>).</li>
+                        </ol>
                     </div>
                     
                     <div class="warnung">
@@ -803,7 +814,7 @@ double orbit = Double.parseDouble(oText);</pre>
                     <div class="code-aufgabe">
                         <h3>Aufgabe: ActionListener implementieren</h3>
                         <p>Füge für den "Planet hinzufügen"-Button einen ActionListener hinzu. Er soll:</p>
-                        <ol>
+                        <ol style="margin-left: 20px; padding-left: 20px;">
                             <li>Beide Textfelder auslesen (Durchmesser & Orbit).</li>
                             <li>Beide Texte in <code>double</code> umwandeln (mit <code>try-catch</code>!).</li>
                             <li>Einen neuen <code>Planet</code> erstellen.</li>
@@ -913,7 +924,7 @@ for (int i = 0; i < this.pegel; i++)</pre>
                     <div class="hinweis">
                         <h3>Lösungs-Strategie</h3>
                         <p>Es gibt zwei Ansätze:</p>
-                        <ol>
+                        <ol style="margin-left: 20px; padding-left: 20px;">
                             <li><strong>Mit Verschieben:</strong> Alle Elemente nach dem gelöschten Element um eine Position nach vorne schieben</li>
                             <li><strong>Swap mit letztem Element:</strong> Das zu löschende Element mit dem letzten Element tauschen und Pegel verringern</li>
                         </ol>
@@ -970,6 +981,8 @@ for (int i = 0; i < this.pegel; i++)</pre>
                             <li>✅ Kein Pegel mehr nötig - <code>size()</code> gibt die Anzahl zurück</li>
                         </ul>
                     </div>
+                    
+                    <button onclick="completePhase(10)">Arbeitsblatt abschließen 🎉</button>
                 </div>
             </div>
             
@@ -1070,8 +1083,7 @@ this.frame.add(kontrollPanel, BorderLayout.SOUTH);`,
             1: 'b',
             2: 'a',
             3: 'b',
-            4: 'b',
-            6: 'b' // Diese Frage existiert in dieser Version nicht mehr, aber wir lassen sie im JS
+            4: 'b'
         };
         
         const answerFeedback = {
@@ -1170,12 +1182,14 @@ this.frame.add(kontrollPanel, BorderLayout.SOUTH);`,
         
         function showSolution(phaseNum) {
             const textarea = document.getElementById(`code${phaseNum}`);
-            const feedback = textarea.nextElementSibling.nextElementSibling;
-            feedback.className = 'feedback show';
+            const feedback = textarea ? textarea.nextElementSibling.nextElementSibling : document.querySelector(`[data-phase="${phaseNum}"] .feedback`);
+            if (!feedback) return;
+            
             // Escape HTML characters for solution display
             const solutionText = (solutions[phaseNum] || "Lösung nicht gefunden.")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;");
+            feedback.className = 'feedback show';
             feedback.innerHTML = '<strong>Musterlösung:</strong><pre>' + solutionText + '</pre>';
         }
         
@@ -1199,8 +1213,10 @@ this.frame.add(kontrollPanel, BorderLayout.SOUTH);`,
         
         function updateProgress() {
             const percentage = (progress.completed.length / progress.total) * 100;
-            document.getElementById('progressFill').style.width = percentage + '%';
-            document.getElementById('progressText').textContent = 
+            const fill = document.getElementById('progressFill');
+            const text = document.getElementById('progressText');
+            if (fill) fill.style.width = percentage + '%';
+            if (text) text.textContent = 
                 `Fortschritt: ${Math.round(percentage)}% (${progress.completed.length}/${progress.total} Phasen)`;
         }
         
