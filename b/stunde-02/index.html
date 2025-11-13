@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbeitsblatt: Von Arrays zu ArrayList</title>
+    <style rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Von Arrays zu ArrayList</h1>
+            <p>Dynamische Datenstrukturen verstehen und anwenden</p>
+        </header>
+        
+        <div class="progress-bar">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Fortschritt: 0%</div>
+        </div>
+        
+        <div class="content">
+            <div class="lernziele">
+                <h2>🎯 Lernziele dieser Stunde</h2>
+                <ul>
+                    <li>Unterschied zwischen Array (primitiv) und ArrayList (Referenzdatentyp) verstehen</li>
+                    <li>Vorteile dynamischer Datenstrukturen kennenlernen</li>
+                    <li>ArrayList-Methoden: add(), get(), remove(), size() anwenden</li>
+                    <li>Generics verstehen: <code>&lt;Himmelskoerper&gt;</code></li>
+                    <li>Migration von Array zu ArrayList durchführen</li>
+                    <li>Code-Refactoring ohne Funktionsverlust</li>
+                </ul>
+            </div>
+            
+            <!-- Phase 1: Konzeptuelles Verständnis -->
+            <div class="phase" data-phase="1">
+                <div class="phase-header" onclick="togglePhase(1)">
+                    <div class="phase-number">1</div>
+                    <div class="phase-title">
+                        <h2>Array vs. ArrayList: Das Konzept</h2>
+                        <div class="phase-subtitle">Primitiv oder Referenz? Das ist hier die Frage!</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="denkbox">
+                        <h3>Einstiegsfrage</h3>
+                        <p>Erinnere dich an die letzte Stunde: Welche Probleme hatte unser statisches Array trotz der Pegel-Variable?</p>
+                    </div>
+                    
+                    <div class="frage" data-question="1">
+                        <div class="frage-text">Was ist der fundamentale Unterschied zwischen einem Array und einer ArrayList?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Arrays sind schneller als ArrayLists</div>
+                            <div class="antwort-option" data-answer="b">b) Arrays haben eine feste Größe, ArrayLists können dynamisch wachsen</div>
+                            <div class="antwort-option" data-answer="c">c) Arrays können nur primitive Datentypen speichern</div>
+                            <div class="antwort-option" data-answer="d">d) ArrayLists sind veraltet und sollten nicht mehr verwendet werden</div>
+                        </div>
+                        <button onclick="checkAnswer(1, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="vergleich">
+                        <h3>Array vs. ArrayList im Vergleich</h3>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Eigenschaft</th>
+                                <th>Array</th>
+                                <th>ArrayList</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Größe</strong></td>
+                                <td><span class="con">✗</span> Fest bei Erstellung</td>
+                                <td><span class="pro">✓</span> Dynamisch änderbar</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Typ</strong></td>
+                                <td>Primitiver Typ (eingebaut)</td>
+                                <td>Klasse aus java.util</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Syntax</strong></td>
+                                <td>String[] array = new String[10];</td>
+                                <td>ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Elemente hinzufügen</strong></td>
+                                <td>array[0] = "Hallo";</td>
+                                <td>list.add("Hallo");</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Größe abfragen</strong></td>
+                                <td>array.length</td>
+                                <td>list.size()</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Element entfernen</strong></td>
+                                <td><span class="con">✗</span> Manuell mit Verschieben</td>
+                                <td><span class="pro">✓</span> list.remove(index)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Performance</strong></td>
+                                <td><span class="pro">✓</span> Etwas schneller</td>
+                                <td><span class="con">~</span> Minimal langsamer</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Flexibilität</strong></td>
+                                <td><span class="con">✗</span> Begrenzt</td>
+                                <td><span class="pro">✓</span> Sehr flexibel</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="frage" data-question="2">
+                        <div class="frage-text">Was bedeutet "Referenzdatentyp" bei ArrayList?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) ArrayList ist eine Klasse, die Variable speichert eine Referenz (Speicheradresse) auf das Objekt</div>
+                            <div class="antwort-option" data-answer="b">b) ArrayList verweist immer auf ein Array</div>
+                            <div class="antwort-option" data-answer="c">c) ArrayList kann nur andere Objekte referenzieren</div>
+                            <div class="antwort-option" data-answer="d">d) ArrayList hat keine besondere Bedeutung</div>
+                        </div>
+                        <button onclick="checkAnswer(2, 'a')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Wichtig: Array vs. ArrayList - Beide sind Referenzdatentypen!</h3>
+                        <p><strong>Array</strong> ist ein spezieller Referenzdatentyp - fest in die Sprache eingebaut, aber trotzdem ein Objekt im Heap.</p>
+                        <p><strong>ArrayList</strong> ist eine Klasse aus der Java-Bibliothek - ebenfalls ein Referenzdatentyp mit Methoden und Attributen.</p>
+                        <p><strong>Der Unterschied:</strong> Arrays haben eine feste Größe und eingebaute Syntax ([], .length). ArrayList ist flexibel und bietet viele Methoden (.add(), .remove(), .size()).</p>
+                    </div>
+                    
+                    <button onclick="completePhase(1)">Phase 1 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 2: Generics verstehen -->
+            <div class="phase collapsed" data-phase="2">
+                <div class="phase-header" onclick="togglePhase(2)">
+                    <div class="phase-number">2</div>
+                    <div class="phase-title">
+                        <h2>Generics: Die spitzen Klammern</h2>
+                        <div class="phase-subtitle">Was bedeutet &lt;Himmelskoerper&gt;?</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Was sind Generics?</h3>
+                        <p>Generics ermöglichen es, den Datentyp einer Klasse zu parametrisieren. Die Syntax sieht so aus:</p>
+                        <pre>ArrayList&lt;Datentyp&gt; name = new ArrayList&lt;&gt;();</pre>
+                        <p>Die spitzen Klammern <code>&lt;&gt;</code> geben an, welcher Typ in der ArrayList gespeichert werden darf.</p>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Beispiele</h3>
+                        <pre>// Eine ArrayList für Strings
+ArrayList&lt;String&gt; namen = new ArrayList&lt;&gt;();
+namen.add("Alice");  // ✓ Geht!
+namen.add(42);       // ✗ Fehler! Nur Strings erlaubt!
+
+// Eine ArrayList für Integers
+ArrayList&lt;Integer&gt; zahlen = new ArrayList&lt;&gt;();
+zahlen.add(42);      // ✓ Geht!
+zahlen.add("Test");  // ✗ Fehler! Nur Integer erlaubt!
+
+// Eine ArrayList für unsere Klasse
+ArrayList&lt;Himmelskoerper&gt; objekte = new ArrayList&lt;&gt;();
+objekte.add(new Planet());  // ✓ Geht!
+objekte.add("Erde");        // ✗ Fehler! Nur Himmelskoerper!</pre>
+                    </div>
+                    
+                    <div class="frage" data-question="3">
+                        <div class="frage-text">Warum sind Generics nützlich?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Sie machen den Code langsamer aber sicherer</div>
+                            <div class="antwort-option" data-answer="b">b) Sie bieten Typsicherheit und machen Code wiederverwendbar - der Compiler erkennt Typfehler schon beim Übersetzen</div>
+                            <div class="antwort-option" data-answer="c">c) Sie sind nur syntaktischer Zucker ohne echten Nutzen</div>
+                            <div class="antwort-option" data-answer="d">d) Sie ermöglichen mehrere Datentypen in einer Liste</div>
+                        </div>
+                        <button onclick="checkAnswer(3, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Überlege</h3>
+                        <p>Was passiert bei dieser Deklaration ohne Generics?</p>
+                        <pre>ArrayList objekte = new ArrayList();  // Kein &lt;Typ&gt;!</pre>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Antwort</summary>
+                            <p style="margin-top: 10px;">Ohne Generics kann die ArrayList <strong>alles</strong> speichern (Object). Das ist unsicher, weil du beim Auslesen casten musst und Fehler erst zur Laufzeit entdeckt werden. Mit Generics prüft der Compiler schon beim Schreiben!</p>
+                        </details>
+                    </div>
+                    
+                    <div class="warnung">
+                        <h3>Wichtig: Wrapper-Klassen</h3>
+                        <p>Generics funktionieren NUR mit Referenzdatentypen (Klassen), nicht mit primitiven Typen!</p>
+                        <pre>ArrayList&lt;int&gt; zahlen;     // ✗ Fehler!
+ArrayList&lt;Integer&gt; zahlen; // ✓ Richtig!</pre>
+                        <p><strong>Wrapper-Klassen</strong> sind Objektversionen der primitiven Typen:</p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li><code>int</code> → <code>Integer</code></li>
+                            <li><code>double</code> → <code>Double</code></li>
+                            <li><code>boolean</code> → <code>Boolean</code></li>
+                            <li><code>char</code> → <code>Character</code></li>
+                        </ul>
+                        <p style="margin-top: 10px;">Java konvertiert automatisch zwischen primitiven Typen und Wrapper-Klassen (Autoboxing).</p>
+                    </div>
+                    
+                    <button onclick="completePhase(2)">Phase 2 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 3: ArrayList-Methoden -->
+            <div class="phase collapsed" data-phase="3">
+                <div class="phase-header" onclick="togglePhase(3)">
+                    <div class="phase-number">3</div>
+                    <div class="phase-title">
+                        <h2>ArrayList-Methoden kennenlernen</h2>
+                        <div class="phase-subtitle">Die wichtigsten Operationen</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Die wichtigsten ArrayList-Methoden</h3>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Methoden-Übersicht</h3>
+                        <pre>ArrayList&lt;Himmelskoerper&gt; objekte = new ArrayList&lt;&gt;();
+
+// Elemente hinzufügen
+objekte.add(new Planet());              // Am Ende anfügen
+objekte.add(0, new Stern());            // An Position 0 einfügen
+
+// Elemente abrufen
+Himmelskoerper h = objekte.get(0);      // Element an Position 0
+
+// Größe abfragen
+int anzahl = objekte.size();            // Anzahl der Elemente
+
+// Element entfernen
+objekte.remove(0);                      // Element an Position 0
+objekte.remove(meinPlanet);             // Bestimmtes Objekt
+
+// Prüfen
+boolean leer = objekte.isEmpty();       // Ist Liste leer?
+boolean enthalten = objekte.contains(h);// Ist Element enthalten?
+
+// Alle Elemente löschen
+objekte.clear();                        // Liste leeren</pre>
+                    </div>
+                    
+                    <div class="frage" data-question="4">
+                        <div class="frage-text">Was ist der Unterschied zwischen array.length und list.size()?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Kein Unterschied, beides gibt die Anzahl der Elemente</div>
+                            <div class="antwort-option" data-answer="b">b) length ist ein Attribut (Klammern vergessen!), size() ist eine Methode (mit Klammern!)</div>
+                            <div class="antwort-option" data-answer="c">c) length zählt ab 1, size() zählt ab 0</div>
+                            <div class="antwort-option" data-answer="d">d) size() ist schneller als length</div>
+                        </div>
+                        <button onclick="checkAnswer(4, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: Durchlaufen einer ArrayList</h3>
+                        <p>Es gibt mehrere Wege, durch eine ArrayList zu iterieren:</p>
+                        <pre>// Variante 1: for-Schleife mit Index
+for (int i = 0; i < objekte.size(); i++) {
+    Himmelskoerper h = objekte.get(i);
+    h.bewegung();
+}
+
+// Variante 2: for-each-Schleife (eleganter!)
+for (Himmelskoerper h : objekte) {
+    h.bewegung();
+}
+
+// Variante 3: while-Schleife
+int i = 0;
+while (i < objekte.size()) {
+    objekte.get(i).bewegung();
+    i++;
+}</pre>
+                        <p><strong>Welche Variante ist am besten für unser Sonnensystem?</strong></p>
+                    </div>
+                    
+                    <div class="思考框">
+                        <h3>Denke nach!</h3>
+                        <p>Warum ist die for-each-Schleife (Variante 2) oft die beste Wahl?</p>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Antwort</summary>
+                            <p style="margin-top: 10px;">Die for-each-Schleife ist kürzer, lesbarer und weniger fehleranfällig. Du brauchst keinen Index und kannst keine IndexOutOfBounds-Fehler machen. Sie eignet sich perfekt, wenn du alle Elemente durchlaufen willst!</p>
+                        </details>
+                    </div>
+                    
+                    <button onclick="completePhase(3)">Phase 3 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 4: Migration - Deklaration -->
+            <div class="phase collapsed" data-phase="4">
+                <div class="phase-header" onclick="togglePhase(4)">
+                    <div class="phase-number">4</div>
+                    <div class="phase-title">
+                        <h2>Migration Schritt 1: Deklaration</h2>
+                        <div class="phase-subtitle">Array durch ArrayList ersetzen</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="code-side-by-side">
+                        <div class="code-column alt-code">
+                            <h4>❌ Alt: Array mit Pegel</h4>
+                            <pre>Himmelskoerper[] objekte;
+int pegel;
+
+public Sonnensystem() {
+    objekte = new Himmelskoerper[10];
+    pegel = 0;
+}</pre>
+                        </div>
+                        <div class="code-column neu-code">
+                            <h4>✅ Neu: ArrayList</h4>
+                            <pre>ArrayList&lt;Himmelskoerper&gt; objekte;
+
+public Sonnensystem() {
+    objekte = new ArrayList&lt;&gt;();
+    // Kein Pegel mehr nötig!
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Import nicht vergessen!</h3>
+                        <p>ArrayList gehört zum Paket <code>java.util</code>. Füge ganz oben hinzu:</p>
+                        <pre>import java.util.ArrayList;</pre>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: Attribute ändern</h3>
+                        <p>Ändere in deiner <code>Sonnensystem</code>-Klasse:</p>
+                        <ol>
+                            <li>Ersetze die Array-Deklaration durch ArrayList</li>
+                            <li>Entferne die <code>pegel</code>-Variable (wird nicht mehr gebraucht!)</li>
+                            <li>Passe den Konstruktor an</li>
+                            <li>Füge den Import hinzu</li>
+                        </ol>
+                        <textarea class="code-input" id="code4" placeholder="// Deine Änderungen hier..."></textarea>
+                    </div>
+                    
+                    <div class="warnung">
+                        <h3>Achtung!</h3>
+                        <p>Nach dieser Änderung wird dein Code noch nicht kompilieren! Das ist normal - wir passen jetzt die Methoden an.</p>
+                    </div>
+                    
+                    <button onclick="completePhase(4)">Phase 4 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 5: Migration - addHimmelskoerper -->
+            <div class="phase collapsed" data-phase="5">
+                <div class="phase-header" onclick="togglePhase(5)">
+                    <div class="phase-number">5</div>
+                    <div class="phase-title">
+                        <h2>Migration Schritt 2: addHimmelskoerper()</h2>
+                        <div class="phase-subtitle">Von manuell zu automatisch</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="code-side-by-side">
+                        <div class="code-column alt-code">
+                            <h4>❌ Alt: Mit Array und Pegel</h4>
+                            <pre>public void addHimmelskoerper(Himmelskoerper hk) {
+    if (pegel < objekte.length) {
+        objekte[pegel] = hk;
+        pegel++;
+    } else {
+        System.out.println("Fehler: Das Array ist voll!");
+    }
+}</pre>
+                        </div>
+                        <div class="code-column neu-code">
+                            <h4>✅ Neu: Mit ArrayList</h4>
+                            <pre>public void addHimmelskoerper(Himmelskoerper hk) {
+    objekte.add(hk);
+    // Das war's! Kein Pegel, keine Grenze!
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Wow! Was ist passiert?</h3>
+                        <p>Die Methode ist von 7 Zeilen auf 1 Zeile geschrumpft! Warum?</p>
+                        <ul>
+                            <li>✅ Keine Prüfung auf Platzmangel nötig - ArrayList wächst automatisch!</li>
+                            <li>✅ Kein manuelles Pegel-Management - <code>add()</code> macht das intern!</li>
+                            <li>✅ Keine ArrayIndexOutOfBoundsException mehr möglich!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="frage" data-question="5">
+                        <div class="frage-text">Was passiert, wenn die interne Kapazität der ArrayList voll ist?</div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Es gibt eine Exception</div>
+                            <div class="antwort-option" data-answer="b">b) Die ArrayList erstellt automatisch ein größeres internes Array und kopiert die Daten</div>
+                            <div class="antwort-option" data-answer="c">c) Alte Elemente werden überschrieben</div>
+                            <div class="antwort-option" data-answer="d">d) Die add()-Methode gibt false zurück</div>
+                        </div>
+                        <button onclick="checkAnswer(5, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: Methode vereinfachen</h3>
+                        <p>Schreibe die neue, einfachere Version von <code>addHimmelskoerper()</code>:</p>
+                        <textarea class="code-input" id="code5" placeholder="public void addHimmelskoerper(Himmelskoerper hk) {
+    // Dein Code hier
+}"></textarea>
+                        <button onclick="showSolution(5)">💡 Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(5)">Phase 5 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 6: Migration - getHimmelskoerper -->
+            <div class="phase collapsed" data-phase="6">
+                <div class="phase-header" onclick="togglePhase(6)">
+                    <div class="phase-number">6</div>
+                    <div class="phase-title">
+                        <h2>Migration Schritt 3: getHimmelskoerper()</h2>
+                        <div class="phase-subtitle">Zugriff auf Elemente</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="code-side-by-side">
+                        <div class="code-column alt-code">
+                            <h4>❌ Alt: Array-Zugriff</h4>
+                            <pre>public Himmelskoerper getHimmelskoerper(int index) {
+    if (index >= 0 && index < pegel) {
+        return objekte[index];
+    } else {
+        System.out.println("Fehler: Ungültiger Index!");
+        return null;
+    }
+}</pre>
+                        </div>
+                        <div class="code-column neu-code">
+                            <h4>✅ Neu: ArrayList-get()</h4>
+                            <pre>public Himmelskoerper getHimmelskoerper(int index) {
+    if (index >= 0 && index < objekte.size()) {
+        return objekte.get(index);
+    } else {
+        System.out.println("Fehler: Ungültiger Index!");
+        return null;
+    }
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>Was hat sich geändert?</h3>
+                        <ul>
+                            <li><code>pegel</code> → <code>objekte.size()</code></li>
+                            <li><code>objekte[index]</code> → <code>objekte.get(index)</code></li>
+                        </ul>
+                        <p>Die Fehlerprüfung bleibt wichtig! ArrayList wirft zwar automatisch eine IndexOutOfBoundsException, aber wir geben lieber eine freundliche Fehlermeldung aus.</p>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: Methode anpassen</h3>
+                        <p>Passe deine <code>getHimmelskoerper()</code>-Methode für ArrayList an:</p>
+                        <textarea class="code-input" id="code6" placeholder="public Himmelskoerper getHimmelskoerper(int index) {
+    // Dein Code hier
+}"></textarea>
+                        <button onclick="showSolution(6)">💡 Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Optional: Fehlerbehandlung mit Exception</h3>
+                        <p>Alternativ könntest du auch die ArrayList-Exception durchreichen lassen:</p>
+                        <pre>public Himmelskoerper getHimmelskoerper(int index) {
+    return objekte.get(index);  // Wirft automatisch IndexOutOfBoundsException
+}</pre>
+                        <p>Was ist besser? Das hängt vom Kontext ab!</p>
+                    </div>
+                    
+                    <button onclick="completePhase(6)">Phase 6 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 7: Migration - actionPerformed -->
+            <div class="phase collapsed" data-phase="7">
+                <div class="phase-header" onclick="togglePhase(7)">
+                    <div class="phase-number">7</div>
+                    <div class="phase-title">
+                        <h2>Migration Schritt 4: Schleifen anpassen</h2>
+                        <div class="phase-subtitle">actionPerformed() und paintComponent()</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Wo müssen Schleifen angepasst werden?</h3>
+                        <p>In zwei Methoden durchlaufen wir alle Himmelskörper:</p>
+                        <ul>
+                            <li><code>actionPerformed()</code> - Bewegung der Himmelskörper</li>
+                            <li><code>paintComponent()</code> - Zeichnen der Himmelskörper</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-side-by-side">
+                        <div class="code-column alt-code">
+                            <h4>❌ Alt: Array durchlaufen</h4>
+                            <pre>@Override
+public void actionPerformed(ActionEvent e) {
+    for (int i = 0; i < objekte.length; i++) {
+        if (objekte[i] != null) {
+            objekte[i].bewegung();
+        }
+    }
+    zeichenflaeche.repaint();
+}</pre>
+                        </div>
+                        <div class="code-column neu-code">
+                            <h4>✅ Neu: ArrayList durchlaufen</h4>
+                            <pre>@Override
+public void actionPerformed(ActionEvent e) {
+    for (Himmelskoerper h : objekte) {
+        h.bewegung();
+    }
+    zeichenflaeche.repaint();
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Vorteile der neuen Version</h3>
+                        <ul>
+                            <li>✅ Keine <code>null</code>-Prüfung mehr nötig - ArrayList enthält nur echte Objekte!</li>
+                            <li>✅ Elegantere for-each-Schleife statt Index-basiert</li>
+                            <li>✅ Kürzer und lesbarer</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe 1: actionPerformed() anpassen</h3>
+                        <textarea class="code-input" id="code7a" placeholder="@Override
+public void actionPerformed(ActionEvent e) {
+    // Dein Code hier
+}"></textarea>
+                    </div>
+                    
+                    <div class="code-side-by-side">
+                        <div class="code-column alt-code">
+                            <h4>❌ Alt: Zeichnen mit Array</h4>
+                            <pre>@Override
+protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    
+    for (int i = 0; i < objekte.length; i++) {
+        if (objekte[i] != null) {
+            String farbe = objekte[i].getFarbe();
+            // Farbe setzen...
+            // Zeichnen...
+        }
+    }
+}</pre>
+                        </div>
+                        <div class="code-column neu-code">
+                            <h4>✅ Neu: Zeichnen mit ArrayList</h4>
+                            <pre>@Override
+protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    
+    for (Himmelskoerper obj : objekte) {
+        String farbe = obj.getFarbe();
+        // Farbe setzen...
+        // Zeichnen...
+    }
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe 2: paintComponent() anpassen</h3>
+                        <p>Passe die Schleife in der <code>paintComponent()</code>-Methode an. Die komplette Methode soll etwa so aussehen:</p>
+                        <textarea class="code-input" id="code7b" style="min-height: 250px;" placeholder="@Override
+protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    
+    for (Himmelskoerper obj : objekte) {
+        // Farbe setzen basierend auf obj.getFarbe()
+        // Position berechnen
+        // Oval zeichnen
+    }
+}"></textarea>
+                        <button onclick="showSolution('7b')">💡 Musterlösung anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(7)">Phase 7 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 8: Bonus - removeHimmelskoerper -->
+            <div class="phase collapsed" data-phase="8">
+                <div class="phase-header" onclick="togglePhase(8)">
+                    <div class="phase-number">8</div>
+                    <div class="phase-title">
+                        <h2>Bonus: removeHimmelskoerper() vereinfachen</h2>
+                        <div class="phase-subtitle">Falls implementiert: Jetzt wird's elegant!</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Falls du die Differenzierung gemacht hast...</h3>
+                        <p>Wenn du in der letzten Stunde die <code>removeHimmelskoerper()</code>-Methode implementiert hast, wird sie jetzt VIEL einfacher!</p>
+                    </div>
+                    
+                    <div class="code-side-by-side">
+                        <div class="code-column alt-code">
+                            <h4>❌ Alt: Kompliziert mit Array</h4>
+                            <pre>public void removeHimmelskoerper(int index) {
+    if (index >= 0 && index < pegel) {
+        // Alle Elemente verschieben
+        for (int i = index; i < pegel - 1; i++) {
+            objekte[i] = objekte[i + 1];
+        }
+        objekte[pegel - 1] = null;
+        pegel--;
+    } else {
+        System.out.println("Fehler: Ungültiger Index!");
+    }
+}</pre>
+                        </div>
+                        <div class="code-column neu-code">
+                            <h4>✅ Neu: Einfach mit ArrayList</h4>
+                            <pre>public void removeHimmelskoerper(int index) {
+    if (index >= 0 && index < objekte.size()) {
+        objekte.remove(index);
+    } else {
+        System.out.println("Fehler: Ungültiger Index!");
+    }
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Von 10 Zeilen auf 3 Zeilen!</h3>
+                        <p>Die <code>remove()</code>-Methode erledigt automatisch:</p>
+                        <ul>
+                            <li>✅ Element entfernen</li>
+                            <li>✅ Alle nachfolgenden Elemente verschieben</li>
+                            <li>✅ Größe anpassen</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Weitere nützliche remove-Varianten</h3>
+                        <pre>// Nach Index entfernen
+objekte.remove(0);  // Erstes Element
+
+// Nach Objekt entfernen
+objekte.remove(meinPlanet);  // Entfernt das spezifische Objekt
+
+// Letztes Element entfernen
+if (!objekte.isEmpty()) {
+    objekte.remove(objekte.size() - 1);
+}</pre>
+                    </div>
+                    
+                    <button onclick="completePhase(8)">Phase 8 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 9: Testen -->
+            <div class="phase collapsed" data-phase="9">
+                <div class="phase-header" onclick="togglePhase(9)">
+                    <div class="phase-number">9</div>
+                    <div class="phase-title">
+                        <h2>Testen der Migration</h2>
+                        <div class="phase-subtitle">Funktioniert alles wie vorher?</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="hinweis">
+                        <h3>Testplan</h3>
+                        <p>Das Programm sollte sich <strong>genau gleich verhalten</strong> wie vorher - nur der interne Code ist besser!</p>
+                    </div>
+                    
+                    <ul class="checklist" id="testChecklist">
+                        <li onclick="toggleCheck(this)">Programm startet ohne Fehler</li>
+                        <li onclick="toggleCheck(this)">Initiale Himmelskörper werden angezeigt</li>
+                        <li onclick="toggleCheck(this)">Himmelskörper bewegen sich korrekt</li>
+                        <li onclick="toggleCheck(this)">Buttons zum Hinzufügen funktionieren</li>
+                        <li onclick="toggleCheck(this)">Man kann mehr als 10 Himmelskörper hinzufügen! 🎉</li>
+                        <li onclick="toggleCheck(this)">Performance ist gut (keine Verlangsamung)</li>
+                        <li onclick="toggleCheck(this)">Keine NullPointerExceptions in der Konsole</li>
+                    </ul>
+                    
+                    <div class="denkbox">
+                        <h3>Der große Test</h3>
+                        <p>Klicke mehrfach auf die "Hinzufügen"-Buttons. Kannst du jetzt 15, 20 oder sogar 50 Himmelskörper erstellen?</p>
+                        <p><strong>Das konntest du mit dem Array nicht!</strong> 🚀</p>
+                    </div>
+                    
+                    <div class="warnung">
+                        <h3>Häufige Fehler bei der Migration</h3>
+                        <ul>
+                            <li><strong>Import vergessen:</strong> <code>import java.util.ArrayList;</code></li>
+                            <li><strong>Klammern vergessen:</strong> <code>size()</code> nicht <code>size</code></li>
+                            <li><strong>Alte null-Prüfungen:</strong> In ArrayList sind keine null-Werte (außer du fügst sie explizit hinzu)</li>
+                            <li><strong>Array-Syntax:</strong> <code>get(i)</code> nicht <code>[i]</code></li>
+                        </ul>
+                    </div>
+                    
+                    <button onclick="completePhase(9)">Phase 9 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 10: Reflexion und Ausblick -->
+            <div class="phase collapsed" data-phase="10">
+                <div class="phase-header" onclick="togglePhase(10)">
+                    <div class="phase-number">🎓</div>
+                    <div class="phase-title">
+                        <h2>Reflexion und Ausblick</h2>
+                        <div class="phase-subtitle">Was haben wir erreicht?</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="vergleich">
+                        <h3>Vorher vs. Nachher</h3>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspekt</th>
+                                <th>Mit Array</th>
+                                <th>Mit ArrayList</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Code-Zeilen</strong></td>
+                                <td>~15 Zeilen für add/get/remove</td>
+                                <td>~5 Zeilen</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Komplexität</strong></td>
+                                <td>Manuelle Verwaltung nötig</td>
+                                <td>Automatisch</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Maximale Größe</strong></td>
+                                <td>Vorher fest eingestellter Wert (hier 10 Himmelskörper)</td>
+                                <td>Unbegrenzt!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fehleranfälligkeit</strong></td>
+                                <td>Hoch (Pegel, Grenzen, null)</td>
+                                <td>Gering</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Wartbarkeit</strong></td>
+                                <td>Schwierig</td>
+                                <td>Einfach</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="frage" data-question="10">
+                        <div class="frage-text">Wann würdest du trotzdem ein Array statt ArrayList verwenden?</div>
+                        <textarea class="code-input" placeholder="Deine Überlegungen..." style="min-height: 100px;"></textarea>
+                        <details style="margin-top: 15px;">
+                            <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Mögliche Antworten</summary>
+                            <ul style="margin-top: 10px; margin-left: 20px;">
+                                <li>Wenn die Größe wirklich fest ist (z.B. Wochentage, Schachbrett)</li>
+                                <li>Wenn maximale Performance kritisch ist (Arrays sind minimal schneller)</li>
+                                <li>Wenn primitive Datentypen ohne Wrapper verwendet werden sollen</li>
+                                <li>Bei multidimensionalen Strukturen (2D-Arrays sind einfacher)</li>
+                            </ul>
+                        </details>
+                    </div>
+                    
+                    <div class="ausblick">
+                        <h3>🚀 Ausblick: Queue und Stack</h3>
+                        <p>In den nächsten Stunden lernen wir zwei wichtige Datenstrukturen kennen:</p>
+                        
+                        <div class="ausblick-items">
+                            <div class="ausblick-item">
+                                <h4>📋 Queue (Warteschlange)</h4>
+                                <p><strong>Prinzip:</strong> FIFO - First In, First Out</p>
+                                <p><strong>Kontext:</strong> Asteroiden-Einschläge verarbeiten</p>
+                                <p>Asteroiden kommen in einer Reihenfolge an und werden der Reihe nach "abgearbeitet" (Kollision überprüft, Animation gestartet)</p>
+                            </div>
+                            
+                            <div class="ausblick-item">
+                                <h4>📚 Stack (Stapel)</h4>
+                                <p><strong>Prinzip:</strong> LIFO - Last In, First Out</p>
+                                <p><strong>Kontext:</strong> Rückgängig-Funktion (Undo)</p>
+                                <p>Aktionen im Sonnensystem (Himmelskörper hinzugefügt/gelöscht) werden gespeichert und können rückgängig gemacht werden</p>
+                            </div>
+                        </div>
+                        
+                        <p style="margin-top: 20px;"><strong>Spannend:</strong> Ihr werdet diese Datenstrukturen selbst implementieren und verstehen, wie sie intern funktionieren!</p>
+                    </div>
+                    
+                    <div class="lernziele">
+                        <h2>✅ Das hast du heute gelernt:</h2>
+                        <ul class="checklist" id="finalChecklist">
+                            <li onclick="toggleCheck(this)">Unterschied zwischen Array (primitiv) und ArrayList (Referenzdatentyp)</li>
+                            <li onclick="toggleCheck(this)">Generics: Typsicherheit mit &lt;T&gt;</li>
+                            <li onclick="toggleCheck(this)">ArrayList-Methoden: add(), get(), remove(), size()</li>
+                            <li onclick="toggleCheck(this)">For-each-Schleife für elegantes Durchlaufen</li>
+                            <li onclick="toggleCheck(this)">Migration von Array zu ArrayList durchgeführt</li>
+                            <li onclick="toggleCheck(this)">Code-Vereinfachung und Wartbarkeit verbessert</li>
+                            <li onclick="toggleCheck(this)">Unbegrenzte dynamische Größe erreicht</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Hausaufgabe / Zusatzaufgabe</h3>
+                        <p><strong>Optional:</strong> Implementiere eine Methode <code>findHimmelskoerperByName(String name)</code>, die einen Himmelskörper anhand seines Namens in der ArrayList sucht und zurückgibt. Tipp: Du brauchst eine Schleife und den Getter für den Namen!</p>
+                    </div>
+                    
+                    <button onclick="completePhase(10)">Arbeitsblatt abschließen 🎉</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        const progress = {
+            total: 10,
+            completed: []
+        };
+        
+        const solutions = {
+            5: `public void addHimmelskoerper(Himmelskoerper hk) {
+    objekte.add(hk);
+}`,
+            6: `public Himmelskoerper getHimmelskoerper(int index) {
+    if (index >= 0 && index < objekte.size()) {
+        return objekte.get(index);
+    } else {
+        System.out.println("Fehler: Ungültiger Index!");
+        return null;
+    }
+}`,
+            '7b': `@Override
+protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    
+    for (Himmelskoerper obj : objekte) {
+        String farbe = obj.getFarbe();
+        
+        if (farbe.equals("blau")) {
+            g.setColor(Color.BLUE);
+        } else if(farbe.equals("gelb")) {
+            g.setColor(Color.YELLOW);
+        } else {
+            g.setColor(Color.RED);
+        }
+        
+        int x = (int) (obj.getX() + getWidth() / 2);
+        int y = (int) (obj.getY() + getHeight() / 2);
+        
+        g.fillOval(x, y, (int)obj.getDurchmesser(), (int)obj.getDurchmesser());
+    }
+}`
+        };
+        
+        const correctAnswers = {
+            1: 'b',
+            2: 'a',
+            3: 'b',
+            4: 'b',
+            5: 'b'
+        };
+        
+        const answerFeedback = {
+            1: {
+                correct: 'Genau richtig! Arrays haben bei der Erstellung eine feste Größe. ArrayList kann dynamisch wachsen und schrumpfen - das ist der Hauptvorteil!',
+                wrong: 'Nicht ganz. Der wichtigste Unterschied ist die Flexibilität: Arrays sind fest, ArrayList ist dynamisch.'
+            },
+            2: {
+                correct: 'Perfekt! ArrayList ist eine Klasse (wie String, Scanner usw.). Die Variable speichert eine Referenz auf das ArrayList-Objekt im Heap.',
+                wrong: 'Denk an die Objektprogrammierung: ArrayList ist eine Klasse. Was speichert eine Objektvariable?'
+            },
+            3: {
+                correct: 'Richtig! Generics ermöglichen parametrisierte Typen - Klassen können mit unterschiedlichen Datentypen arbeiten, ohne ihre Typsicherheit zu verlieren. Der Compiler prüft schon beim Übersetzen, ob die Typen zusammenpassen, und Typumwandlungen (Casts) werden überflüssig.',
+                wrong: 'Generics sind für Typsicherheit da. Sie ermöglichen, dass der Compiler Typfehler schon beim Schreiben erkennt und machen den Code wiederverwendbar.'
+            },
+            4: {
+                correct: 'Exakt! length ist ein Attribut (final), deshalb keine Klammern. size() ist eine Methode, daher mit Klammern. Ein häufiger Anfängerfehler!',
+                wrong: 'Achte auf die Syntax: Attribute ohne Klammern, Methoden mit Klammern!'
+            },
+            5: {
+                correct: 'Genau! ArrayList vergrößert sich automatisch. Intern wird ein neues, größeres Array erstellt (meist 1,5x so groß), die Daten werden kopiert, und das alte Array wird verworfen. Das passiert transparent für dich!',
+                wrong: 'ArrayList ist "dynamisch" - sie wächst automatisch! Intern wird ein neues, größeres Array erstellt.'
+            }
+        };
+        
+        function togglePhase(phaseNum) {
+            const phase = document.querySelector(`[data-phase="${phaseNum}"]`);
+            phase.classList.toggle('collapsed');
+        }
+        
+        function checkAnswer(questionNum, correctAnswer) {
+            const question = document.querySelector(`[data-question="${questionNum}"]`);
+            const options = question.querySelectorAll('.antwort-option');
+            const feedback = question.querySelector('.feedback');
+            const button = question.querySelector('button');
+            
+            let selectedAnswer = null;
+            options.forEach(opt => {
+                if (opt.classList.contains('selected')) {
+                    selectedAnswer = opt.dataset.answer;
+                }
+            });
+            
+            if (!selectedAnswer) {
+                alert('Bitte wähle zuerst eine Antwort aus!');
+                return;
+            }
+            
+            const isCorrect = selectedAnswer === correctAnswer;
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.answer === correctAnswer) {
+                    opt.classList.add('correct');
+                } else if (opt.classList.contains('selected')) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+            feedback.textContent = isCorrect ? 
+                answerFeedback[questionNum].correct : 
+                answerFeedback[questionNum].wrong;
+            
+            button.disabled = true;
+        }
+        
+        document.querySelectorAll('.antwort-option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (this.style.pointerEvents === 'none') return;
+                
+                const question = this.closest('.frage');
+                question.querySelectorAll('.antwort-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+        
+        function showSolution(phaseNum) {
+            const textarea = document.getElementById(`code${phaseNum}`) || 
+                           document.querySelector(`#code${phaseNum.replace('7b', '7b')}`);
+            const feedback = textarea ? textarea.nextElementSibling.nextElementSibling : 
+                           document.querySelector(`[data-phase="${phaseNum.charAt(0)}"] .feedback:last-of-type`);
+            
+            if (!feedback) {
+                const codeAufgabe = document.querySelector(`#code${phaseNum}`).closest('.code-aufgabe');
+                const newFeedback = document.createElement('div');
+                newFeedback.className = 'feedback show';
+                newFeedback.innerHTML = '<strong>💡 Musterlösung:</strong><pre>' + solutions[phaseNum] + '</pre>';
+                codeAufgabe.appendChild(newFeedback);
+            } else {
+                feedback.className = 'feedback show';
+                feedback.innerHTML = '<strong>💡 Musterlösung:</strong><pre>' + solutions[phaseNum] + '</pre>';
+            }
+        }
+        
+        function completePhase(phaseNum) {
+            if (!progress.completed.includes(phaseNum)) {
+                progress.completed.push(phaseNum);
+                updateProgress();
+            }
+            
+            if (phaseNum < 10) {
+                const nextPhase = document.querySelector(`[data-phase="${phaseNum + 1}"]`);
+                if (nextPhase && nextPhase.classList.contains('collapsed')) {
+                    nextPhase.classList.remove('collapsed');
+                    nextPhase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            } else if (phaseNum === 10) {
+                alert('🎉 Herzlichen Glückwunsch! Du hast erfolgreich von Array zu ArrayList migriert!');
+            }
+        }
+        
+        function updateProgress() {
+            const percentage = (progress.completed.length / progress.total) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = 
+                `Fortschritt: ${Math.round(percentage)}% (${progress.completed.length}/${progress.total} Phasen)`;
+        }
+        
+        function toggleCheck(element) {
+            element.classList.toggle('checked');
+        }
+        
+        updateProgress();
+    </script>
+</body>
+</html>
