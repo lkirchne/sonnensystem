@@ -4,7 +4,530 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arbeitsblatt: Von Arrays zu ArrayList</title>
-    <link rel="stylesheet" href="../style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .progress-bar {
+            background: #f0f0f0;
+            padding: 20px 40px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .progress-track {
+            background: #ddd;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .lernziele {
+            background: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        
+        .lernziele h2 {
+            color: #1976D2;
+            margin-bottom: 15px;
+        }
+        
+        .lernziele ul {
+            list-style-position: inside;
+            margin-left: 10px;
+        }
+        
+        .lernziele li {
+            margin: 8px 0;
+        }
+        
+        .phase {
+            margin: 30px 0;
+            border: 2px solid #11998e;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .phase.collapsed .phase-content {
+            display: none;
+        }
+        
+        .phase-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .phase-header:hover {
+            background: linear-gradient(135deg, #0d7a72 0%, #2dd16d 100%);
+        }
+        
+        .phase-number {
+            background: white;
+            color: #11998e;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .phase-title {
+            flex: 1;
+        }
+        
+        .phase-title h2 {
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+        
+        .phase-subtitle {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+        
+        .toggle-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+        
+        .phase.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+        
+        .phase-content {
+            padding: 30px;
+            background: #fafafa;
+        }
+        
+        .denkbox, .hinweis, .warnung, .ausblick {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid;
+        }
+        
+        .denkbox {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+        
+        .denkbox h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+        
+        .hinweis {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+        
+        .hinweis h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .warnung {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+        
+        .warnung h3 {
+            color: #c62828;
+            margin-bottom: 10px;
+        }
+        
+        .ausblick {
+            background: #f3e5f5;
+            border-color: #9c27b0;
+        }
+        
+        .ausblick h3 {
+            color: #6a1b9a;
+            margin-bottom: 10px;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        
+        .frage {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .frage-text {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #11998e;
+        }
+        
+        .antwort-optionen {
+            margin: 15px 0;
+        }
+        
+        .antwort-option {
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .antwort-option:hover {
+            background: #e3f2fd;
+            border-color: #2196F3;
+            transform: translateX(5px);
+        }
+        
+        .antwort-option.selected {
+            background: #bbdefb;
+            border-color: #1976D2;
+        }
+        
+        .antwort-option.correct {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+        
+        .antwort-option.wrong {
+            background: #ffcdd2;
+            border-color: #f44336;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .feedback.show {
+            display: block;
+        }
+        
+        .feedback.correct {
+            background: #c8e6c9;
+            border-left: 5px solid #4caf50;
+            color: #2e7d32;
+        }
+        
+        .feedback.wrong {
+            background: #ffcdd2;
+            border-left: 5px solid #f44336;
+            color: #c62828;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .pro {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .con {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .code-side-by-side {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .code-side-by-side {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .code-column {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .code-column h4 {
+            padding: 15px;
+            margin: 0;
+        }
+        
+        .alt-code h4 {
+            background: #ffcdd2;
+            color: #c62828;
+        }
+        
+        .neu-code h4 {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+        
+        .code-column pre {
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .code-aufgabe {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .code-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 0.95em;
+        }
+        
+        .code-input:focus {
+            outline: none;
+            border-color: #11998e;
+        }
+        
+        .checklist {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .checklist li {
+            padding: 12px 12px 12px 45px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .checklist li:hover {
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+        
+        .checklist li:before {
+            content: "☐";
+            position: absolute;
+            left: 15px;
+            font-size: 1.3em;
+            color: #999;
+        }
+        
+        .checklist li.checked {
+            background: #c8e6c9;
+            border-color: #4caf50;
+        }
+        
+        .checklist li.checked:before {
+            content: "☑";
+            color: #4caf50;
+        }
+        
+        .ausblick-items {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .ausblick-items {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .ausblick-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .ausblick-item h4 {
+            color: #9c27b0;
+            margin-bottom: 10px;
+        }
+        
+        details {
+            margin: 10px 0;
+        }
+        
+        summary {
+            cursor: pointer;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            user-select: none;
+        }
+        
+        summary:hover {
+            background: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -39,7 +562,7 @@
                     <div class="phase-number">1</div>
                     <div class="phase-title">
                         <h2>Array vs. ArrayList: Das Konzept</h2>
-                        <div class="phase-subtitle">Primitiv oder Referenz? Das ist hier die Frage!</div>
+                        <div class="phase-subtitle">Fest oder flexibel? Das ist hier die Frage!</div>
                     </div>
                     <div class="toggle-icon">▼</div>
                 </div>
@@ -75,8 +598,8 @@
                             </tr>
                             <tr>
                                 <td><strong>Typ</strong></td>
-                                <td>Referenzdatentyp (sprachintegriert).</td>
-                                <td>Klasse aus java.util</td>
+                                <td>Sprachintegriert (fester Bestandteil von Java)</td>
+                                <td>Klasse aus java.util (Teil der Java-Bibliothek)</td>
                             </tr>
                             <tr>
                                 <td><strong>Syntax</strong></td>
@@ -112,22 +635,23 @@
                     </div>
                     
                     <div class="frage" data-question="2">
-                        <div class="frage-text">Was bedeutet "Referenzdatentyp" bei ArrayList?</div>
+                        <div class="frage-text">Was bedeutet es, dass ArrayList eine Klasse ist?</div>
                         <div class="antwort-optionen">
-                            <div class="antwort-option" data-answer="a">a) ArrayList ist eine Klasse, die Variable speichert eine Referenz (Speicheradresse) auf das Objekt</div>
+                            <div class="antwort-option" data-answer="a">a) ArrayList ist wie Planet oder Stern eine Klasse - mit Attributen und Methoden. Die Variable speichert eine Referenz (Adresse) auf das ArrayList-Objekt</div>
                             <div class="antwort-option" data-answer="b">b) ArrayList verweist immer auf ein Array</div>
                             <div class="antwort-option" data-answer="c">c) ArrayList kann nur andere Objekte referenzieren</div>
-                            <div class="antwort-option" data-answer="d">d) ArrayList hat keine besondere Bedeutung</div>
+                            <div class="antwort-option" data-answer="d">d) ArrayList ist eine primitive Variable</div>
                         </div>
                         <button onclick="checkAnswer(2, 'a')">Antwort überprüfen</button>
                         <div class="feedback"></div>
                     </div>
                     
                     <div class="hinweis">
-                        <h3>Wichtig: Array vs. ArrayList - Beide sind Referenzdatentypen!</h3>
-                        <p><strong>Array</strong> ist ein spezieller Referenzdatentyp - fest in die Sprache eingebaut, aber trotzdem ein Objekt im Heap.</p>
-                        <p><strong>ArrayList</strong> ist eine Klasse aus der Java-Bibliothek - ebenfalls ein Referenzdatentyp mit Methoden und Attributen.</p>
-                        <p><strong>Der Unterschied:</strong> Arrays haben eine feste Größe und eingebaute Syntax ([], .length). ArrayList ist flexibel und bietet viele Methoden (.add(), .remove(), .size()).</p>
+                        <h3>Wichtig: Arrays und ArrayList - beides Objekte!</h3>
+                        <p><strong>Array</strong> ist ein spezielles Objekt - fest in die Sprache Java eingebaut. Ein Array hat eine feste Größe und wird mit eckigen Klammern [] verwendet.</p>
+                        <p><strong>ArrayList</strong> ist eine Klasse aus der Java-Bibliothek - genau wie Planet oder Stern eine Klasse ist. ArrayList-Objekte haben Methoden wie .add() und .size().</p>
+                        <p><strong>Der Unterschied:</strong> Arrays haben eine feste Größe und spezielle Syntax ([], .length). ArrayList ist flexibel und kann wachsen - sie bietet viele nützliche Methoden (.add(), .remove(), .size()).</p>
+                        <p><strong>Beide sind keine primitiven Datentypen</strong> wie int oder double - beide sind Objekte!</p>
                     </div>
                     
                     <button onclick="completePhase(1)">Phase 1 abschließen ✓</button>
@@ -184,27 +708,33 @@ objekte.add("Erde");        // ✗ Fehler! Nur Himmelskoerper!</pre>
                     
                     <div class="denkbox">
                         <h3>Überlege</h3>
-                        <p>Was passiert bei dieser Deklaration ohne Generics?</p>
+                        <p>Was passiert, wenn du eine ArrayList ohne Generics deklarierst?</p>
                         <pre>ArrayList objekte = new ArrayList();  // Kein &lt;Typ&gt;!</pre>
                         <details style="margin-top: 10px;">
                             <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Antwort</summary>
-                            <p style="margin-top: 10px;">Ohne Generics kann die ArrayList <strong>alles</strong> speichern (Object). Das ist unsicher, weil du beim Auslesen casten musst und Fehler erst zur Laufzeit entdeckt werden. Mit Generics prüft der Compiler schon beim Schreiben!</p>
+                            <p style="margin-top: 10px;">Ohne Generics kann die ArrayList <strong>alles</strong> speichern - Strings, Zahlen, Planeten durcheinander! Das ist unsicher, weil:</p>
+                            <ul style="margin-left: 20px;">
+                                <li>Du beim Auslesen nicht weißt, welchen Typ du bekommst</li>
+                                <li>Du manuell umwandeln (casten) musst</li>
+                                <li>Fehler erst beim Programmstart entdeckt werden, nicht beim Schreiben</li>
+                            </ul>
+                            <p>Mit Generics prüft der Compiler schon beim Schreiben des Codes, ob die Typen passen!</p>
                         </details>
                     </div>
                     
                     <div class="warnung">
-                        <h3>Wichtig: Wrapper-Klassen</h3>
-                        <p>Generics funktionieren NUR mit Referenzdatentypen (Klassen), nicht mit primitiven Typen!</p>
-                        <pre>ArrayList&lt;int&gt; zahlen;     // ✗ Fehler!
-ArrayList&lt;Integer&gt; zahlen; // ✓ Richtig!</pre>
-                        <p><strong>Wrapper-Klassen</strong> sind Objektversionen der primitiven Typen:</p>
+                        <h3>Wichtig: Wrapper-Klassen für primitive Typen</h3>
+                        <p>Generics funktionieren NUR mit Objekten (Klassen), nicht mit primitiven Typen wie int oder double!</p>
+                        <pre>ArrayList&lt;int&gt; zahlen;     // ✗ Fehler! int ist primitiv
+ArrayList&lt;Integer&gt; zahlen; // ✓ Richtig! Integer ist eine Klasse</pre>
+                        <p><strong>Wrapper-Klassen</strong> sind "Verpackungen" für primitive Typen - sie machen aus dem primitiven Wert ein Objekt:</p>
                         <ul style="margin-left: 20px; margin-top: 10px;">
-                            <li><code>int</code> → <code>Integer</code></li>
+                            <li><code>int</code> → <code>Integer</code> (z.B. 42 wird zu einem Integer-Objekt)</li>
                             <li><code>double</code> → <code>Double</code></li>
                             <li><code>boolean</code> → <code>Boolean</code></li>
                             <li><code>char</code> → <code>Character</code></li>
                         </ul>
-                        <p style="margin-top: 10px;">Java konvertiert automatisch zwischen primitiven Typen und Wrapper-Klassen (Autoboxing).</p>
+                        <p style="margin-top: 10px;"><strong>Autoboxing:</strong> Java konvertiert automatisch zwischen primitiven Typen und Wrapper-Klassen. Du kannst also einfach <code>zahlen.add(42)</code> schreiben, und Java macht daraus automatisch ein Integer-Objekt!</p>
                     </div>
                     
                     <button onclick="completePhase(2)">Phase 2 abschließen ✓</button>
@@ -287,12 +817,12 @@ while (i < objekte.size()) {
                         <p><strong>Welche Variante ist am besten für unser Sonnensystem?</strong></p>
                     </div>
                     
-                    <div class="思考框">
+                    <div class="denkbox">
                         <h3>Denke nach!</h3>
                         <p>Warum ist die for-each-Schleife (Variante 2) oft die beste Wahl?</p>
                         <details style="margin-top: 10px;">
                             <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Antwort</summary>
-                            <p style="margin-top: 10px;">Die for-each-Schleife ist kürzer, lesbarer und weniger fehleranfällig. Du brauchst keinen Index und kannst keine IndexOutOfBounds-Fehler machen. Sie eignet sich perfekt, wenn du alle Elemente durchlaufen willst!</p>
+                            <p style="margin-top: 10px;">Die for-each-Schleife ist kürzer, lesbarer und weniger fehleranfällig. Du brauchst keinen Index und kannst keine IndexOutOfBounds-Fehler machen. Sie eignet sich perfekt, wenn du alle Elemente nacheinander durchlaufen willst!</p>
                         </details>
                     </div>
                     
@@ -300,10 +830,127 @@ while (i < objekte.size()) {
                 </div>
             </div>
             
-            <!-- Phase 4: Migration - Deklaration -->
+            <!-- Phase 4: Pegel-Problem lösen -->
             <div class="phase collapsed" data-phase="4">
                 <div class="phase-header" onclick="togglePhase(4)">
                     <div class="phase-number">4</div>
+                    <div class="phase-title">
+                        <h2>Problem: Pegel-Zugriffe ersetzen</h2>
+                        <div class="phase-subtitle">Was tun mit pegel-1 in urknall()?</div>
+                    </div>
+                    <div class="toggle-icon">▼</div>
+                </div>
+                <div class="phase-content">
+                    <div class="warnung">
+                        <h3>⚠️ Häufiges Problem bei der Migration</h3>
+                        <p>Viele von euch haben in der <code>urknall()</code>-Methode so gearbeitet:</p>
+                        <pre>this.addHimmelskoerper(new Planet());
+this.getHimmelskoerper(this.pegel-1).setDurchmesser(10);
+this.getHimmelskoerper(this.pegel-1).setX(50);
+this.getHimmelskoerper(this.pegel-1).setFarbe("blau");</pre>
+                        <p><strong>Problem:</strong> <code>pegel</code> gibt es bei ArrayList nicht mehr! Wie greifen wir auf das gerade hinzugefügte Element zu?</p>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>✅ Lösung 1: size() - 1 verwenden</h3>
+                        <p>Bei ArrayList nutzen wir <code>objekte.size() - 1</code> für das letzte Element:</p>
+                        <pre>this.addHimmelskoerper(new Planet());
+this.getHimmelskoerper(objekte.size()-1).setDurchmesser(10);
+this.getHimmelskoerper(objekte.size()-1).setX(50);
+this.getHimmelskoerper(objekte.size()-1).setFarbe("blau");</pre>
+                        <p><strong>Warum size()-1?</strong> Wenn die Liste 3 Elemente hat, sind die Indizes 0, 1, 2. Das letzte Element ist also bei Index 2 = size()-1.</p>
+                    </div>
+                    
+                    <div class="hinweis">
+                        <h3>✅ Lösung 2: Lokale Variable (eleganter!)</h3>
+                        <p>Noch besser: Das neue Objekt in einer Variable speichern!</p>
+                        <pre>Planet erde = new Planet();
+erde.setDurchmesser(10);
+erde.setX(50);
+erde.setFarbe("blau");
+this.addHimmelskoerper(erde);</pre>
+                        <p><strong>Vorteile:</strong></p>
+                        <ul>
+                            <li>✅ Lesbarer und klarer</li>
+                            <li>✅ Kein mehrfacher Zugriff über Index nötig</li>
+                            <li>✅ Keine Fehler durch falsche Indizes</li>
+                            <li>✅ Funktioniert auch ohne ArrayList/Array-Zugriff</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="code-side-by-side">
+                        <div class="code-column alt-code">
+                            <h4>❌ Alt: Mit pegel</h4>
+                            <pre>this.addHimmelskoerper(new Planet());
+this.getHimmelskoerper(this.pegel-1).setDurchmesser(10);
+this.getHimmelskoerper(this.pegel-1).setX(50);
+this.getHimmelskoerper(this.pegel-1).setY(0);
+this.getHimmelskoerper(this.pegel-1).setFarbe("blau");
+this.getHimmelskoerper(this.pegel-1).setVx(0);
+this.getHimmelskoerper(this.pegel-1).setVy(2);</pre>
+                        </div>
+                        <div class="code-column neu-code">
+                            <h4>✅ Neu: Mit lokaler Variable</h4>
+                            <pre>Planet erde = new Planet();
+erde.setDurchmesser(10);
+erde.setX(50);
+erde.setY(0);
+erde.setFarbe("blau");
+erde.setVx(0);
+erde.setVy(2);
+this.addHimmelskoerper(erde);</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Vergleich der beiden Lösungen</h3>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspekt</th>
+                                <th>objekte.size()-1</th>
+                                <th>Lokale Variable</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Aufwand</strong></td>
+                                <td>Minimal - nur pegel durch size()-1 ersetzen</td>
+                                <td>Mehr Umschreibarbeit</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lesbarkeit</strong></td>
+                                <td><span class="con">~</span> Okay</td>
+                                <td><span class="pro">✓</span> Sehr gut</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Performance</strong></td>
+                                <td><span class="con">~</span> Mehrfacher ArrayList-Zugriff</td>
+                                <td><span class="pro">✓</span> Direkter Objekt-Zugriff</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fehleranfälligkeit</strong></td>
+                                <td><span class="con">~</span> Index könnte falsch sein</td>
+                                <td><span class="pro">✓</span> Kein Index nötig</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="code-aufgabe">
+                        <h3>Aufgabe: Deine urknall()-Methode anpassen</h3>
+                        <p>Wähle eine der beiden Lösungen und passe deine <code>urknall()</code>-Methode an:</p>
+                        <textarea class="code-input" id="code4" placeholder="private void urknall() {
+    // Dein Code hier - entweder mit size()-1 oder mit lokalen Variablen
+}"></textarea>
+                        <button onclick="showSolution(4)">💡 Musterlösung (lokale Variable) anzeigen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
+                    <button onclick="completePhase(5)">Phase 5 abschließen ✓</button>
+                </div>
+            </div>
+            
+            <!-- Phase 5: Migration - Deklaration -->
+            <div class="phase collapsed" data-phase="5">
+                <div class="phase-header" onclick="togglePhase(5)">
+                    <div class="phase-number">5</div>
                     <div class="phase-title">
                         <h2>Migration Schritt 1: Deklaration</h2>
                         <div class="phase-subtitle">Array durch ArrayList ersetzen</div>
@@ -348,7 +995,7 @@ public Sonnensystem() {
                             <li>Passe den Konstruktor an</li>
                             <li>Füge den Import hinzu</li>
                         </ol>
-                        <textarea class="code-input" id="code4" placeholder="// Deine Änderungen hier..."></textarea>
+                        <textarea class="code-input" id="code5x" placeholder="// Deine Änderungen hier..."></textarea>
                     </div>
                     
                     <div class="warnung">
@@ -360,10 +1007,10 @@ public Sonnensystem() {
                 </div>
             </div>
             
-            <!-- Phase 5: Migration - addHimmelskoerper -->
-            <div class="phase collapsed" data-phase="5">
-                <div class="phase-header" onclick="togglePhase(5)">
-                    <div class="phase-number">5</div>
+            <!-- Phase 6: Migration - addHimmelskoerper -->
+            <div class="phase collapsed" data-phase="6">
+                <div class="phase-header" onclick="togglePhase(6)">
+                    <div class="phase-number">6</div>
                     <div class="phase-title">
                         <h2>Migration Schritt 2: addHimmelskoerper()</h2>
                         <div class="phase-subtitle">Von manuell zu automatisch</div>
@@ -417,21 +1064,21 @@ public Sonnensystem() {
                     <div class="code-aufgabe">
                         <h3>Aufgabe: Methode vereinfachen</h3>
                         <p>Schreibe die neue, einfachere Version von <code>addHimmelskoerper()</code>:</p>
-                        <textarea class="code-input" id="code5" placeholder="public void addHimmelskoerper(Himmelskoerper hk) {
+                        <textarea class="code-input" id="code6" placeholder="public void addHimmelskoerper(Himmelskoerper hk) {
     // Dein Code hier
 }"></textarea>
-                        <button onclick="showSolution(5)">💡 Musterlösung anzeigen</button>
+                        <button onclick="showSolution(6)">💡 Musterlösung anzeigen</button>
                         <div class="feedback"></div>
                     </div>
                     
-                    <button onclick="completePhase(5)">Phase 5 abschließen ✓</button>
+                    <button onclick="completePhase(6)">Phase 6 abschließen ✓</button>
                 </div>
             </div>
             
-            <!-- Phase 6: Migration - getHimmelskoerper -->
-            <div class="phase collapsed" data-phase="6">
-                <div class="phase-header" onclick="togglePhase(6)">
-                    <div class="phase-number">6</div>
+            <!-- Phase 7: Migration - getHimmelskoerper -->
+            <div class="phase collapsed" data-phase="7">
+                <div class="phase-header" onclick="togglePhase(7)">
+                    <div class="phase-number">7</div>
                     <div class="phase-title">
                         <h2>Migration Schritt 3: getHimmelskoerper()</h2>
                         <div class="phase-subtitle">Zugriff auf Elemente</div>
@@ -476,10 +1123,10 @@ public Sonnensystem() {
                     <div class="code-aufgabe">
                         <h3>Aufgabe: Methode anpassen</h3>
                         <p>Passe deine <code>getHimmelskoerper()</code>-Methode für ArrayList an:</p>
-                        <textarea class="code-input" id="code6" placeholder="public Himmelskoerper getHimmelskoerper(int index) {
+                        <textarea class="code-input" id="code7" placeholder="public Himmelskoerper getHimmelskoerper(int index) {
     // Dein Code hier
 }"></textarea>
-                        <button onclick="showSolution(6)">💡 Musterlösung anzeigen</button>
+                        <button onclick="showSolution(7)">💡 Musterlösung anzeigen</button>
                         <div class="feedback"></div>
                     </div>
                     
@@ -492,14 +1139,14 @@ public Sonnensystem() {
                         <p>Was ist besser? Das hängt vom Kontext ab!</p>
                     </div>
                     
-                    <button onclick="completePhase(6)">Phase 6 abschließen ✓</button>
+                    <button onclick="completePhase(7)">Phase 7 abschließen ✓</button>
                 </div>
             </div>
             
-            <!-- Phase 7: Migration - actionPerformed -->
-            <div class="phase collapsed" data-phase="7">
-                <div class="phase-header" onclick="togglePhase(7)">
-                    <div class="phase-number">7</div>
+            <!-- Phase 8: Migration - actionPerformed -->
+            <div class="phase collapsed" data-phase="8">
+                <div class="phase-header" onclick="togglePhase(8)">
+                    <div class="phase-number">8</div>
                     <div class="phase-title">
                         <h2>Migration Schritt 4: Schleifen anpassen</h2>
                         <div class="phase-subtitle">actionPerformed() und paintComponent()</div>
@@ -552,7 +1199,7 @@ public void actionPerformed(ActionEvent e) {
                     
                     <div class="code-aufgabe">
                         <h3>Aufgabe 1: actionPerformed() anpassen</h3>
-                        <textarea class="code-input" id="code7a" placeholder="@Override
+                        <textarea class="code-input" id="code8a" placeholder="@Override
 public void actionPerformed(ActionEvent e) {
     // Dein Code hier
 }"></textarea>
@@ -592,7 +1239,7 @@ protected void paintComponent(Graphics g) {
                     <div class="code-aufgabe">
                         <h3>Aufgabe 2: paintComponent() anpassen</h3>
                         <p>Passe die Schleife in der <code>paintComponent()</code>-Methode an. Die komplette Methode soll etwa so aussehen:</p>
-                        <textarea class="code-input" id="code7b" style="min-height: 250px;" placeholder="@Override
+                        <textarea class="code-input" id="code8b" style="min-height: 250px;" placeholder="@Override
 protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     
@@ -602,18 +1249,18 @@ protected void paintComponent(Graphics g) {
         // Oval zeichnen
     }
 }"></textarea>
-                        <button onclick="showSolution('7b')">💡 Musterlösung anzeigen</button>
+                        <button onclick="showSolution('8b')">💡 Musterlösung anzeigen</button>
                         <div class="feedback"></div>
                     </div>
                     
-                    <button onclick="completePhase(7)">Phase 7 abschließen ✓</button>
+                    <button onclick="completePhase(10)">Phase 10 abschließen ✓</button>
                 </div>
             </div>
             
-            <!-- Phase 8: Bonus - removeHimmelskoerper -->
-            <div class="phase collapsed" data-phase="8">
-                <div class="phase-header" onclick="togglePhase(8)">
-                    <div class="phase-number">8</div>
+            <!-- Phase 9: Bonus - removeHimmelskoerper -->
+            <div class="phase collapsed" data-phase="9">
+                <div class="phase-header" onclick="togglePhase(9)">
+                    <div class="phase-number">9</div>
                     <div class="phase-title">
                         <h2>Bonus: removeHimmelskoerper() vereinfachen</h2>
                         <div class="phase-subtitle">Falls implementiert: Jetzt wird's elegant!</div>
@@ -682,10 +1329,10 @@ if (!objekte.isEmpty()) {
                 </div>
             </div>
             
-            <!-- Phase 9: Testen -->
-            <div class="phase collapsed" data-phase="9">
-                <div class="phase-header" onclick="togglePhase(9)">
-                    <div class="phase-number">9</div>
+            <!-- Phase 10: Testen -->
+            <div class="phase collapsed" data-phase="10">
+                <div class="phase-header" onclick="togglePhase(10)">
+                    <div class="phase-number">10</div>
                     <div class="phase-title">
                         <h2>Testen der Migration</h2>
                         <div class="phase-subtitle">Funktioniert alles wie vorher?</div>
@@ -728,9 +1375,9 @@ if (!objekte.isEmpty()) {
                 </div>
             </div>
             
-            <!-- Phase 10: Reflexion und Ausblick -->
-            <div class="phase collapsed" data-phase="10">
-                <div class="phase-header" onclick="togglePhase(10)">
+            <!-- Phase 11: Reflexion und Ausblick -->
+            <div class="phase collapsed" data-phase="11">
+                <div class="phase-header" onclick="togglePhase(11)">
                     <div class="phase-number">🎓</div>
                     <div class="phase-title">
                         <h2>Reflexion und Ausblick</h2>
@@ -803,17 +1450,15 @@ if (!objekte.isEmpty()) {
                             <div class="ausblick-item">
                                 <h4>📚 Stack (Stapel)</h4>
                                 <p><strong>Prinzip:</strong> LIFO - Last In, First Out</p>
-                                <p><strong>Anwenungbespiele:</strong> Papierstapel auf dem Tisch</p>
+                                <p><strong>Anwendungsbeispiele:</strong> Papierstapel auf dem Tisch</p>
                             </div>
                         </div>
-                        
-                        
                     </div>
                     
                     <div class="lernziele">
                         <h2>✅ Das hast du heute gelernt:</h2>
                         <ul class="checklist" id="finalChecklist">
-                            <li onclick="toggleCheck(this)">Unterschied zwischen Array (primitiv) und ArrayList (Referenzdatentyp)</li>
+                            <li onclick="toggleCheck(this)">Unterschied zwischen Array (fest) und ArrayList (flexibel)</li>
                             <li onclick="toggleCheck(this)">Generics: Typsicherheit mit &lt;T&gt;</li>
                             <li onclick="toggleCheck(this)">ArrayList-Methoden: add(), get(), remove(), size()</li>
                             <li onclick="toggleCheck(this)">For-each-Schleife für elegantes Durchlaufen</li>
@@ -890,12 +1535,12 @@ protected void paintComponent(Graphics g) {
                 wrong: 'Nicht ganz. Der wichtigste Unterschied ist die Flexibilität: Arrays sind fest, ArrayList ist dynamisch.'
             },
             2: {
-                correct: 'Perfekt! ArrayList ist eine Klasse (wie String, Scanner usw.). Die Variable speichert eine Referenz auf das ArrayList-Objekt im Heap.',
-                wrong: 'Denk an die Objektprogrammierung: ArrayList ist eine Klasse. Was speichert eine Objektvariable?'
+                correct: 'Perfekt! ArrayList ist eine Klasse (wie Planet, Stern, String oder Scanner). Die Variable speichert eine Referenz - also die "Adresse" - wo das ArrayList-Objekt im Speicher liegt.',
+                wrong: 'Denk an die Objektprogrammierung: ArrayList ist eine Klasse. Wenn du schreibst "ArrayList<String> namen = new ArrayList<>();", erstellst du ein Objekt!'
             },
             3: {
                 correct: 'Richtig! Generics ermöglichen parametrisierte Typen - Klassen können mit unterschiedlichen Datentypen arbeiten, ohne ihre Typsicherheit zu verlieren. Der Compiler prüft schon beim Übersetzen, ob die Typen zusammenpassen, und Typumwandlungen (Casts) werden überflüssig.',
-                wrong: 'Generics sind für Typsicherheit da. Sie ermöglichen, dass der Compiler Typfehler schon beim Schreiben erkennt und machen den Code wiederverwendbar.'
+                wrong: 'Generics geben einer Liste einen festen Typ, z. B. nur Strings. So kannst du später nichts Falsches hineinlegen und der Computer merkt Fehler früh.'
             },
             4: {
                 correct: 'Exakt! length ist ein Attribut (final), deshalb keine Klammern. size() ist eine Methode, daher mit Klammern. Ein häufiger Anfängerfehler!',
