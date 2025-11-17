@@ -24,7 +24,7 @@
             <div class="lernziele">
                 <h2>🎯 Lernziele dieser Stunde</h2>
                 <ul>
-                    <li>Unterschied zwischen Array (primitiv) und ArrayList (Referenzdatentyp) verstehen</li>
+                    <li>Unterschied zwischen Array und ArrayList (Referenzdatentyp) verstehen</li>
                     <li>Vorteile dynamischer Datenstrukturen kennenlernen</li>
                     <li>ArrayList-Methoden: add(), get(), remove(), size() anwenden</li>
                     <li>Generics verstehen: <code>&lt;Himmelskoerper&gt;</code></li>
@@ -54,7 +54,6 @@
                         <div class="antwort-optionen">
                             <div class="antwort-option" data-answer="a">a) Arrays sind schneller als ArrayLists</div>
                             <div class="antwort-option" data-answer="b">b) Arrays haben eine feste Größe, ArrayLists können dynamisch wachsen</div>
-                            <div class="antwort-option" data-answer="c">c) Arrays können nur primitive Datentypen speichern</div>
                             <div class="antwort-option" data-answer="d">d) ArrayLists sind veraltet und sollten nicht mehr verwendet werden</div>
                         </div>
                         <button onclick="checkAnswer(1, 'b')">Antwort überprüfen</button>
@@ -76,7 +75,7 @@
                             </tr>
                             <tr>
                                 <td><strong>Typ</strong></td>
-                                <td>Primitiver Typ (eingebaut)</td>
+                                <td>Referenzdatentyp (sprachintegriert).</td>
                                 <td>Klasse aus java.util</td>
                             </tr>
                             <tr>
@@ -720,7 +719,7 @@ if (!objekte.isEmpty()) {
                         <ul>
                             <li><strong>Import vergessen:</strong> <code>import java.util.ArrayList;</code></li>
                             <li><strong>Klammern vergessen:</strong> <code>size()</code> nicht <code>size</code></li>
-                            <li><strong>Alte null-Prüfungen:</strong> In ArrayList sind keine null-Werte (außer du fügst sie explizit hinzu)</li>
+                            <li><strong>ArrayList enthält nur Elemente, die du aktiv hinzufügst</strong> – keine automatisch erzeugten null-Plätze wie bei Arrays.</li>
                             <li><strong>Array-Syntax:</strong> <code>get(i)</code> nicht <code>[i]</code></li>
                         </ul>
                     </div>
