@@ -797,13 +797,13 @@ objekte.clear();                        // Liste leeren</pre>
                     <div class="code-aufgabe">
                         <h3>Aufgabe: Durchlaufen einer ArrayList</h3>
                         <p>Es gibt mehrere Wege, durch eine ArrayList zu iterieren:</p>
-                        <pre>// Variante 1: for-Schleife mit Index
+                        <pre>// Variante 1: for-Schleife mit Index (kennst du schon!)
 for (int i = 0; i < objekte.size(); i++) {
     Himmelskoerper h = objekte.get(i);
     h.bewegung();
 }
 
-// Variante 2: for-each-Schleife (eleganter!)
+// Variante 2: for-each-Schleife (NEU und eleganter!)
 for (Himmelskoerper h : objekte) {
     h.bewegung();
 }
@@ -817,12 +817,76 @@ while (i < objekte.size()) {
                         <p><strong>Welche Variante ist am besten für unser Sonnensystem?</strong></p>
                     </div>
                     
+                    <div class="hinweis">
+                        <h3>🆕 Die for-each-Schleife verstehen</h3>
+                        <p>Die for-each-Schleife (auch "enhanced for loop") ist eine elegante Kurzform zum Durchlaufen von Collections wie ArrayList:</p>
+                        <pre>for (Datentyp variable : collection) {
+    // Nutze die variable
+}</pre>
+                        <p><strong>So liest man das:</strong> "Für jedes Element vom Typ Himmelskoerper (nenne es h) in der Liste objekte, tue Folgendes..."</p>
+                        
+                        <div style="background: white; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                            <h4 style="margin-top: 0; color: #11998e;">Beispiel zum Vergleich:</h4>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 10px; vertical-align: top; width: 50%; border-right: 2px solid #e0e0e0;">
+                                        <strong>Klassische for-Schleife:</strong>
+                                        <pre style="margin: 10px 0;">for (int i = 0; i < objekte.size(); i++) {
+    Himmelskoerper h = objekte.get(i);
+    System.out.println(h.getFarbe());
+}</pre>
+                                    </td>
+                                    <td style="padding: 10px; vertical-align: top; width: 50%;">
+                                        <strong>For-each-Schleife:</strong>
+                                        <pre style="margin: 10px 0;">for (Himmelskoerper h : objekte) {
+    System.out.println(h.getFarbe());
+}</pre>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <p style="margin-top: 15px;"><strong>Wichtig:</strong> Die Variable <code>h</code> ist automatisch das aktuelle Element - du musst nicht mit <code>get(i)</code> darauf zugreifen!</p>
+                    </div>
+                    
+                    <div class="frage" data-question="6">
+                        <div class="frage-text">Was macht diese for-each-Schleife? <code>for (Planet p : planeten) { p.setFarbe("rot"); }</code></div>
+                        <div class="antwort-optionen">
+                            <div class="antwort-option" data-answer="a">a) Setzt die Farbe des ersten Planeten auf rot</div>
+                            <div class="antwort-option" data-answer="b">b) Setzt die Farbe ALLER Planeten in der Liste auf rot</div>
+                            <div class="antwort-option" data-answer="c">c) Gibt einen Fehler, weil p nicht definiert ist</div>
+                            <div class="antwort-option" data-answer="d">d) Macht nichts, weil die Schleife leer ist</div>
+                        </div>
+                        <button onclick="checkAnswer(6, 'b')">Antwort überprüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                    
                     <div class="denkbox">
-                        <h3>Denke nach!</h3>
-                        <p>Warum ist die for-each-Schleife (Variante 2) oft die beste Wahl?</p>
-                        <details style="margin-top: 10px;">
-                            <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Antwort</summary>
-                            <p style="margin-top: 10px;">Die for-each-Schleife ist kürzer, lesbarer und weniger fehleranfällig. Du brauchst keinen Index und kannst keine IndexOutOfBounds-Fehler machen. Sie eignet sich perfekt, wenn du alle Elemente nacheinander durchlaufen willst!</p>
+                        <h3>Wann for-each, wann klassische for-Schleife?</h3>
+                        <p><strong>✅ Verwende for-each wenn:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Du alle Elemente durchlaufen willst</li>
+                            <li>Du den Index nicht brauchst</li>
+                            <li>Du nur lesend auf Elemente zugreifst oder ihre Methoden aufrufst</li>
+                        </ul>
+                        <p><strong>⚠️ Verwende klassische for-Schleife wenn:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Du den Index brauchst (z.B. für Position oder Nummerierung)</li>
+                            <li>Du nur jedes 2. Element durchlaufen willst</li>
+                            <li>Du Elemente während des Durchlaufens entfernen willst</li>
+                        </ul>
+                        
+                        <details style="margin-top: 15px;">
+                            <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Beispiele</summary>
+                            <pre style="margin-top: 10px;">// ✓ Gut für for-each: Alle Bewegungen aktualisieren
+for (Himmelskoerper h : objekte) {
+    h.bewegung();
+}
+
+// ✓ Besser klassische for: Index wird gebraucht
+for (int i = 0; i < objekte.size(); i++) {
+    System.out.println("Himmelskörper " + (i+1) + ": " + objekte.get(i).getFarbe());
+}</pre>
                         </details>
                     </div>
                     
@@ -1422,7 +1486,7 @@ if (!objekte.isEmpty()) {
                         </table>
                     </div>
                     
-                    <div class="frage" data-question="10">
+                    <div class="frage" data-question="11">
                         <div class="frage-text">Wann würdest du trotzdem ein Array statt ArrayList verwenden?</div>
                         <textarea class="code-input" placeholder="Deine Überlegungen..." style="min-height: 100px;"></textarea>
                         <details style="margin-top: 15px;">
@@ -1473,7 +1537,7 @@ if (!objekte.isEmpty()) {
                         <p><strong>Optional:</strong> Implementiere eine Methode <code>findHimmelskoerperByName(String name)</code>, die einen Himmelskörper anhand seines Namens in der ArrayList sucht und zurückgibt. Tipp: Du brauchst eine Schleife und den Getter für den Namen!</p>
                     </div>
                     
-                    <button onclick="completePhase(10)">Arbeitsblatt abschließen 🎉</button>
+                    <button onclick="completePhase(11)">Arbeitsblatt abschließen 🎉</button>
                 </div>
             </div>
             
@@ -1482,15 +1546,35 @@ if (!objekte.isEmpty()) {
     
     <script>
         const progress = {
-            total: 10,
+            total: 11,
             completed: []
         };
         
         const solutions = {
-            5: `public void addHimmelskoerper(Himmelskoerper hk) {
+            4: `private void urknall() {
+    // Lösung mit lokaler Variable (empfohlen!)
+    Planet erde = new Planet();
+    erde.setDurchmesser(10);
+    erde.setX(50);
+    erde.setY(0);
+    erde.setFarbe("blau");
+    erde.setVx(0);
+    erde.setVy(2);
+    this.addHimmelskoerper(erde);
+    
+    Stern sonne = new Stern();
+    sonne.setDurchmesser(30);
+    sonne.setX(0);
+    sonne.setY(0);
+    sonne.setFarbe("gelb");
+    sonne.setVx(0);
+    sonne.setVy(0);
+    this.addHimmelskoerper(sonne);
+}`,
+            6: `public void addHimmelskoerper(Himmelskoerper hk) {
     objekte.add(hk);
 }`,
-            6: `public Himmelskoerper getHimmelskoerper(int index) {
+            7: `public Himmelskoerper getHimmelskoerper(int index) {
     if (index >= 0 && index < objekte.size()) {
         return objekte.get(index);
     } else {
@@ -1498,7 +1582,7 @@ if (!objekte.isEmpty()) {
         return null;
     }
 }`,
-            '7b': `@Override
+            '8b': `@Override
 protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     
@@ -1526,7 +1610,8 @@ protected void paintComponent(Graphics g) {
             2: 'a',
             3: 'b',
             4: 'b',
-            5: 'b'
+            5: 'b',
+            6: 'b'
         };
         
         const answerFeedback = {
@@ -1549,6 +1634,10 @@ protected void paintComponent(Graphics g) {
             5: {
                 correct: 'Genau! ArrayList vergrößert sich automatisch. Intern wird ein neues, größeres Array erstellt (meist 1,5x so groß), die Daten werden kopiert, und das alte Array wird verworfen. Das passiert transparent für dich!',
                 wrong: 'ArrayList ist "dynamisch" - sie wächst automatisch! Intern wird ein neues, größeres Array erstellt.'
+            },
+            6: {
+                correct: 'Richtig! Die for-each-Schleife geht durch ALLE Elemente der Liste. Bei jedem Durchlauf ist p ein anderer Planet, und dessen Farbe wird auf rot gesetzt.',
+                wrong: 'Die for-each-Schleife durchläuft alle Elemente! "for (Planet p : planeten)" bedeutet: für jeden Planet p in der Liste planeten.'
             }
         };
         
@@ -1630,13 +1719,13 @@ protected void paintComponent(Graphics g) {
                 updateProgress();
             }
             
-            if (phaseNum < 10) {
+            if (phaseNum < 11) {
                 const nextPhase = document.querySelector(`[data-phase="${phaseNum + 1}"]`);
                 if (nextPhase && nextPhase.classList.contains('collapsed')) {
                     nextPhase.classList.remove('collapsed');
                     nextPhase.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-            } else if (phaseNum === 10) {
+            } else if (phaseNum === 11) {
                 alert('🎉 Herzlichen Glückwunsch! Du hast erfolgreich von Array zu ArrayList migriert!');
             }
         }
