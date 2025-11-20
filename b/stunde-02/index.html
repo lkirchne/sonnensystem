@@ -202,7 +202,7 @@ liste.remove(0);</pre>
                     
                     <div class="frage" data-question="4">
                         <div class="frage-text">
-                            Szenario: Ein Array hat Platz für 100 Elemente (<code>new String[100]</code>). Eine ArrayList ist neu erstellt.<br>
+                            Szenario: Ein Array hat Platz für 100 Elemente (<code>Himmelskoerper[] obj = new Himmelskoerper[100];</code>). Eine ArrayList ist neu erstellt (<code>ArrayList&lt;Himmelskoerper&gt; obj = new ArrayList&lt;Himmelskoerper&gt;();</code>).<br>
                             In beide fügen wir jetzt genau <strong>3 Namen</strong> ein.<br><br>
                             Was geben <code>array.length</code> und <code>list.size()</code> zurück?
                         </div>
@@ -601,7 +601,7 @@ protected void paintComponent(Graphics g) {
             1: { correct: 'Richtig! Arrays sind starr, ArrayLists flexibel.', wrong: 'Leider nein. Arrays sind starr, ArrayLists sind dynamisch.' },
             2: { correct: 'Genau! ArrayList ist eine Klasse aus der Java-Bibliothek.', wrong: 'Nein, ArrayList ist eine ganz normale Klasse, von der man Objekte erstellt.' },
             3: { correct: 'Stimmt! int ist kein Objekt. Generics funktionieren nur mit Objekten. Wir brauchen Integer.', wrong: 'Falsch. Generics funktionieren nur mit Klassen (Objekten). int ist aber ein primitiver Typ.' },
-            4: { correct: 'Richtig! array.length bleibt 10 (das ist der reservierte Platz). list.size() ist 2 (tatsächliche Elemente).', wrong: 'Nicht ganz. Das Array hat 10 Plätze RESERVIERT (length=10), auch wenn nur 2 belegt sind. Die ArrayList zählt nur, was wirklich drin ist (size=2).' },
+            4: { correct: 'Richtig! array.length bleibt 10 (das ist der reservierte Platz). list.size() ist 3 (tatsächliche Elemente).', wrong: 'Nicht ganz. Das Array hat 100 Plätze RESERVIERT (length=100), auch wenn nur 3 belegt sind. Die ArrayList zählt nur, was wirklich drin ist (size=3).' },
             6: { correct: 'Richtig! For-each läuft durch ALLE Elemente.', wrong: 'Die Schleife läuft durch jedes einzelne Element der Liste.' }
         };
         
