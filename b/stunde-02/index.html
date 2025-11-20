@@ -4,95 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arbeitsblatt: Von Arrays zu ArrayList</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
-        header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 40px; text-align: center; }
-        header h1 { font-size: 2.5em; margin-bottom: 10px; }
-        header p { font-size: 1.2em; opacity: 0.9; }
-        .progress-bar { background: #f0f0f0; padding: 20px 40px; border-bottom: 2px solid #e0e0e0; }
-        .progress-track { background: #ddd; height: 30px; border-radius: 15px; overflow: hidden; margin-bottom: 10px; }
-        .progress-fill { background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%); height: 100%; width: 0%; transition: width 0.5s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; color: white; font-weight: bold; }
-        .progress-text { text-align: center; font-weight: 600; color: #555; }
-        .content { padding: 40px; }
-        .lernziele { background: #e3f2fd; border-left: 5px solid #2196F3; padding: 20px; margin-bottom: 30px; border-radius: 5px; }
-        .lernziele h2 { color: #1976D2; margin-bottom: 15px; }
-        .lernziele ul { list-style-position: inside; margin-left: 10px; }
-        .lernziele li { margin: 8px 0; }
-        .phase { margin: 30px 0; border: 2px solid #11998e; border-radius: 10px; overflow: hidden; transition: all 0.3s ease; }
-        .phase.collapsed .phase-content { display: none; }
-        .phase-header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 20px; cursor: pointer; display: flex; align-items: center; gap: 20px; transition: all 0.3s ease; }
-        .phase-header:hover { background: linear-gradient(135deg, #0d7a72 0%, #2dd16d 100%); }
-        .phase-number { background: white; color: #11998e; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold; flex-shrink: 0; }
-        .phase-title { flex: 1; }
-        .phase-title h2 { font-size: 1.4em; margin-bottom: 5px; }
-        .phase-subtitle { opacity: 0.9; font-size: 0.9em; }
-        .toggle-icon { font-size: 1.5em; transition: transform 0.3s ease; }
-        .phase.collapsed .toggle-icon { transform: rotate(-90deg); }
-        .phase-content { padding: 30px; background: #fafafa; }
-        .denkbox, .hinweis, .warnung, .ausblick { padding: 20px; margin: 20px 0; border-radius: 10px; border-left: 5px solid; }
-        .denkbox { background: #fff3e0; border-color: #ff9800; }
-        .denkbox h3 { color: #e65100; margin-bottom: 10px; }
-        .hinweis { background: #e8f5e9; border-color: #4caf50; }
-        .hinweis h3 { color: #2e7d32; margin-bottom: 10px; }
-        .warnung { background: #ffebee; border-color: #f44336; }
-        .warnung h3 { color: #c62828; margin-bottom: 10px; }
-        .ausblick { background: #f3e5f5; border-color: #9c27b0; }
-        .ausblick h3 { color: #6a1b9a; margin-bottom: 10px; }
-        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 10px 0; font-family: 'Courier New', monospace; }
-        code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; color: #d63384; }
-        .frage { background: white; padding: 20px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .frage-text { font-weight: 600; font-size: 1.1em; margin-bottom: 15px; color: #11998e; }
-        .antwort-optionen { margin: 15px 0; }
-        .antwort-option { padding: 15px; margin: 10px 0; background: #f8f9fa; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
-        .antwort-option:hover { background: #e3f2fd; border-color: #2196F3; transform: translateX(5px); }
-        .antwort-option.selected { background: #bbdefb; border-color: #1976D2; }
-        .antwort-option.correct { background: #c8e6c9; border-color: #4caf50; }
-        .antwort-option.wrong { background: #ffcdd2; border-color: #f44336; }
-        button { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; border: none; padding: 12px 30px; font-size: 1em; border-radius: 25px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; margin: 10px 0; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(17, 153, 142, 0.4); }
-        button:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-        .feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; animation: slideIn 0.3s ease; }
-        .feedback.show { display: block; }
-        .feedback.correct { background: #c8e6c9; border-left: 5px solid #4caf50; color: #2e7d32; }
-        .feedback.wrong { background: #ffcdd2; border-left: 5px solid #f44336; color: #c62828; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        .comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .comparison-table th { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 15px; text-align: left; }
-        .comparison-table td { padding: 15px; border-bottom: 1px solid #e0e0e0; }
-        .comparison-table tr:last-child td { border-bottom: none; }
-        .pro { color: #4caf50; font-weight: bold; }
-        .con { color: #f44336; font-weight: bold; }
-        .code-side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
-        @media (max-width: 768px) { .code-side-by-side { grid-template-columns: 1fr; } }
-        .code-column { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .code-column h4 { padding: 15px; margin: 0; }
-        .alt-code h4 { background: #ffcdd2; color: #c62828; }
-        .neu-code h4 { background: #c8e6c9; color: #2e7d32; }
-        .code-column pre { margin: 0; border-radius: 0; }
-        .code-aufgabe { background: white; padding: 20px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .code-input { width: 100%; min-height: 150px; padding: 15px; font-family: 'Courier New', monospace; border: 2px solid #e0e0e0; border-radius: 8px; margin: 10px 0; font-size: 0.95em; }
-        .code-input:focus { outline: none; border-color: #11998e; }
-        .checklist { list-style: none; margin: 20px 0; }
-        .checklist li { padding: 12px 12px 12px 45px; margin: 8px 0; background: white; border-radius: 8px; position: relative; cursor: pointer; transition: all 0.3s ease; border: 2px solid #e0e0e0; }
-        .checklist li:hover { background: #f8f9fa; transform: translateX(5px); }
-        .checklist li:before { content: "☐"; position: absolute; left: 15px; font-size: 1.3em; color: #999; }
-        .checklist li.checked { background: #c8e6c9; border-color: #4caf50; }
-        .checklist li.checked:before { content: "☑"; color: #4caf50; }
-        .ausblick-items { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
-        @media (max-width: 768px) { .ausblick-items { grid-template-columns: 1fr; } }
-        .ausblick-item { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .ausblick-item h4 { color: #9c27b0; margin-bottom: 10px; }
-        details { margin: 10px 0; }
-        summary { cursor: pointer; padding: 10px; background: #f0f0f0; border-radius: 5px; user-select: none; }
-        summary:hover { background: #e0e0e0; }
-    </style>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>📦 Von Arrays zu ArrayList</h1>
+            <div class="logo-placeholder"><img src="logo.png" alt="Gynesa" class="header-logo" width="200px"></div>
+            <h1>Von Arrays zu ArrayList</h1>
             <p>Dynamische Datenstrukturen verstehen und anwenden</p>
         </header>
         
