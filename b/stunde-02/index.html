@@ -126,76 +126,60 @@
                     <div class="toggle-icon">▼</div>
                 </div>
                 <div class="phase-content">
-                    
                     <div class="denkbox">
                         <h3>Einstiegsfrage</h3>
-                        <p>Erinnere dich an die letzte Stunde: Welche Probleme hatte unser statisches Array trotz der Pegel-Variable?</p>
+                        <p>Erinnere dich an die letzte Stunde: Unser Array hatte eine feste Größe (z.B. 10). Wenn wir einen 11. Planeten hinzufügen wollten, stürzte das Programm ab oder wir mussten tricksen.</p>
+                    </div>
+                    
+                    <div class="vergleich">
+                        <h3>Wissen: Array vs. ArrayList</h3>
+                        <p>Schau dir die Unterschiede genau an:</p>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Eigenschaft</th>
+                                <th>Array []</th>
+                                <th>ArrayList &lt;&gt;</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Größe</strong></td>
+                                <td><span class="con">✗</span> Fest (muss am Anfang festgelegt werden)</td>
+                                <td><span class="pro">✓</span> Dynamisch (wächst automatisch mit)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Elemente hinzufügen</strong></td>
+                                <td>Kompliziert (Index verwalten)</td>
+                                <td>Einfach (<code>add</code> Methode)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Was wird gespeichert?</strong></td>
+                                <td>Primitive (int, double) oder Objekte</td>
+                                <td><strong>Nur Objekte</strong> (Klassen)</td>
+                            </tr>
+                        </table>
                     </div>
                     
                     <div class="frage" data-question="1">
-                        <div class="frage-text">Was ist der fundamentale Unterschied zwischen einem Array und einer ArrayList?</div>
+                        <div class="frage-text">Basierend auf der Tabelle oben: Was ist der entscheidende Vorteil der ArrayList?</div>
                         <div class="antwort-optionen">
-                            <div class="antwort-option" data-answer="a">a) Arrays sind schneller als ArrayLists</div>
-                            <div class="antwort-option" data-answer="b">b) Arrays haben eine feste Größe, ArrayLists können dynamisch wachsen</div>
-                            <div class="antwort-option" data-answer="d">d) ArrayLists sind veraltet und sollten nicht mehr verwendet werden</div>
+                            <div class="antwort-option" data-answer="a">a) Sie ist schneller im Zugriff.</div>
+                            <div class="antwort-option" data-answer="b">b) Sie passt ihre Größe automatisch an die Anzahl der Elemente an.</div>
+                            <div class="antwort-option" data-answer="c">c) Sie hat eine schönere Farbe im Code-Editor.</div>
                         </div>
                         <button onclick="checkAnswer(1, 'b')">Antwort überprüfen</button>
                         <div class="feedback"></div>
                     </div>
                     
-                    <div class="vergleich">
-                        <h3>Array vs. ArrayList im Vergleich</h3>
-                        <table class="comparison-table">
-                            <tr>
-                                <th>Eigenschaft</th>
-                                <th>Array</th>
-                                <th>ArrayList</th>
-                            </tr>
-                            <tr>
-                                <td><strong>Größe</strong></td>
-                                <td><span class="con">✗</span> Fest bei Erstellung</td>
-                                <td><span class="pro">✓</span> Dynamisch änderbar</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Typ</strong></td>
-                                <td>Sprachintegriert (Basic Java)</td>
-                                <td>Klasse aus java.util (Java-Bibliothek)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Syntax</strong></td>
-                                <td>String[] array = new String[10];</td>
-                                <td>ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Elemente hinzufügen</strong></td>
-                                <td>array[0] = "Hallo";</td>
-                                <td>list.add("Hallo");</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Größe abfragen</strong></td>
-                                <td>array.length</td>
-                                <td>list.size()</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Element entfernen</strong></td>
-                                <td><span class="con">✗</span> Manuell mit Verschieben</td>
-                                <td><span class="pro">✓</span> list.remove(index)</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Performance</strong></td>
-                                <td><span class="pro">✓</span> Etwas schneller</td>
-                                <td><span class="con">~</span> Minimal langsamer (meist egal)</td>
-                            </tr>
-                        </table>
+                    <div class="hinweis">
+                        <h3>ArrayList ist ein Objekt</h3>
+                        <p>Ein Array ist fest in die Sprache Java eingebaut (erkennbar an den eckigen Klammern <code>[]</code>). Eine <strong>ArrayList</strong> hingegen ist eine richtige <strong>Klasse</strong> (wie <code>Planet</code> oder <code>String</code>). Das bedeutet, die Variable speichert nur eine <strong>Referenz</strong> (einen Verweis) auf das Objekt im Speicher.</p>
                     </div>
                     
                     <div class="frage" data-question="2">
-                        <div class="frage-text">Was bedeutet es, dass ArrayList eine Klasse ist?</div>
+                        <div class="frage-text">Was bedeutet es technisch, dass ArrayList eine Klasse ist?</div>
                         <div class="antwort-optionen">
-                            <div class="antwort-option" data-answer="a">a) ArrayList ist wie Planet oder Stern eine Klasse - mit Attributen und Methoden. Die Variable speichert eine Referenz auf das Objekt.</div>
-                            <div class="antwort-option" data-answer="b">b) ArrayList verweist immer auf ein Array</div>
-                            <div class="antwort-option" data-answer="c">c) ArrayList kann nur andere Objekte referenzieren</div>
-                            <div class="antwort-option" data-answer="d">d) ArrayList ist eine primitive Variable</div>
+                            <div class="antwort-option" data-answer="a">a) Sie hat Attribute und Methoden (wie .add()), und die Variable ist eine Referenz.</div>
+                            <div class="antwort-option" data-answer="b">b) Sie ist ein primitiver Datentyp wie int.</div>
+                            <div class="antwort-option" data-answer="c">c) Sie existiert gar nicht wirklich.</div>
                         </div>
                         <button onclick="checkAnswer(2, 'a')">Antwort überprüfen</button>
                         <div class="feedback"></div>
@@ -217,47 +201,47 @@
                 <div class="phase-content">
                     <div class="hinweis">
                         <h3>Was sind Generics?</h3>
-                        <p>Generics ermöglichen es, den Datentyp einer Liste festzulegen. Die Syntax sieht so aus:</p>
-                        <pre>ArrayList&lt;Datentyp&gt; name = new ArrayList&lt;&gt;();</pre>
-                        <p>Die spitzen Klammern <code>&lt;&gt;</code> funktionieren wie ein "Etikett" auf einer Kiste: Nur was draufsteht, darf auch rein!</p>
+                        <p>Generics <code>&lt;Typ&gt;</code> funktionieren wie ein Etikett auf einer Kiste. Sie legen fest, was in die Liste darf. Das sorgt für Sicherheit: Du kannst keinen "String" in eine Liste für "Planeten" stecken.</p>
+                        <pre>ArrayList&lt;String&gt; namen = new ArrayList&lt;&gt;();
+namen.add("Hallo"); // Erlaubt
+namen.add(123);     // Verboten (Compiler-Fehler!)</pre>
                     </div>
                     
-                    <div class="code-aufgabe">
-                        <h3>Beispiele</h3>
-                        <pre>// Eine ArrayList NUR für Strings
-ArrayList&lt;String&gt; namen = new ArrayList&lt;&gt;();
-namen.add("Alice");  // ✓ Geht!
-namen.add(42);       // ✗ Fehler! Nur Strings erlaubt!
+                    <div class="denkbox">
+                        <h3>Expertenwissen: Warum überhaupt &lt;...&gt;?</h3>
+                        <p>Was passiert, wenn du eine ArrayList ohne Generics deklarierst?</p>
+                        <pre>ArrayList liste = new ArrayList(); // Kein &lt;Typ&gt;!</pre>
+                        <details style="margin-top: 10px;">
+                            <summary style="cursor: pointer; color: #11998e; font-weight: 600;">💡 Antwort anzeigen</summary>
+                            <p style="margin-top: 10px;">Ohne Generics kann die ArrayList <strong>alles gemischt</strong> speichern - Strings, Zahlen, Planeten! Das klingt gut, ist aber gefährlich:</p>
+                            <ul style="margin-left: 20px;">
+                                <li>Du weißt beim Rausholen nicht, was du bekommst.</li>
+                                <li>Der Computer stürzt ab, wenn du versuchst, einen "String" als "Planet" zu behandeln.</li>
+                            </ul>
+                            <p>Mit <code>&lt;Himmelskoerper&gt;</code> passt der Compiler auf, dass nur Himmelskörper in der Liste landen!</p>
+                        </details>
+                    </div>
 
-// Eine ArrayList für unsere Planeten
-ArrayList&lt;Himmelskoerper&gt; objekte = new ArrayList&lt;&gt;();
-objekte.add(new Planet());  // ✓ Geht!
-objekte.add("Erde");        // ✗ Fehler! Nur Himmelskoerper!</pre>
+                    <div class="warnung">
+                        <h3>Wichtig: Das Problem mit primitiven Typen</h3>
+                        <p>Eine ArrayList kann <strong>nur Objekte</strong> speichern. Primitive Datentypen wie <code>int</code>, <code>double</code> oder <code>boolean</code> sind keine Objekte.</p>
+                        <p>Deshalb gibt es sogenannte <strong>Wrapper-Klassen</strong> (Hüllen), die aus dem primitiven Wert ein Objekt machen:</p>
+                        <ul>
+                            <li><code>int</code> ➔ <code>Integer</code></li>
+                            <li><code>double</code> ➔ <code>Double</code></li>
+                            <li><code>boolean</code> ➔ <code>Boolean</code></li>
+                        </ul>
                     </div>
                     
                     <div class="frage" data-question="3">
-                        <div class="frage-text">Warum können wir nicht <code>ArrayList&lt;int&gt;</code> schreiben?</div>
+                        <div class="frage-text">Welche Zeile Code ist korrekt, um eine Liste für ganze Zahlen zu erstellen?</div>
                         <div class="antwort-optionen">
-                            <div class="antwort-option" data-answer="a">a) Weil "int" zu kurz ist.</div>
-                            <div class="antwort-option" data-answer="b">b) Weil ArrayLists nur Objekte (Klassen) speichern können, int aber ein primitiver Typ ist.</div>
-                            <div class="antwort-option" data-answer="c">c) Das geht, man muss nur die Bibliothek importieren.</div>
-                            <div class="antwort-option" data-answer="d">d) Weil Zahlen in Listen verboten sind.</div>
+                            <div class="antwort-option" data-answer="a"><code>ArrayList&lt;int&gt; zahlen = new ArrayList&lt;&gt;();</code></div>
+                            <div class="antwort-option" data-answer="b"><code>ArrayList&lt;Integer&gt; zahlen = new ArrayList&lt;&gt;();</code></div>
+                            <div class="antwort-option" data-answer="c"><code>ArrayList&lt;Zahl&gt; zahlen = new ArrayList&lt;&gt;();</code></div>
                         </div>
                         <button onclick="checkAnswer(3, 'b')">Antwort überprüfen</button>
                         <div class="feedback"></div>
-                    </div>
-                    
-                    <div class="warnung">
-                        <h3>Die Lösung: Wrapper-Klassen</h3>
-                        <p>Da <code>int</code> kein Objekt ist, brauchen wir eine "Objekt-Verpackung" dafür.</p>
-                        <p>Stell dir vor, die primitive Zahl ist loser Sand. Die ArrayList ist ein Regal. Sand fällt durchs Gitter. Wir müssen ihn in eine Kiste packen.</p>
-                        <ul style="margin-left: 20px; margin-top: 10px;">
-                            <li><code>int</code> (Zahl) → <code>Integer</code> (Kiste mit der Zahl)</li>
-                            <li><code>double</code> → <code>Double</code></li>
-                            <li><code>boolean</code> → <code>Boolean</code></li>
-                        </ul>
-                        <pre>ArrayList&lt;int&gt; zahlen;      // ✗ Geht nicht!
-ArrayList&lt;Integer&gt; zahlen;  // ✓ Richtig!</pre>
                     </div>
                     
                     <button onclick="completePhase(2)">Phase 2 abschließen ✓</button>
@@ -276,53 +260,75 @@ ArrayList&lt;Integer&gt; zahlen;  // ✓ Richtig!</pre>
                 <div class="phase-content">
                     <div class="code-aufgabe">
                         <h3>Methoden-Übersicht</h3>
-                        <pre>ArrayList&lt;Himmelskoerper&gt; objekte = new ArrayList&lt;&gt;();
+                        <p>Hier sind die Befehle, die du brauchst:</p>
+                        <pre>ArrayList&lt;String&gt; liste = new ArrayList&lt;&gt;();
 
 // Hinzufügen
-objekte.add(new Planet());      // Am Ende anfügen
-objekte.add(0, new Stern());    // An Position 0 quetschen
+liste.add("Hallo");      
 
-// Abrufen
-Himmelskoerper h = objekte.get(0);
+// Abrufen (statt array[0])
+String s = liste.get(0);
 
-// Größe
-int anzahl = objekte.size();    // Anzahl der enthaltenen Elemente
+// Größe abfragen (statt array.length)
+int anzahl = liste.size(); 
 
 // Entfernen
-objekte.remove(0);              // Löscht Element an Index 0</pre>
+liste.remove(0);</pre>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Wichtig: Kapazität vs. Inhalt</h3>
+                        <p>Ein Array hat eine feste <strong>Kapazität</strong> (<code>.length</code>), egal wie viel drin ist (auch wenn alles <code>null</code> ist).</p>
+                        <p>Die ArrayList Methode <code>.size()</code> zählt nur die <strong>tatsächlich enthaltenen Elemente</strong> (den Füllstand).</p>
                     </div>
                     
                     <div class="frage" data-question="4">
                         <div class="frage-text">
-                            Stell dir vor: Wir haben ein Array mit Platz für 10 Elemente (`new String[10]`) und eine leere ArrayList.<br>
-                            In beide fügen wir nun genau <strong>2 Elemente</strong> ein.<br><br>
+                            Szenario: Ein Array hat Platz für 100 Elemente (<code>new String[100]</code>). Eine ArrayList ist neu erstellt.<br>
+                            In beide fügen wir jetzt genau <strong>3 Namen</strong> ein.<br><br>
                             Was geben <code>array.length</code> und <code>list.size()</code> zurück?
                         </div>
                         <div class="antwort-optionen">
-                            <div class="antwort-option" data-answer="a">a) Beide geben 2 zurück.</div>
-                            <div class="antwort-option" data-answer="b">b) Array: 10 (Kapazität), ArrayList: 2 (Füllstand)</div>
-                            <div class="antwort-option" data-answer="c">c) Array: 2, ArrayList: 10</div>
+                            <div class="antwort-option" data-answer="a">Beide geben 3 zurück.</div>
+                            <div class="antwort-option" data-answer="b">Array: 100 (Gesamtplatz), ArrayList: 3 (Füllstand)</div>
+                            <div class="antwort-option" data-answer="c">Array: 3, ArrayList: 100</div>
                         </div>
                         <button onclick="checkAnswer(4, 'b')">Antwort überprüfen</button>
                         <div class="feedback"></div>
                     </div>
                     
                     <div class="code-aufgabe">
-                        <h3>Die for-each Schleife (Der "Gamechanger")</h3>
-                        <p>Statt mit Index <code>i</code> zu hantieren, sagst du einfach:</p>
-                        <pre>// "Für jeden Himmelskörper h in der Liste objekte"
-for (Himmelskoerper h : objekte) {
+                        <h3>Die for-each Schleife</h3>
+                        <p>Um alle Elemente einer Liste zu bearbeiten, nutzen wir die moderne "for-each"-Schleife. Man liest sie so: <em>"Für jeden Himmelskörper h in der Liste objekte..."</em></p>
+                        <pre>for (Himmelskoerper h : objekte) {
     h.bewegung();
 }</pre>
-                        <p>Das ist viel sicherer und kürzer!</p>
+                    </div>
+                    
+                    <div class="denkbox">
+                        <h3>Entscheidungshilfe: Welche Schleife?</h3>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Schleifen-Typ</th>
+                                <th>Wann benutzen?</th>
+                            </tr>
+                            <tr>
+                                <td><strong>For-each</strong><br><code>for(Planet p : liste)</code></td>
+                                <td><span class="pro">✓</span> Wenn du <strong>alle</strong> Elemente anschauen oder verändern willst.<br>Das ist der Standardfall!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Normale For</strong><br><code>for(int i=0; ...)</code></td>
+                                <td><span class="pro">✓</span> Wenn du den <strong>Index</strong> brauchst (z.B. "Lösche jeden 2. Planeten" oder "Gib Planet Nr. 5 aus").</td>
+                            </tr>
+                        </table>
                     </div>
 
                     <div class="frage" data-question="6">
-                        <div class="frage-text">Was macht: <code>for (Planet p : planeten) { p.setFarbe("rot"); }</code></div>
+                        <div class="frage-text">Was passiert in dieser Schleife: <code>for (Planet p : planeten) { p.setFarbe("rot"); }</code>?</div>
                         <div class="antwort-optionen">
-                            <div class="antwort-option" data-answer="a">a) Setzt die Farbe des ersten Planeten auf rot</div>
-                            <div class="antwort-option" data-answer="b">b) Setzt die Farbe ALLER Planeten in der Liste nacheinander auf rot</div>
-                            <div class="antwort-option" data-answer="d">d) Macht nichts</div>
+                            <div class="antwort-option" data-answer="a">Nur der letzte Planet wird rot.</div>
+                            <div class="antwort-option" data-answer="b">Jeder Planet in der Liste wird nacheinander rot gefärbt.</div>
+                            <div class="antwort-option" data-answer="c">Es passiert nichts.</div>
                         </div>
                         <button onclick="checkAnswer(6, 'b')">Antwort überprüfen</button>
                         <div class="feedback"></div>
