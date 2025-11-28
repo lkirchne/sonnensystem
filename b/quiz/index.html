@@ -1,0 +1,2635 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OOP-Konzepte Zusammenfassung - Sonnensystem-Projekt</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- DARK MODE (Standard) --- */
+            --bg-dark: #1a1d24;
+            --bg-card: #242830;
+            --bg-card-hover: #2d323c;
+            
+            /* UI Akzente */
+            --accent-purple: #a78bfa;
+            --accent-blue: #60a5fa;
+            --accent-teal: #2dd4bf;
+            --accent-orange: #fb923c;
+            --accent-pink: #f472b6;
+            --accent-green: #4ade80;
+            
+            /* Text */
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-subtle: #374151;
+            
+            /* Feedback */
+            --correct: #4ade80;
+            --wrong: #f87171;
+            
+            /* Toggle Switch */
+            --toggle-bg: #374151;
+
+            /* CODE BLOCK DARK (Neon Farben) */
+            --code-bg: #1e2028;
+            --code-text: #f8fafc;
+            --syn-keyword: #c792ea;    /* Lila */
+            --syn-type: #ffcb6b;       /* Gelb/Orange */
+            --syn-string: #c3e88d;     /* Hellgrün */
+            --syn-comment: #7a8599;    /* Grau-Blau */
+            --syn-method: #82aaff;     /* Hellblau */
+            --syn-annotation: #f07178; /* Rot/Pink */
+        }
+
+        /* --- LIGHT MODE --- */
+        [data-theme="light"] {
+            --bg-dark: #f1f5f9;       /* Helles Grauweiß */
+            --bg-card: #ffffff;       /* Reines Weiß */
+            --bg-card-hover: #f8fafc;
+            
+            /* Text - Viel dunkler für Kontrast */
+            --text-primary: #0f172a;  
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --border-subtle: #e2e8f0;
+
+            --toggle-bg: #cbd5e1;
+
+            /* Akzente etwas abdunkeln damit sie auf Weiß lesbar sind */
+            --accent-purple: #7c3aed;
+            --accent-blue: #2563eb;
+            --accent-teal: #0d9488;
+            --accent-orange: #ea580c;
+            --accent-pink: #db2777;
+            --accent-green: #16a34a;
+
+            /* CODE BLOCK LIGHT (Papier-Stil) */
+            --code-bg: #f8fafc;        /* Sehr helles Grau */
+            --code-text: #334155;      /* Dunkles Grau */
+            --syn-keyword: #9333ea;    /* Dunkles Lila */
+            --syn-type: #d97706;       /* Dunkles Orange */
+            --syn-string: #16a34a;     /* Dunkles Grün */
+            --syn-comment: #94a3b8;    /* Mittelgrau */
+            --syn-method: #2563eb;     /* Kräftiges Blau */
+            --syn-annotation: #db2777; /* Pink */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.75;
+            min-height: 100vh;
+            font-size: 18px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Navigation */
+        .nav-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border-subtle);
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        /* Logo Bereich */
+        .nav-logo-container {
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-logo-img {
+            max-width: 80%;
+            max-height: 80px;
+            height: auto;
+            display: block;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 0.85rem;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.05rem;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--accent-purple);
+        }
+
+        .nav-icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Theme Toggle Switch */
+        .theme-switch-container {
+            margin-top: auto; 
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--toggle-bg);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent-purple);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--accent-purple);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .theme-label {
+            font-size: 0.9rem;
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text-secondary);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 3rem 4rem;
+            max-width: 1000px;
+            transition: margin 0.3s;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-description {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+        }
+
+        .card-text strong {
+            color: var(--text-primary);
+        }
+
+        /* Definition Box */
+        .definition-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.05));
+            border-left: 3px solid var(--accent-purple);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .definition-box p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+        }
+
+        /* Code Blocks - Variable Colors */
+        .code-block {
+            background: var(--code-bg);
+            color: var(--code-text);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            line-height: 1.7;
+            white-space: pre;
+            border: 1px solid var(--border-subtle);
+            font-variant-ligatures: none;
+            -webkit-font-feature-settings: "liga" 0;
+            font-feature-settings: "liga" 0;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .code-block .keyword { color: var(--syn-keyword); }
+        .code-block .type { color: var(--syn-type); }
+        .code-block .string { color: var(--syn-string); }
+        .code-block .comment { color: var(--syn-comment); font-style: italic; }
+        .code-block .method { color: var(--syn-method); }
+        .code-block .annotation { color: var(--syn-annotation); }
+
+        /* Key Points */
+        .key-points {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .key-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 6px;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+        }
+
+        .key-point::before {
+            content: "→";
+            color: var(--accent-teal);
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 2rem;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .quiz-header {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .quiz-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        .quiz-body {
+            padding: 1.5rem;
+        }
+
+        .quiz-question {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-question:last-child {
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .question-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .options {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+        }
+
+        .option:hover:not(.selected):not(.correct):not(.wrong) {
+            border-color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .option.selected {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .option.correct {
+            border-color: var(--correct);
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--correct);
+        }
+
+        .option.wrong {
+            border-color: var(--wrong);
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--wrong);
+        }
+
+        .option-marker {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-subtle);
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .option.correct .option-marker {
+            border-color: var(--correct);
+            background: var(--correct);
+            color: white;
+        }
+
+        .option.wrong .option-marker {
+            border-color: var(--wrong);
+            background: var(--wrong);
+            color: white;
+        }
+
+        .check-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--accent-purple);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.25rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+
+        .check-btn:hover {
+            background: #7c3aed;
+        }
+
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--correct);
+        }
+
+        .feedback.wrong {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--wrong);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 1.05rem;
+        }
+
+        .comparison-table th {
+            font-family: 'Space Grotesk', sans-serif;
+            text-align: left;
+            padding: 0.85rem 1rem;
+            background: var(--bg-card-hover);
+            border-bottom: 1px solid var(--border-subtle);
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        .comparison-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            vertical-align: top;
+        }
+
+        .comparison-table code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent-teal);
+        }
+
+        /* Warning/Info Boxes */
+        .info-box {
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .info-box.warning {
+            background: rgba(249, 115, 22, 0.1);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .info-box.warning .info-title {
+            color: var(--accent-orange);
+        }
+
+        .info-box.tip {
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+        }
+
+        .info-box.tip .info-title {
+            color: var(--accent-teal);
+        }
+
+        .info-box.new {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+
+        .info-box.new .info-title {
+            color: var(--accent-pink);
+        }
+
+        .info-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-text {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+
+        /* Class Diagram */
+        .class-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+            padding: 2rem;
+            background: var(--bg-card-hover);
+            border-radius: 12px;
+        }
+
+        .diagram-class {
+            background: var(--bg-card);
+            border: 2px solid var(--border-subtle);
+            border-radius: 8px;
+            min-width: 200px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .diagram-class.abstract {
+            border-color: var(--accent-pink);
+            border-style: dashed;
+        }
+
+        .diagram-class-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.75rem;
+            background: var(--bg-card-hover);
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+        }
+
+        .diagram-class.abstract .diagram-class-name {
+            background: rgba(236, 72, 153, 0.1);
+            font-style: italic;
+        }
+
+        .diagram-class-name::before {
+            content: "«abstract»";
+            display: none;
+            font-size: 0.7rem;
+            color: var(--accent-pink);
+            font-style: italic;
+            margin-bottom: 0.25rem;
+        }
+
+        .diagram-class.abstract .diagram-class-name::before {
+            display: block;
+        }
+
+        .diagram-class-body {
+            padding: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: left;
+        }
+
+        .diagram-arrow {
+            color: var(--text-muted);
+            font-size: 1.5rem;
+        }
+
+        .diagram-children {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        /* Progress Indicator */
+        .progress-bar {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .progress-ring {
+            width: 50px;
+            height: 50px;
+        }
+
+        .progress-ring-circle {
+            fill: none;
+            stroke: var(--border-subtle);
+            stroke-width: 4;
+        }
+
+        .progress-ring-progress {
+            fill: none;
+            stroke: var(--accent-purple);
+            stroke-width: 4;
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        .progress-text {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .progress-percent {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Reflexionsfragen */
+        .reflection-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin: 2rem 0;
+        }
+
+        .reflection-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .reflection-icon {
+            font-size: 1.5rem;
+        }
+
+        .reflection-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+        }
+
+        .reflection-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-left: auto;
+        }
+
+        .reflection-question {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+            font-style: italic;
+        }
+
+        .reflection-context {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            padding-left: 1rem;
+            border-left: 3px solid rgba(99, 102, 241, 0.3);
+        }
+
+        /* Hilfekarte */
+        .help-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+            transition: background 0.3s;
+        }
+
+        .help-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 1.25rem;
+            background: var(--bg-card-hover);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .help-card-header:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .help-card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .help-card-toggle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            transition: transform 0.3s;
+        }
+
+        .help-card.open .help-card-toggle {
+            transform: rotate(180deg);
+        }
+
+        .help-card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .help-card.open .help-card-content {
+            max-height: 500px;
+        }
+
+        .help-card-body {
+            padding: 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .help-keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .keyword-tag {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent-purple);
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .help-hints {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .help-hints li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+            .nav-sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+            .progress-bar {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* iPad und Tablets */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .nav-sidebar {
+                width: 240px;
+            }
+            .main-content {
+                margin-left: 240px;
+                padding: 2.5rem 3rem;
+            }
+            .page-title {
+                font-size: 2rem;
+            }
+            .code-block {
+                font-size: 0.85rem;
+                padding: 1.25rem;
+            }
+            .option {
+                padding: 1rem 1.25rem;
+                font-size: 1rem;
+            }
+            .quiz-question {
+                margin-bottom: 2.5rem;
+            }
+        }
+
+        /* iPad Pro und größere Tablets im Querformat */
+        @media (min-width: 1024px) and (max-width: 1366px) {
+            .nav-sidebar {
+                width: 260px;
+            }
+            .main-content {
+                margin-left: 260px;
+                padding: 2.5rem 3.5rem;
+            }
+        }
+
+        /* Touch-Optimierung */
+        @media (hover: none) and (pointer: coarse) {
+            .option {
+                padding: 1rem 1.25rem;
+                min-height: 54px;
+            }
+            .check-btn {
+                padding: 0.85rem 1.5rem;
+                font-size: 1rem;
+            }
+            .nav-link {
+                padding: 0.85rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-sidebar">
+        <div class="nav-logo-container">
+            <img src="logo.png" alt="Schullogo" class="nav-logo-img" onerror="this.style.display='none'">
+        </div>
+        
+        <div class="nav-logo">OOP-Konzepte</div>
+        <div class="nav-subtitle">Sonnensystem-Projekt</div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Grundkonzepte</div>
+            <a href="#vererbung" class="nav-link active">
+                <span class="nav-icon" style="background: var(--accent-purple)"></span>
+                Vererbung
+            </a>
+            <a href="#polymorphie" class="nav-link">
+                <span class="nav-icon" style="background: var(--accent-blue)"></span>
+                Polymorphie
+            </a>
+            <a href="#datenkapselung" class="nav-link">
+                <span class="nav-icon" style="background: var(--accent-teal)"></span>
+                Datenkapselung
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Erweiterte Konzepte</div>
+            <a href="#abstrakte-klassen" class="nav-link">
+                <span class="nav-icon" style="background: var(--accent-pink)"></span>
+                Abstrakte Klassen
+            </a>
+            <a href="#interfaces" class="nav-link">
+                <span class="nav-icon" style="background: var(--accent-orange)"></span>
+                Interfaces
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Programmierung</div>
+            <a href="#timer" class="nav-link">
+                <span class="nav-icon" style="background: var(--accent-green)"></span>
+                Timer & Events
+            </a>
+            <a href="#datenstrukturen" class="nav-link">
+                <span class="nav-icon" style="background: var(--text-muted)"></span>
+                Datenstrukturen
+            </a>
+        </div>
+
+        <div class="theme-switch-container">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+            <span class="theme-label">Heller Modus</span>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="page-header">
+            <h1 class="page-title">OOP-Konzepte im Überblick</h1>
+            <p class="page-description">Zusammenfassung aller wichtigen Konzepte aus dem Sonnensystem-Projekt mit interaktiven Quiz-Fragen.</p>
+        </header>
+
+        <section class="section" id="vererbung">
+            <div class="section-header">
+                <span class="section-number" style="background: rgba(139, 92, 246, 0.2); color: var(--accent-purple)">01</span>
+                <h2 class="section-title">Vererbung (Inheritance)</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Was ist Vererbung?</h3>
+                <div class="definition-box">
+                    <p><strong>Vererbung</strong> ist ein Mechanismus, bei dem eine Klasse (Subklasse) Eigenschaften und Methoden von einer anderen Klasse (Superklasse) übernimmt. Die Subklasse erweitert oder spezialisiert die Superklasse.</p>
+                </div>
+
+                <p class="card-text">In unserem Sonnensystem-Projekt haben wir eine Vererbungshierarchie aufgebaut:</p>
+
+                <div class="code-block"><span class="keyword">public class</span> <span class="type">Himmelskoerper</span> {
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private double</span> durchmesser;
+    <span class="keyword">private double</span> geschwindigkeit;
+    
+    <span class="keyword">public void</span> <span class="method">bewegung</span>() {
+        <span class="comment">// Berechnet Bewegung auf Orbit</span>
+    }
+}
+
+<span class="keyword">public class</span> <span class="type">Planet</span> <span class="keyword">extends</span> <span class="type">Himmelskoerper</span> {
+    <span class="comment">// Erbt ALLE Attribute und Methoden von Himmelskoerper</span>
+}
+
+<span class="keyword">public class</span> <span class="type">Stern</span> <span class="keyword">extends</span> <span class="type">Himmelskoerper</span> {
+    <span class="comment">// Erbt ebenfalls von Himmelskoerper</span>
+}</div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Warum Vererbung?</h3>
+                
+                <p class="card-text">Vererbung löst ein wichtiges Problem: <strong>Code-Duplikation vermeiden</strong>. Ohne Vererbung müssten wir in jeder Klasse (Planet, Stern, Mond, Komet...) dieselben Attribute und Methoden neu schreiben. Mit Vererbung definieren wir gemeinsame Eigenschaften nur einmal in der Oberklasse.</p>
+
+                <div class="info-box tip">
+                    <div class="info-title">Die "ist-ein"-Beziehung</div>
+                    <div class="info-text">
+                        Vererbung modelliert immer eine <strong>"ist-ein"-Beziehung</strong>: Ein Planet IST EIN Himmelskoerper. Ein Stern IST EIN Himmelskoerper. Wenn diese Beziehung nicht passt (z.B. "Ein Auto IST EIN Motor" – falsch!), sollte man keine Vererbung verwenden, sondern Komposition ("Ein Auto HAT EINEN Motor").
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <div class="key-point">Planet und Stern erben ALLE Attribute (name, durchmesser, geschwindigkeit, etc.)</div>
+                    <div class="key-point">Planet und Stern erben ALLE Methoden (bewegung(), getter, setter)</div>
+                    <div class="key-point">Das Schlüsselwort <code>extends</code> definiert die Vererbungsbeziehung</div>
+                    <div class="key-point">Java unterstützt nur Einfachvererbung (eine Klasse kann nur von einer anderen erben)</div>
+                    <div class="key-point">Subklassen können geerbte Methoden <strong>überschreiben</strong> (@Override), um spezielles Verhalten zu definieren</div>
+                </div>
+            </div>
+
+            <div class="quiz-container" data-quiz="vererbung">
+                <div class="quiz-header">
+                    <div class="quiz-title">Quiz: Vererbung</div>
+                </div>
+                <div class="quiz-body">
+                    <div class="quiz-question" data-question="v1">
+                        <div class="question-number">Frage 1 von 2</div>
+                        <div class="question-text">Welche Aussage über Vererbung ist korrekt?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Planet erbt nur die Methoden, nicht die Attribute von Himmelskoerper
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Planet erbt sowohl Attribute als auch Methoden von Himmelskoerper
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Planet muss alle Methoden von Himmelskoerper neu schreiben
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Planet kann von mehreren Klassen gleichzeitig erben
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('v1', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="v2">
+                        <div class="question-number">Frage 2 von 3</div>
+                        <div class="question-text">Was bedeutet die "ist-ein"-Beziehung bei Vererbung?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Planet ist identisch mit Himmelskoerper
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Planet ist eine Spezialisierung von Himmelskoerper
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Planet enthält ein Himmelskoerper-Objekt
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Planet ist eine Kopie von Himmelskoerper
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('v2', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="v3">
+                        <div class="question-number">Frage 3 von 3</div>
+                        <div class="question-text">Was ist der Hauptvorteil von Vererbung?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Das Programm läuft schneller
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Code-Duplikation vermeiden – gemeinsame Eigenschaften nur einmal definieren
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Man kann mehr Klassen erstellen
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Die Dateien werden kleiner
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('v3', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <div class="reflection-header">
+                    <span class="reflection-icon">💬</span>
+                    <span class="reflection-title">Reflexionsfrage</span>
+                    <span class="reflection-subtitle">Besprich dich mit deiner Partnerin</span>
+                </div>
+                <div class="reflection-question">
+                    „In unserem Projekt erbt Planet von Himmelskoerper. Wäre es sinnvoll, wenn Himmelskoerper von Planet erben würde? Warum oder warum nicht?"
+                </div>
+                <div class="reflection-context">
+                    Denkt gemeinsam darüber nach, was passieren würde, wenn man die Vererbungsrichtung umdreht. Was würde das für die Beziehung zwischen den Klassen bedeuten?
+                </div>
+                <div class="help-card" onclick="toggleHelpCard(this)">
+                    <div class="help-card-header">
+                        <span class="help-card-title">💡 Hilfekarte – Stichworte zur Diskussion</span>
+                        <span class="help-card-toggle">▼</span>
+                    </div>
+                    <div class="help-card-content">
+                        <div class="help-card-body">
+                            <div class="help-keywords">
+                                <span class="keyword-tag">ist-ein-Beziehung</span>
+                                <span class="keyword-tag">Spezialisierung</span>
+                                <span class="keyword-tag">Oberbegriff</span>
+                                <span class="keyword-tag">Logik</span>
+                            </div>
+                            <ul class="help-hints">
+                                <li>Prüft die "ist-ein"-Beziehung: Ist ein Himmelskoerper ein Planet? Oder ist ein Planet ein Himmelskoerper?</li>
+                                <li>Denkt an andere Beispiele: Ist ein Tier ein Hund? Oder ist ein Hund ein Tier?</li>
+                                <li>Was ist allgemeiner, was ist spezieller?</li>
+                                <li>Gibt es Himmelskörper, die keine Planeten sind? (Sterne, Monde...)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="polymorphie">
+            <div class="section-header">
+                <span class="section-number" style="background: rgba(59, 130, 246, 0.2); color: var(--accent-blue)">02</span>
+                <h2 class="section-title">Polymorphie</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Was ist Polymorphie?</h3>
+                <div class="definition-box">
+                    <p><strong>Polymorphie</strong> (griechisch: "Vielgestaltigkeit") bedeutet, dass Objekte verschiedener Klassen über eine gemeinsame Schnittstelle angesprochen werden können. Ein Objekt kann sich je nach seinem tatsächlichen Typ unterschiedlich verhalten.</p>
+                </div>
+
+                <p class="card-text">Das Mächtige an Polymorphie: Wir können alle Himmelskörper gleich behandeln, obwohl sie verschieden sind!</p>
+
+                <div class="code-block"><span class="comment">// Array vom Typ Himmelskoerper kann verschiedene Objekte speichern</span>
+<span class="type">Himmelskoerper</span>[] objekte = <span class="keyword">new</span> <span class="type">Himmelskoerper</span>[10];
+
+objekte[0] = <span class="keyword">new</span> <span class="type">Stern</span>();      <span class="comment">// Ein Stern ist ein Himmelskoerper</span>
+objekte[1] = <span class="keyword">new</span> <span class="type">Planet</span>();     <span class="comment">// Ein Planet ist ein Himmelskoerper</span>
+objekte[2] = <span class="keyword">new</span> <span class="type">Planet</span>();     <span class="comment">// Noch ein Planet</span>
+
+<span class="comment">// Alle können gleich behandelt werden:</span>
+<span class="keyword">for</span> (<span class="type">Himmelskoerper</span> h : objekte) {
+    <span class="keyword">if</span> (h != <span class="keyword">null</span>) {
+        h.<span class="method">bewegung</span>();  <span class="comment">// Funktioniert für alle!</span>
+    }
+}</div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Dynamische Bindung (Late Binding)</h3>
+                
+                <p class="card-text">Ein wichtiges Konzept hinter Polymorphie ist die <strong>dynamische Bindung</strong>: Der Compiler weiß zur Compile-Zeit nicht, welche konkrete Methode aufgerufen wird – das entscheidet sich erst zur <strong>Laufzeit</strong> basierend auf dem tatsächlichen Objekttyp.</p>
+
+                <div class="code-block"><span class="type">Himmelskoerper</span> h = <span class="keyword">new</span> <span class="type">Planet</span>();  <span class="comment">// Variable vom Typ Himmelskoerper</span>
+h.<span class="method">zeichne</span>(g);  <span class="comment">// Welche zeichne()-Methode wird aufgerufen?</span>
+
+<span class="comment">// Antwort: Die von Planet! Nicht die von Himmelskoerper.</span>
+<span class="comment">// Der tatsächliche Typ des Objekts (Planet) entscheidet,</span>
+<span class="comment">// nicht der deklarierte Typ der Variable (Himmelskoerper).</span></div>
+
+                <div class="info-box tip">
+                    <div class="info-title">Warum ist das wichtig?</div>
+                    <div class="info-text">
+                        Durch dynamische Bindung können wir Code schreiben, der mit <em>zukünftigen</em> Klassen funktioniert, die wir noch gar nicht kennen! Wenn jemand später eine Klasse <code>Komet</code> hinzufügt, die von <code>Himmelskoerper</code> erbt, funktioniert unsere Schleife automatisch auch für Kometen – ohne eine einzige Zeile zu ändern.
+                    </div>
+                </div>
+
+                <div class="key-points">
+                    <div class="key-point">Eine Variable vom Typ Himmelskoerper kann auch Planet- oder Stern-Objekte speichern</div>
+                    <div class="key-point">Alle Objekte im Array können mit denselben Methoden angesprochen werden</div>
+                    <div class="key-point"><strong>Dynamische Bindung:</strong> Erst zur Laufzeit wird entschieden, welche Methode aufgerufen wird</div>
+                    <div class="key-point">Polymorphie ermöglicht flexiblen, erweiterbaren Code – neue Klassen fügen sich nahtlos ein</div>
+                </div>
+            </div>
+
+            <div class="quiz-container" data-quiz="polymorphie">
+                <div class="quiz-header">
+                    <div class="quiz-title">Quiz: Polymorphie</div>
+                </div>
+                <div class="quiz-body">
+                    <div class="quiz-question" data-question="p1">
+                        <div class="question-number">Frage 1 von 2</div>
+                        <div class="question-text">Warum kann ein Array vom Typ Himmelskoerper[] auch Planet-Objekte speichern?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Weil Arrays jeden Typ speichern können
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Weil Planet von Himmelskoerper erbt und damit ein Himmelskoerper IST
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Weil Java automatisch konvertiert
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Das ist nur bei Planet möglich, nicht bei anderen Klassen
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('p1', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="p2">
+                        <div class="question-number">Frage 2 von 3</div>
+                        <div class="question-text">Was ist der Hauptvorteil von Polymorphie?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Das Programm läuft schneller
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Verschiedene Objekte können einheitlich behandelt werden
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Man braucht weniger Klassen
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Man spart Speicherplatz
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('p2', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="p3">
+                        <div class="question-number">Frage 3 von 3</div>
+                        <div class="question-text">Gegeben: <code>Himmelskoerper h = new Planet();</code> und <code>h.zeichne(g);</code> – Welche zeichne()-Methode wird aufgerufen?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Die von Himmelskoerper, weil die Variable vom Typ Himmelskoerper ist
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Die von Planet, weil das Objekt tatsächlich ein Planet ist (dynamische Bindung)
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Beide werden nacheinander aufgerufen
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Das führt zu einem Fehler
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('p3', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <div class="reflection-header">
+                    <span class="reflection-icon">💬</span>
+                    <span class="reflection-title">Reflexionsfrage</span>
+                    <span class="reflection-subtitle">Besprich dich mit deiner Partnerin</span>
+                </div>
+                <div class="reflection-question">
+                    „Stell dir vor, du fügst dem Sonnensystem eine neue Klasse ‚Komet' hinzu, die von Himmelskoerper erbt. Welchen Code musst du ändern, damit Kometen sich auch bewegen und gezeichnet werden?"
+                </div>
+                <div class="reflection-context">
+                    Schaut euch die Schleife an, die alle Himmelskörper bewegt. Was passiert, wenn ihr einfach einen Kometen zum Array hinzufügt?
+                </div>
+                <div class="help-card" onclick="toggleHelpCard(this)">
+                    <div class="help-card-header">
+                        <span class="help-card-title">💡 Hilfekarte – Stichworte zur Diskussion</span>
+                        <span class="help-card-toggle">▼</span>
+                    </div>
+                    <div class="help-card-content">
+                        <div class="help-card-body">
+                            <div class="help-keywords">
+                                <span class="keyword-tag">Erweiterbarkeit</span>
+                                <span class="keyword-tag">Dynamische Bindung</span>
+                                <span class="keyword-tag">Open-Closed-Prinzip</span>
+                            </div>
+                            <ul class="help-hints">
+                                <li>Die Schleife ruft h.bewegung() auf – funktioniert das auch für Kometen?</li>
+                                <li>Komet erbt bewegung() von Himmelskoerper – muss die Schleife geändert werden?</li>
+                                <li>Was bedeutet es, dass der Code "offen für Erweiterung, geschlossen für Änderung" ist?</li>
+                                <li>Wie viele Zeilen müsst ihr ändern, um Kometen hinzuzufügen? (Spoiler: weniger als ihr denkt!)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="datenkapselung">
+            <div class="section-header">
+                <span class="section-number" style="background: rgba(20, 184, 166, 0.2); color: var(--accent-teal)">03</span>
+                <h2 class="section-title">Datenkapselung (Encapsulation)</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Was ist Datenkapselung?</h3>
+                <div class="definition-box">
+                    <p><strong>Datenkapselung</strong> bedeutet, dass Attribute einer Klasse vor direktem Zugriff von außen geschützt werden. Der Zugriff erfolgt nur über kontrollierte Methoden (Getter und Setter).</p>
+                </div>
+
+                <div class="code-block"><span class="keyword">public class</span> <span class="type">Himmelskoerper</span> {
+    <span class="keyword">private</span> String name;           <span class="comment">// Geschützt!</span>
+    <span class="keyword">private double</span> geschwindigkeit; <span class="comment">// Geschützt!</span>
+    
+    <span class="comment">// Getter: Wert lesen</span>
+    <span class="keyword">public</span> String <span class="method">getName</span>() {
+        <span class="keyword">return</span> name;
+    }
+    
+    <span class="comment">// Setter: Wert setzen mit Validierung!</span>
+    <span class="keyword">public void</span> <span class="method">setGeschwindigkeit</span>(<span class="keyword">double</span> g) {
+        <span class="keyword">if</span> (g >= 0) {  <span class="comment">// Nur positive Werte erlaubt</span>
+            <span class="keyword">this</span>.geschwindigkeit = g;
+        }
+    }
+}</div>
+
+                <table class="comparison-table">
+                    <tr>
+                        <th>Sichtbarkeit</th>
+                        <th>Zugriff</th>
+                        <th>Verwendung</th>
+                    </tr>
+                    <tr>
+                        <td><code>private</code></td>
+                        <td>Nur innerhalb der eigenen Klasse</td>
+                        <td>Für Attribute (Schutz der Daten)</td>
+                    </tr>
+                    <tr>
+                        <td><code>public</code></td>
+                        <td>Von überall</td>
+                        <td>Für Getter/Setter und öffentliche Methoden</td>
+                    </tr>
+                    <tr>
+                        <td><code>protected</code></td>
+                        <td>Eigene Klasse, Subklassen & gleiches Package</td>
+                        <td>Wenn Subklassen direkten Zugriff brauchen</td>
+                    </tr>
+                </table>
+
+                <div class="key-points">
+                    <div class="key-point">Private Attribute verhindern ungültige Werte (z.B. negative Geschwindigkeit)</div>
+                    <div class="key-point">Getter erlauben kontrolliertes Lesen der Werte</div>
+                    <div class="key-point">Setter können Eingaben validieren bevor sie gespeichert werden</div>
+                    <div class="key-point">Die interne Implementierung kann geändert werden, ohne dass andere Klassen angepasst werden müssen</div>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-title">Wichtig: Private Attribute und Vererbung</div>
+                    <div class="info-text">
+                        Subklassen wie <code>Planet</code> erben zwar die privaten Attribute von <code>Himmelskoerper</code> (sie sind Teil des Objekts im Speicher), können aber <strong>nicht direkt</strong> darauf zugreifen. Ein <code>this.name = "Erde"</code> in der Klasse Planet würde einen Fehler werfen! Stattdessen muss Planet die Getter und Setter der Oberklasse nutzen: <code>this.setName("Erde")</code>. Das ist gewollt – so bleibt die Validierung erhalten.
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container" data-quiz="datenkapselung">
+                <div class="quiz-header">
+                    <div class="quiz-title">Quiz: Datenkapselung</div>
+                </div>
+                <div class="quiz-body">
+                    <div class="quiz-question" data-question="d1">
+                        <div class="question-number">Frage 1 von 2</div>
+                        <div class="question-text">Was wäre der größte Nachteil, wenn alle Attribute von Himmelskoerper public wären?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Das Programm würde nicht kompilieren
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Jede andere Klasse könnte ungültige Werte setzen, ohne Validierung
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Das Programm wäre langsamer
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Die Vererbung würde nicht mehr funktionieren
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('d1', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="d2">
+                        <div class="question-number">Frage 2 von 3</div>
+                        <div class="question-text">Was ist der Zweck eines Setters mit Validierung?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Den Code kürzer zu machen
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Nur gültige Werte zuzulassen und ungültige abzulehnen
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Das Programm schneller zu machen
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Vererbung zu ermöglichen
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('d2', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="d3">
+                        <div class="question-number">Frage 3 von 3</div>
+                        <div class="question-text">Planet erbt von Himmelskoerper. Kann Planet direkt auf <code>this.name</code> zugreifen, wenn name in Himmelskoerper als private deklariert ist?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Ja, weil Planet das Attribut erbt
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Nein – Planet erbt das Attribut zwar, muss aber getName()/setName() nutzen
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Nur wenn Planet im selben Package ist
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Planet erbt keine privaten Attribute
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('d3', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <div class="reflection-header">
+                    <span class="reflection-icon">💬</span>
+                    <span class="reflection-title">Reflexionsfrage</span>
+                    <span class="reflection-subtitle">Besprich dich mit deiner Partnerin</span>
+                </div>
+                <div class="reflection-question">
+                    „Warum ist es besser, einen Setter mit Validierung zu haben, anstatt das Attribut einfach public zu machen? Nennt mindestens zwei konkrete Situationen, in denen das einen Unterschied macht."
+                </div>
+                <div class="reflection-context">
+                    Denkt an Fehler, die eine Programmiererin machen könnte, und wie Kapselung davor schützt.
+                </div>
+                <div class="help-card" onclick="toggleHelpCard(this)">
+                    <div class="help-card-header">
+                        <span class="help-card-title">💡 Hilfekarte – Stichworte zur Diskussion</span>
+                        <span class="help-card-toggle">▼</span>
+                    </div>
+                    <div class="help-card-content">
+                        <div class="help-card-body">
+                            <div class="help-keywords">
+                                <span class="keyword-tag">Validierung</span>
+                                <span class="keyword-tag">Ungültige Werte</span>
+                                <span class="keyword-tag">Fehlerprävention</span>
+                                <span class="keyword-tag">Wartbarkeit</span>
+                            </div>
+                            <ul class="help-hints">
+                                <li>Was passiert, wenn jemand geschwindigkeit = -500 setzt? Oder durchmesser = 0?</li>
+                                <li>Könnt ihr später die interne Berechnung ändern, ohne dass andere Klassen angepasst werden müssen?</li>
+                                <li>Stellt euch vor, 50 andere Klassen greifen direkt auf ein public-Attribut zu – was passiert, wenn ihr das Attribut umbenennen wollt?</li>
+                                <li>Wie hilft ein Setter beim Debuggen? (Tipp: Ihr könnt dort eine Ausgabe einbauen)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="abstrakte-klassen">
+            <div class="section-header">
+                <span class="section-number" style="background: rgba(236, 72, 153, 0.2); color: var(--accent-pink)">04</span>
+                <h2 class="section-title">Abstrakte Klassen</h2>
+            </div>
+
+            <div class="info-box new">
+                <div class="info-title">Neues Konzept</div>
+                <div class="info-text">Abstrakte Klassen erweitern das Konzept der Vererbung und ermöglichen noch besseres Design.</div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Was ist eine abstrakte Klasse?</h3>
+                
+                <p class="card-text">Stell dir vor, du sollst ein "Tier" zeichnen – nicht einen Hund, nicht eine Katze, sondern einfach nur "ein Tier". Das geht nicht wirklich, oder? Ein Tier ist ein <strong>Oberbegriff</strong>, keine konkrete Sache. Genauso verhält es sich mit <code>Himmelskoerper</code> in unserem Projekt.</p>
+
+                <div class="definition-box">
+                    <p>Eine <strong>abstrakte Klasse</strong> ist eine Klasse, von der man keine Objekte erstellen kann. Sie dient als gemeinsame Vorlage für andere Klassen. Das Schlüsselwort <code>abstract</code> markiert sie als "unvollständig" – sie braucht Subklassen, die sie vervollständigen.</p>
+                </div>
+
+                <div class="info-box tip">
+                    <div class="info-title">Alltagsbeispiel</div>
+                    <div class="info-text">
+                        Denke an den Begriff "Fahrzeug": Du kannst kein "Fahrzeug" kaufen – du kaufst ein <em>Auto</em>, ein <em>Fahrrad</em> oder einen <em>Bus</em>. "Fahrzeug" ist nur der Oberbegriff, der beschreibt, was alle gemeinsam haben (sie bewegen sich, haben eine Geschwindigkeit). Aber jedes konkrete Fahrzeug sieht anders aus und funktioniert anders.
+                    </div>
+                </div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Warum Himmelskoerper abstrakt machen?</h3>
+                
+                <p class="card-text">In unserem Sonnensystem-Projekt gibt es keine "echten" Himmelskörper – es gibt nur <strong>konkrete Typen</strong>: Planeten, Sterne, Monde. Ein Objekt vom Typ <code>Himmelskoerper</code> direkt zu erstellen wäre problematisch:</p>
+
+                <div class="key-points">
+                    <div class="key-point">Wie soll ein "allgemeiner Himmelskoerper" gezeichnet werden? Als Kreis? Als Stern? Wir wissen es nicht!</div>
+                    <div class="key-point">Welche Farbe hat er? Welche Größe ist typisch? Es gibt keine sinnvollen Standardwerte.</div>
+                    <div class="key-point">Wenn jemand versehentlich <code>new Himmelskoerper()</code> schreibt, ist das ein Programmierfehler – den wollen wir verhindern.</div>
+                </div>
+
+                <div class="code-block"><span class="comment">// VORHER: Normale Klasse – erlaubt unsinnige Objekte</span>
+<span class="keyword">public class</span> <span class="type">Himmelskoerper</span> { ... }
+
+<span class="type">Himmelskoerper</span> h = <span class="keyword">new</span> <span class="type">Himmelskoerper</span>();  <span class="comment">// Kompiliert, aber macht keinen Sinn!</span>
+
+
+<span class="comment">// NACHHER: Abstrakte Klasse – der Compiler schützt uns</span>
+<span class="keyword">public abstract class</span> <span class="type">Himmelskoerper</span> { ... }
+
+<span class="type">Himmelskoerper</span> h = <span class="keyword">new</span> <span class="type">Himmelskoerper</span>();  <span class="comment">// FEHLER! Der Compiler sagt: "Geht nicht!"</span>
+<span class="type">Himmelskoerper</span> p = <span class="keyword">new</span> <span class="type">Planet</span>();         <span class="comment">// OK! Planet ist konkret.</span></div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Abstrakte Methoden: Der "Vertrag"</h3>
+                
+                <p class="card-text">Eine abstrakte Klasse kann <strong>abstrakte Methoden</strong> enthalten. Das sind Methoden ohne Implementierung – nur die Signatur (Name, Parameter, Rückgabetyp). Sie sagen: "Jede Subklasse MUSS diese Methode selbst implementieren!"</p>
+
+                <div class="code-block"><span class="keyword">public abstract class</span> <span class="type">Himmelskoerper</span> {
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private double</span> durchmesser;
+    <span class="keyword">private double</span> geschwindigkeit;
+    <span class="keyword">protected double</span> x, y, winkel, orbitRadius; // Koordinaten für Bewegung
+    
+    <span class="comment">// KONKRETE Methode: Hat einen Rumpf { ... }</span>
+    <span class="comment">// Alle Himmelskörper bewegen sich gleich → einmal schreiben, überall nutzen</span>
+    <span class="keyword">public void</span> <span class="method">bewegung</span>() {
+        winkel += geschwindigkeit;
+        x = zentrum_x + orbitRadius * Math.<span class="method">cos</span>(winkel);
+        y = zentrum_y + orbitRadius * Math.<span class="method">sin</span>(winkel);
+    }
+    
+    <span class="comment">// ABSTRAKTE Methode: Kein Rumpf, nur Semikolon!</span>
+    <span class="comment">// Jeder Himmelskörper zeichnet sich anders → Subklassen müssen das selbst regeln</span>
+    <span class="keyword">public abstract void</span> <span class="method">zeichne</span>(Graphics g);
+}</div>
+
+                <div class="info-box warning">
+                    <div class="info-title">Die Regel für abstrakte Methoden</div>
+                    <div class="info-text">
+                        Wenn eine Subklasse von einer abstrakten Klasse erbt, MUSS sie alle abstrakten Methoden implementieren. Tut sie das nicht, muss sie selbst als <code>abstract</code> deklariert werden. Der Compiler erzwingt das – es gibt kein Entkommen!
+                    </div>
+                </div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Subklassen vervollständigen die Vorlage</h3>
+
+                <div class="code-block"><span class="keyword">public class</span> <span class="type">Planet</span> <span class="keyword">extends</span> <span class="type">Himmelskoerper</span> {
+    
+    <span class="annotation">@Override</span>  <span class="comment">// Sagt: "Ich implementiere hier eine geerbte/abstrakte Methode"</span>
+    <span class="keyword">public void</span> <span class="method">zeichne</span>(Graphics g) {
+        <span class="comment">// Planet wird als gefüllter Kreis gezeichnet</span>
+        g.<span class="method">setColor</span>(farbe);
+        g.<span class="method">fillOval</span>((<span class="keyword">int</span>)x, (<span class="keyword">int</span>)y, durchmesser, durchmesser);
+    }
+    <span class="comment">// bewegung() muss NICHT überschrieben werden – Planet erbt sie einfach!</span>
+}
+
+<span class="keyword">public class</span> <span class="type">Stern</span> <span class="keyword">extends</span> <span class="type">Himmelskoerper</span> {
+    
+    <span class="annotation">@Override</span>
+    <span class="keyword">public void</span> <span class="method">zeichne</span>(Graphics g) {
+        <span class="comment">// Stern wird anders gezeichnet (z.B. mit Strahlen)</span>
+        g.<span class="method">setColor</span>(Color.YELLOW);
+        g.<span class="method">fillOval</span>((<span class="keyword">int</span>)x, (<span class="keyword">int</span>)y, durchmesser, durchmesser);
+        <span class="comment">// ... Strahlen zeichnen ...</span>
+    }
+}</div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Der Unterschied zu normalen Klassen und Interfaces</h3>
+                
+                <p class="card-text">Eine abstrakte Klasse ist ein Mittelding:</p>
+
+                <table class="comparison-table">
+                    <tr>
+                        <th></th>
+                        <th>Normale Klasse</th>
+                        <th>Abstrakte Klasse</th>
+                        <th>Interface</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Objekte erstellen?</strong></td>
+                        <td>Ja</td>
+                        <td>Nein</td>
+                        <td>Nein</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Konkrete Methoden?</strong></td>
+                        <td>Ja</td>
+                        <td>Ja</td>
+                        <td>Nur Default-Methoden</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Abstrakte Methoden?</strong></td>
+                        <td>Nein</td>
+                        <td>Ja (optional)</td>
+                        <td>Ja</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Attribute (Zustand)?</strong></td>
+                        <td>Ja</td>
+                        <td>Ja</td>
+                        <td>Nein (nur Konstanten)</td>
+                    </tr>
+                </table>
+
+                <div class="class-diagram">
+                    <div class="diagram-class abstract">
+                        <div class="diagram-class-name">Himmelskoerper</div>
+                        <div class="diagram-class-body">
+                            - name: String<br>
+                            - durchmesser: double<br>
+                            + bewegung(): void<br>
+                            + <em>zeichne(g): void</em>
+                        </div>
+                    </div>
+                    <div class="diagram-arrow">▼</div>
+                    <div class="diagram-children">
+                        <div class="diagram-class">
+                            <div class="diagram-class-name">Planet</div>
+                            <div class="diagram-class-body">
+                                + zeichne(g): void
+                            </div>
+                        </div>
+                        <div class="diagram-class">
+                            <div class="diagram-class-name">Stern</div>
+                            <div class="diagram-class-body">
+                                + zeichne(g): void
+                            </div>
+                        </div>
+                        <div class="diagram-class">
+                            <div class="diagram-class-name">Mond</div>
+                            <div class="diagram-class-body">
+                                + zeichne(g): void
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Was resultiert aus abstrakten Klassen?</h3>
+
+                <div class="key-points">
+                    <div class="key-point"><strong>Sicherheit:</strong> Es kann kein "unvollständiges" Himmelskoerper-Objekt erstellt werden</div>
+                    <div class="key-point"><strong>Vertrag:</strong> Jede Subklasse MUSS die abstrakte Methode <code>zeichne()</code> implementieren</div>
+                    <div class="key-point"><strong>Wiederverwendung:</strong> Gemeinsamer Code (z.B. <code>bewegung()</code>) wird nur einmal geschrieben</div>
+                    <div class="key-point"><strong>Klarheit:</strong> Es ist sofort erkennbar, dass Himmelskoerper nur eine Vorlage ist</div>
+                    <div class="key-point"><strong>Polymorphie:</strong> Wir können weiterhin <code>Himmelskoerper[]</code> verwenden und alle Objekte einheitlich zeichnen</div>
+                </div>
+
+                <div class="info-box warning">
+                    <div class="info-title">Wichtig zu beachten</div>
+                    <div class="info-text">
+                        Wenn eine Klasse auch nur EINE abstrakte Methode enthält, MUSS die Klasse selbst als <code>abstract</code> deklariert werden. Eine Subklasse, die nicht alle abstrakten Methoden implementiert, muss selbst auch abstract sein.
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container" data-quiz="abstrakt">
+                <div class="quiz-header">
+                    <div class="quiz-title">Quiz: Abstrakte Klassen</div>
+                </div>
+                <div class="quiz-body">
+                    <div class="quiz-question" data-question="a1">
+                        <div class="question-number">Frage 1 von 5</div>
+                        <div class="question-text">Warum sollte Himmelskoerper eine abstrakte Klasse sein?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Weil das Programm sonst nicht kompiliert
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Weil es keinen Sinn macht, ein "allgemeines" Himmelskoerper-Objekt zu erstellen – es gibt nur konkrete Typen wie Planet oder Stern
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Weil abstrakte Klassen schneller sind
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Weil Java das für Vererbung vorschreibt
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('a1', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="a2">
+                        <div class="question-number">Frage 2 von 5</div>
+                        <div class="question-text">Was passiert, wenn Planet die abstrakte Methode zeichne() nicht implementiert?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Die Methode wird automatisch generiert
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Planet muss selbst als abstract deklariert werden – sonst gibt es einen Kompilierfehler
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Die Methode von Himmelskoerper wird verwendet
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Nichts, abstrakte Methoden sind optional
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('a2', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="a3">
+                        <div class="question-number">Frage 3 von 5</div>
+                        <div class="question-text">Kann eine abstrakte Klasse auch konkrete (nicht-abstrakte) Methoden haben?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Nein, alle Methoden müssen abstrakt sein
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Ja – z.B. ist bewegung() konkret und wird von allen Subklassen geerbt
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Nur wenn sie private sind
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Nur Getter und Setter dürfen konkret sein
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('a3', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="a4">
+                        <div class="question-number">Frage 4 von 5</div>
+                        <div class="question-text">Was ist der Unterschied zwischen einer abstrakten Methode und einer konkreten Methode?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Abstrakte Methoden sind schneller
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Abstrakte Methoden haben keinen Methodenrumpf { } – nur die Signatur mit Semikolon
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Konkrete Methoden können nicht überschrieben werden
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Es gibt keinen Unterschied
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('a4', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="a5">
+                        <div class="question-number">Frage 5 von 5</div>
+                        <div class="question-text">Welche Zeile würde einen Kompilierfehler verursachen?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                <code>Himmelskoerper h = new Planet();</code>
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                <code>Himmelskoerper h = new Himmelskoerper();</code>
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                <code>Planet p = new Planet();</code>
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                <code>Himmelskoerper[] objekte = new Himmelskoerper[10];</code>
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('a5', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <div class="reflection-header">
+                    <span class="reflection-icon">💬</span>
+                    <span class="reflection-title">Reflexionsfrage</span>
+                    <span class="reflection-subtitle">Besprich dich mit deiner Partnerin</span>
+                </div>
+                <div class="reflection-question">
+                    „Wir haben bewegung() als konkrete Methode und zeichne() als abstrakte Methode in Himmelskoerper. Warum macht das Sinn? Könnte man es auch andersherum machen?"
+                </div>
+                <div class="reflection-context">
+                    Überlegt, was alle Himmelskörper gemeinsam haben und was bei jedem anders ist.
+                </div>
+                <div class="help-card" onclick="toggleHelpCard(this)">
+                    <div class="help-card-header">
+                        <span class="help-card-title">💡 Hilfekarte – Stichworte zur Diskussion</span>
+                        <span class="help-card-toggle">▼</span>
+                    </div>
+                    <div class="help-card-content">
+                        <div class="help-card-body">
+                            <div class="help-keywords">
+                                <span class="keyword-tag">Gemeinsames Verhalten</span>
+                                <span class="keyword-tag">Individuelles Verhalten</span>
+                                <span class="keyword-tag">Kreisbahn</span>
+                                <span class="keyword-tag">Darstellung</span>
+                            </div>
+                            <ul class="help-hints">
+                                <li>Bewegen sich alle Himmelskörper auf die gleiche Weise? (Kreisbahn mit Sinus/Cosinus)</li>
+                                <li>Sehen alle Himmelskörper gleich aus? (Planet = Kreis, Stern = mit Strahlen?)</li>
+                                <li>Was wäre, wenn bewegung() abstrakt wäre? Müsste dann jede Subklasse die gleiche Formel neu schreiben?</li>
+                                <li>Gibt es Situationen, in denen bewegung() auch abstrakt sein sollte? (z.B. wenn Kometen sich anders bewegen)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="interfaces">
+            <div class="section-header">
+                <span class="section-number" style="background: rgba(249, 115, 22, 0.2); color: var(--accent-orange)">05</span>
+                <h2 class="section-title">Interfaces</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Was ist ein Interface?</h3>
+                <div class="definition-box">
+                    <p>Ein <strong>Interface</strong> ist ein "Vertrag", der festlegt, welche Methoden eine Klasse implementieren muss. Im Gegensatz zu Vererbung kann eine Klasse mehrere Interfaces implementieren.</p>
+                </div>
+
+                <p class="card-text">Während Vererbung eine "ist-ein"-Beziehung beschreibt, beschreibt ein Interface eine <strong>"kann"-Beziehung</strong> bzw. eine Fähigkeit: Die Klasse Sonnensystem KANN auf Actions reagieren (ActionListener).</p>
+
+                <div class="code-block"><span class="comment">// Das Interface ActionListener (von Java)</span>
+<span class="keyword">public interface</span> <span class="type">ActionListener</span> {
+    <span class="keyword">void</span> <span class="method">actionPerformed</span>(ActionEvent e);  <span class="comment">// Muss implementiert werden!</span>
+}
+
+<span class="comment">// Unsere Klasse implementiert das Interface</span>
+<span class="keyword">public class</span> <span class="type">Sonnensystem</span> <span class="keyword">implements</span> <span class="type">ActionListener</span> {
+    
+    <span class="annotation">@Override</span>
+    <span class="keyword">public void</span> <span class="method">actionPerformed</span>(ActionEvent e) {
+        <span class="comment">// Diese Methode wird bei jedem Timer-Tick aufgerufen</span>
+        <span class="keyword">for</span> (<span class="type">Himmelskoerper</span> h : objekte) {
+            <span class="keyword">if</span> (h != <span class="keyword">null</span>) {
+                h.<span class="method">bewegung</span>();
+            }
+        }
+        zeichenflaeche.<span class="method">repaint</span>();
+    }
+}</div>
+
+                <h3 class="card-title" style="margin-top: 2rem;">Mehrfachimplementierung</h3>
+                
+                <p class="card-text">Ein großer Vorteil von Interfaces: Eine Klasse kann <strong>mehrere Interfaces</strong> implementieren, aber nur von <strong>einer Klasse</strong> erben. Das ermöglicht flexible Kombinationen von Fähigkeiten.</p>
+
+                <div class="code-block"><span class="comment">// Eine Klasse kann mehrere Interfaces implementieren</span>
+<span class="keyword">public class</span> <span class="type">Sonnensystem</span> <span class="keyword">extends</span> <span class="type">JFrame</span> 
+                          <span class="keyword">implements</span> <span class="type">ActionListener</span>, <span class="type">MouseListener</span> {
+    <span class="comment">// Erbt von JFrame (Fenster)</span>
+    <span class="comment">// Kann auf Timer-Events reagieren (ActionListener)</span>
+    <span class="comment">// Kann auf Maus-Events reagieren (MouseListener)</span>
+}</div>
+
+                <table class="comparison-table">
+                    <tr>
+                        <th></th>
+                        <th><code>extends</code> (Vererbung)</th>
+                        <th><code>implements</code> (Interface)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Was wird übernommen?</strong></td>
+                        <td>Attribute + Methoden (mit Zustand)</td>
+                        <td>Methodensignaturen (Vertrag), keine Instanzvariablen</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Anzahl möglich?</strong></td>
+                        <td>Nur eine Klasse</td>
+                        <td>Mehrere Interfaces</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Verwendung</strong></td>
+                        <td>"ist-ein"-Beziehung</td>
+                        <td>"kann"-Beziehung (Fähigkeit)</td>
+                    </tr>
+                </table>
+
+                <div class="info-box tip">
+                    <div class="info-title">Gut zu wissen</div>
+                    <div class="info-text">
+                        Seit Java 8 können Interfaces auch <strong>Default-Methoden</strong> mit Implementierung enthalten. Der wichtigste Unterschied zu Klassen bleibt aber: Interfaces können keinen Zustand (Instanzvariablen) speichern – sie definieren nur, WAS ein Objekt können muss, nicht WIE es intern aufgebaut ist.
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container" data-quiz="interfaces">
+                <div class="quiz-header">
+                    <div class="quiz-title">Quiz: Interfaces</div>
+                </div>
+                <div class="quiz-body">
+                    <div class="quiz-question" data-question="i1">
+                        <div class="question-number">Frage 1 von 2</div>
+                        <div class="question-text">Was ist der Hauptunterschied zwischen extends und implements?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                extends ist für Klassen, implements für Interfaces
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                extends ist schneller als implements
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                implements ist älter als extends
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Es gibt keinen Unterschied
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('i1', 'a')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="i2">
+                        <div class="question-number">Frage 2 von 3</div>
+                        <div class="question-text">Warum implementiert Sonnensystem das Interface ActionListener?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Damit es Attribute erben kann
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Damit es auf Timer-Events reagieren kann
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Weil Java das vorschreibt
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Um Speicher zu sparen
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('i2', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="i3">
+                        <div class="question-number">Frage 3 von 3</div>
+                        <div class="question-text">Wie viele Interfaces kann eine Klasse implementieren?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Nur eins, genau wie bei Vererbung
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Beliebig viele – das ist ein großer Vorteil gegenüber Vererbung
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Maximal drei
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Gar keins, wenn die Klasse bereits von einer anderen erbt
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('i3', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <div class="reflection-header">
+                    <span class="reflection-icon">💬</span>
+                    <span class="reflection-title">Reflexionsfrage</span>
+                    <span class="reflection-subtitle">Besprich dich mit deiner Partnerin</span>
+                </div>
+                <div class="reflection-question">
+                    „Warum ist ActionListener ein Interface und keine abstrakte Klasse? Was wäre das Problem, wenn ActionListener eine abstrakte Klasse wäre?"
+                </div>
+                <div class="reflection-context">
+                    Denkt daran, dass Sonnensystem schon von einer anderen Klasse erben könnte (z.B. JFrame).
+                </div>
+                <div class="help-card" onclick="toggleHelpCard(this)">
+                    <div class="help-card-header">
+                        <span class="help-card-title">💡 Hilfekarte – Stichworte zur Diskussion</span>
+                        <span class="help-card-toggle">▼</span>
+                    </div>
+                    <div class="help-card-content">
+                        <div class="help-card-body">
+                            <div class="help-keywords">
+                                <span class="keyword-tag">Einfachvererbung</span>
+                                <span class="keyword-tag">Mehrfachimplementierung</span>
+                                <span class="keyword-tag">Flexibilität</span>
+                                <span class="keyword-tag">Fähigkeiten</span>
+                            </div>
+                            <ul class="help-hints">
+                                <li>In Java kann eine Klasse nur von EINER anderen Klasse erben (Einfachvererbung)</li>
+                                <li>Was wäre, wenn Sonnensystem von JFrame erben UND ActionListener-Funktionalität haben soll?</li>
+                                <li>Interfaces beschreiben Fähigkeiten ("kann reagieren"), nicht Identität ("ist ein")</li>
+                                <li>Eine Klasse kann beliebig viele Interfaces implementieren – das macht sie flexibel</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="timer">
+            <div class="section-header">
+                <span class="section-number" style="background: rgba(34, 197, 94, 0.2); color: var(--accent-green)">06</span>
+                <h2 class="section-title">Timer & Ereignisgesteuerte Programmierung</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Wie funktioniert der Timer?</h3>
+                <div class="definition-box">
+                    <p>Ein <strong>Timer</strong> löst in regelmäßigen Abständen ein Event aus. Die Klasse, die auf dieses Event reagieren soll, muss das Interface <code>ActionListener</code> implementieren.</p>
+                </div>
+
+                <div class="code-block"><span class="keyword">public class</span> <span class="type">Sonnensystem</span> <span class="keyword">implements</span> <span class="type">ActionListener</span> {
+
+    <span class="keyword">public void</span> <span class="method">urknall</span>() {
+        <span class="comment">// Timer erstellen: alle 20ms ein Event</span>
+        Timer timer = <span class="keyword">new</span> Timer(20, <span class="keyword">this</span>);
+        timer.<span class="method">start</span>();
+    }
+    
+    <span class="annotation">@Override</span>
+    <span class="keyword">public void</span> <span class="method">actionPerformed</span>(ActionEvent e) {
+        <span class="comment">// Wird AUTOMATISCH alle 20ms aufgerufen!</span>
+        <span class="keyword">for</span> (<span class="type">Himmelskoerper</span> h : objekte) {
+            <span class="keyword">if</span> (h != <span class="keyword">null</span>) {
+                h.<span class="method">bewegung</span>();
+            }
+        }
+        zeichenflaeche.<span class="method">repaint</span>();  <span class="comment">// Neu zeichnen</span>
+    }
+}</div>
+
+                <div class="key-points">
+                    <div class="key-point"><strong>Event:</strong> Ein Ereignis (Timer-Tick, Button-Klick, Tastendruck)</div>
+                    <div class="key-point"><strong>Listener:</strong> Ein Objekt, das auf Events "hört"</div>
+                    <div class="key-point"><strong>Handler:</strong> Die Methode, die beim Event ausgeführt wird</div>
+                    <div class="key-point"><code>this</code> bedeutet "dieses Objekt" – die Sonnensystem-Instanz ist selbst der Listener</div>
+                </div>
+            </div>
+
+            <div class="quiz-container" data-quiz="timer">
+                <div class="quiz-header">
+                    <div class="quiz-title">Quiz: Timer & Events</div>
+                </div>
+                <div class="quiz-body">
+                    <div class="quiz-question" data-question="t1">
+                        <div class="question-number">Frage 1 von 2</div>
+                        <div class="question-text">Was bedeutet <code>new Timer(20, this)</code>?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Erstelle einen Timer, der 20 Mal läuft
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Erstelle einen Timer, der alle 20ms ein Event an dieses Objekt sendet
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Erstelle 20 Timer
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Warte 20 Sekunden
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('t1', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="t2">
+                        <div class="question-number">Frage 2 von 2</div>
+                        <div class="question-text">Warum ist die null-Prüfung in der Schleife wichtig?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Weil das Programm sonst langsamer wird
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Weil das Array leere Plätze haben kann und der Zugriff auf null einen Fehler verursacht
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Weil Java das vorschreibt
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Die Prüfung ist optional
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('t2', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <div class="reflection-header">
+                    <span class="reflection-icon">💬</span>
+                    <span class="reflection-title">Reflexionsfrage</span>
+                    <span class="reflection-subtitle">Besprich dich mit deiner Partnerin</span>
+                </div>
+                <div class="reflection-question">
+                    „Was würde passieren, wenn wir den Timer-Intervall von 20ms auf 1ms ändern? Und was bei 1000ms? Welche Auswirkungen hätte das auf unser Sonnensystem?"
+                </div>
+                <div class="reflection-context">
+                    Denkt an die Animation und die Benutzererfahrung. Was passiert, wenn actionPerformed() sehr oft oder sehr selten aufgerufen wird?
+                </div>
+                <div class="help-card" onclick="toggleHelpCard(this)">
+                    <div class="help-card-header">
+                        <span class="help-card-title">💡 Hilfekarte – Stichworte zur Diskussion</span>
+                        <span class="help-card-toggle">▼</span>
+                    </div>
+                    <div class="help-card-content">
+                        <div class="help-card-body">
+                            <div class="help-keywords">
+                                <span class="keyword-tag">Framerate</span>
+                                <span class="keyword-tag">Performance</span>
+                                <span class="keyword-tag">Flüssigkeit</span>
+                                <span class="keyword-tag">CPU-Last</span>
+                            </div>
+                            <ul class="help-hints">
+                                <li>Bei 1ms: 1000 Aufrufe pro Sekunde – schafft der Computer das? Ist das nötig?</li>
+                                <li>Bei 1000ms: Nur 1 Aufruf pro Sekunde – wie wirkt die Animation dann?</li>
+                                <li>Was ist eine sinnvolle Framerate für flüssige Animation? (Tipp: Filme haben 24 fps)</li>
+                                <li>Was passiert, wenn actionPerformed() länger braucht als der Timer-Intervall?</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="datenstrukturen">
+            <div class="section-header">
+                <span class="section-number" style="background: rgba(100, 116, 139, 0.2); color: var(--text-muted)">07</span>
+                <h2 class="section-title">Datenstrukturen: Array vs. ArrayList</h2>
+            </div>
+
+            <div class="content-card">
+                <h3 class="card-title">Wann verwende ich was?</h3>
+
+                <table class="comparison-table">
+                    <tr>
+                        <th></th>
+                        <th>Array</th>
+                        <th>ArrayList</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Größe</strong></td>
+                        <td>Fest (bei Erstellung)</td>
+                        <td>Dynamisch (wächst automatisch)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Deklaration</strong></td>
+                        <td><code>Himmelskoerper[] objekte = new Himmelskoerper[10];</code></td>
+                        <td><code>ArrayList&lt;Himmelskoerper&gt; objekte = new ArrayList&lt;&gt;();</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Element hinzufügen</strong></td>
+                        <td><code>objekte[0] = planet;</code></td>
+                        <td><code>objekte.add(planet);</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Element abrufen</strong></td>
+                        <td><code>objekte[0]</code></td>
+                        <td><code>objekte.get(0)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Länge</strong></td>
+                        <td><code>objekte.length</code></td>
+                        <td><code>objekte.size()</code></td>
+                    </tr>
+                </table>
+
+                <div class="info-box tip">
+                    <div class="info-title">Tipp</div>
+                    <div class="info-text">
+                        Verwende <strong>Array</strong>, wenn die Anzahl der Elemente von Anfang an feststeht.<br>
+                        Verwende <strong>ArrayList</strong>, wenn Elemente dynamisch hinzugefügt oder entfernt werden sollen.
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container" data-quiz="daten">
+                <div class="quiz-header">
+                    <div class="quiz-title">Quiz: Datenstrukturen</div>
+                </div>
+                <div class="quiz-body">
+                    <div class="quiz-question" data-question="ds1">
+                        <div class="question-number">Frage 1 von 2</div>
+                        <div class="question-text">Was ist der Hauptunterschied zwischen Array und ArrayList?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Arrays sind schneller
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Arrays haben eine feste Größe, ArrayLists können wachsen
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                ArrayLists können nur Zahlen speichern
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Es gibt keinen Unterschied
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('ds1', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+
+                    <div class="quiz-question" data-question="ds2">
+                        <div class="question-number">Frage 2 von 2</div>
+                        <div class="question-text">Sind Arrays in Java primitive Datentypen oder Referenztypen?</div>
+                        <div class="options">
+                            <div class="option" data-value="a" onclick="selectOption(this)">
+                                <span class="option-marker">A</span>
+                                Primitiv wie int oder double
+                            </div>
+                            <div class="option" data-value="b" onclick="selectOption(this)">
+                                <span class="option-marker">B</span>
+                                Referenztypen – sie verweisen auf Objekte im Speicher
+                            </div>
+                            <div class="option" data-value="c" onclick="selectOption(this)">
+                                <span class="option-marker">C</span>
+                                Beides gleichzeitig
+                            </div>
+                            <div class="option" data-value="d" onclick="selectOption(this)">
+                                <span class="option-marker">D</span>
+                                Keins von beiden
+                            </div>
+                        </div>
+                        <button class="check-btn" onclick="checkAnswer('ds2', 'b')" disabled>Antwort prüfen</button>
+                        <div class="feedback"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reflection-box">
+                <div class="reflection-header">
+                    <span class="reflection-icon">💬</span>
+                    <span class="reflection-title">Reflexionsfrage</span>
+                    <span class="reflection-subtitle">Besprich dich mit deiner Partnerin</span>
+                </div>
+                <div class="reflection-question">
+                    „In unserem Projekt haben wir ein Array mit fester Größe für die Himmelskörper verwendet. Wann wäre es besser gewesen, eine ArrayList zu nehmen? Welche Vor- und Nachteile hätte das?"
+                </div>
+                <div class="reflection-context">
+                    Denkt an Situationen, in denen die Benutzerin neue Planeten hinzufügen oder löschen möchte.
+                </div>
+                <div class="help-card" onclick="toggleHelpCard(this)">
+                    <div class="help-card-header">
+                        <span class="help-card-title">💡 Hilfekarte – Stichworte zur Diskussion</span>
+                        <span class="help-card-toggle">▼</span>
+                    </div>
+                    <div class="help-card-content">
+                        <div class="help-card-body">
+                            <div class="help-keywords">
+                                <span class="keyword-tag">Dynamische Größe</span>
+                                <span class="keyword-tag">Benutzerinteraktion</span>
+                                <span class="keyword-tag">null-Prüfung</span>
+                                <span class="keyword-tag">Einfachheit</span>
+                            </div>
+                            <ul class="help-hints">
+                                <li>Mit Array: Was passiert, wenn die Benutzerin mehr Planeten hinzufügen will als das Array Platz hat?</li>
+                                <li>Mit ArrayList: Brauchen wir noch die null-Prüfung in der Schleife?</li>
+                                <li>ArrayList hat Methoden wie add(), remove(), size() – wie würde das den Code vereinfachen?</li>
+                                <li>Gibt es auch Situationen, in denen ein Array besser ist? (Tipp: Wenn sich die Anzahl nie ändert)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="progress-bar">
+        <svg class="progress-ring" viewBox="0 0 60 60">
+            <circle class="progress-ring-circle" cx="30" cy="30" r="25"></circle>
+            <circle class="progress-ring-progress" cx="30" cy="30" r="25" 
+                    stroke-dasharray="157" stroke-dashoffset="157" id="progressCircle"></circle>
+        </svg>
+        <div class="progress-text">
+            <div class="progress-percent" id="progressPercent">0%</div>
+            <div class="progress-label">Quiz-Fortschritt</div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Switcher Logic
+        const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+
+        function switchTheme(e) {
+            if (e.target.checked) {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        toggleSwitch.addEventListener('change', switchTheme);
+
+        // Check local storage for theme preference
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'light') {
+                toggleSwitch.checked = true;
+            }
+        }
+
+        // Quiz State
+        const quizState = {
+            totalQuestions: 21,
+            correctAnswers: 0,
+            answeredQuestions: new Set()
+        };
+
+        // Toggle Help Card
+        function toggleHelpCard(card) {
+            card.classList.toggle('open');
+        }
+
+        const feedbackMessages = {
+            v1: {
+                correct: "Richtig! Planet erbt sowohl alle Attribute als auch alle Methoden von Himmelskoerper. Wichtig: Private Attribute werden zwar geerbt, aber Planet kann nur über Getter/Setter darauf zugreifen.",
+                wrong: "Nicht ganz. Bei Vererbung werden ALLE Attribute und Methoden übernommen (auch private – aber auf diese kann nur über Getter/Setter zugegriffen werden)."
+            },
+            v2: {
+                correct: "Genau! Ein Planet ist eine speziellere Form eines Himmelskörpers – er hat alles, was ein Himmelskoerper hat, aber kann zusätzliche Eigenschaften haben.",
+                wrong: "Die 'ist-ein'-Beziehung bedeutet Spezialisierung: Planet IST EIN Himmelskoerper mit zusätzlichen Eigenschaften."
+            },
+            v3: {
+                correct: "Richtig! Code-Duplikation vermeiden ist einer der Hauptgründe für Vererbung. Gemeinsame Eigenschaften werden nur einmal in der Oberklasse definiert.",
+                wrong: "Der Hauptvorteil von Vererbung ist, dass gemeinsamer Code nur einmal geschrieben werden muss – nicht in jeder Klasse neu."
+            },
+            p1: {
+                correct: "Richtig! Durch Vererbung IST ein Planet auch ein Himmelskoerper. Das ist der Kern der Polymorphie.",
+                wrong: "Denke an Vererbung: Planet erbt von Himmelskoerper, daher IST ein Planet auch ein Himmelskoerper."
+            },
+            p2: {
+                correct: "Genau! Wir können alle Objekte gleich behandeln (z.B. bewegung() aufrufen), obwohl sie unterschiedliche Typen haben.",
+                wrong: "Polymorphie ermöglicht die einheitliche Behandlung verschiedener Objekte über ihre gemeinsame Schnittstelle."
+            },
+            p3: {
+                correct: "Richtig! Das ist dynamische Bindung: Der tatsächliche Objekttyp (Planet) bestimmt zur Laufzeit, welche Methode aufgerufen wird – nicht der deklarierte Variablentyp.",
+                wrong: "Bei dynamischer Bindung entscheidet der tatsächliche Objekttyp (Planet), nicht der Variablentyp (Himmelskoerper)."
+            },
+            d1: {
+                correct: "Richtig! Ohne Kapselung könnte jeder Code ungültige Werte setzen, z.B. negative Geschwindigkeit.",
+                wrong: "Private Attribute schützen vor ungültigen Werten. Setter können Eingaben validieren."
+            },
+            d2: {
+                correct: "Genau! Ein Setter mit Validierung prüft Eingaben und lehnt ungültige Werte ab.",
+                wrong: "Setter können Validierung einbauen – so werden nur gültige Werte akzeptiert."
+            },
+            d3: {
+                correct: "Richtig! Private Attribute werden zwar geerbt (sie existieren im Objekt), aber die Subklasse kann nicht direkt darauf zugreifen – sie muss Getter/Setter nutzen.",
+                wrong: "Planet erbt die privaten Attribute, aber kann nur über die geerbten Getter/Setter darauf zugreifen – nicht direkt mit this.name!"
+            },
+            a1: {
+                correct: "Richtig! Ein 'allgemeiner' Himmelskoerper existiert nicht – es gibt nur konkrete Typen wie Planet oder Stern. Eine abstrakte Klasse verhindert, dass jemand versehentlich so ein sinnloses Objekt erstellt.",
+                wrong: "Abstrakte Klassen verhindern sinnlose Objekte. Frage dich: Wie würde ein 'allgemeiner Himmelskoerper' aussehen? Es gibt keine sinnvolle Antwort!"
+            },
+            a2: {
+                correct: "Genau! Der Compiler erzwingt: Entweder implementierst du alle abstrakten Methoden, oder deine Klasse muss selbst abstract sein. Es gibt kein Entkommen!",
+                wrong: "Abstrakte Methoden MÜSSEN implementiert werden. Wenn nicht, muss die Subklasse selbst als abstract deklariert werden."
+            },
+            a3: {
+                correct: "Richtig! Das ist der große Vorteil: Gemeinsamer Code (wie bewegung()) wird einmal geschrieben, individueller Code (wie zeichne()) muss jede Subklasse selbst liefern.",
+                wrong: "Abstrakte Klassen können beides haben: konkrete Methoden (werden geerbt) und abstrakte Methoden (müssen implementiert werden)."
+            },
+            a4: {
+                correct: "Genau! Eine abstrakte Methode hat nur die Signatur und endet mit einem Semikolon. Sie sagt 'WAS' gemacht werden muss, aber nicht 'WIE'.",
+                wrong: "Der Unterschied: Konkrete Methode hat einen Rumpf { ... } mit Code. Abstrakte Methode hat nur die Signatur und ein Semikolon."
+            },
+            a5: {
+                correct: "Richtig! Von einer abstrakten Klasse kann man keine Objekte erstellen. Aber: Ein Array vom Typ Himmelskoerper[] ist erlaubt – das Array selbst ist kein Himmelskoerper-Objekt!",
+                wrong: "new Himmelskoerper() ist verboten. Aber: Himmelskoerper[] erstellt nur ein Array (einen Container), kein Himmelskoerper-Objekt."
+            },
+            i1: {
+                correct: "Richtig! extends ist für Vererbung von Klassen, implements für die Umsetzung von Interface-Verträgen.",
+                wrong: "extends = Vererbung von Klassen (nur eine), implements = Interfaces (mehrere möglich)."
+            },
+            i2: {
+                correct: "Genau! ActionListener erlaubt es, auf Timer-Events zu reagieren – die Methode actionPerformed wird aufgerufen.",
+                wrong: "ActionListener ist der 'Vertrag', der sagt: Diese Klasse kann auf Timer-Events reagieren."
+            },
+            i3: {
+                correct: "Richtig! Das ist ein großer Vorteil von Interfaces: Eine Klasse kann mehrere Fähigkeiten haben. Vererbung ist auf eine Oberklasse beschränkt.",
+                wrong: "Java erlaubt nur Einfachvererbung (eine Oberklasse), aber eine Klasse kann beliebig viele Interfaces implementieren."
+            },
+            t1: {
+                correct: "Richtig! Der Timer sendet alle 20 Millisekunden ein Event an 'this' (das Sonnensystem-Objekt).",
+                wrong: "20 ist das Intervall in Millisekunden, 'this' ist der Empfänger der Events."
+            },
+            t2: {
+                correct: "Genau! Ein Array kann leere Plätze (null) haben. Der Zugriff auf null.bewegung() würde eine NullPointerException verursachen.",
+                wrong: "null-Prüfung verhindert Fehler: null.methode() führt zu einem Programmabsturz!"
+            },
+            ds1: {
+                correct: "Richtig! Arrays haben eine feste Größe, ArrayLists können dynamisch wachsen.",
+                wrong: "Der Hauptunterschied ist die Größe: Arrays sind fest, ArrayLists sind dynamisch."
+            },
+            ds2: {
+                correct: "Richtig! Arrays sind Referenztypen – sie verweisen auf Objekte im Heap-Speicher.",
+                wrong: "Arrays sind KEINE primitiven Typen! Sie sind Referenztypen wie alle Objekte in Java."
+            }
+        };
+
+        function selectOption(element) {
+            const question = element.closest('.quiz-question');
+            const options = question.querySelectorAll('.option');
+            const button = question.querySelector('.check-btn');
+            
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            button.disabled = false;
+        }
+
+        function checkAnswer(questionId, correctAnswer) {
+            const question = document.querySelector(`[data-question="${questionId}"]`);
+            const selectedOption = question.querySelector('.option.selected');
+            const feedback = question.querySelector('.feedback');
+            const button = question.querySelector('.check-btn');
+            const options = question.querySelectorAll('.option');
+            
+            if (!selectedOption) return;
+            
+            const selectedValue = selectedOption.dataset.value;
+            const isCorrect = selectedValue === correctAnswer;
+            
+            // Mark options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.value === correctAnswer) {
+                    opt.classList.add('correct');
+                } else if (opt.classList.contains('selected') && !isCorrect) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.textContent = isCorrect ? feedbackMessages[questionId].correct : feedbackMessages[questionId].wrong;
+            feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'wrong');
+            
+            button.disabled = true;
+            button.textContent = isCorrect ? '✓ Richtig!' : '✗ Falsch';
+            
+            // Update progress
+            if (!quizState.answeredQuestions.has(questionId)) {
+                quizState.answeredQuestions.add(questionId);
+                if (isCorrect) {
+                    quizState.correctAnswers++;
+                }
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const percent = Math.round((quizState.answeredQuestions.size / quizState.totalQuestions) * 100);
+            const circle = document.getElementById('progressCircle');
+            const percentText = document.getElementById('progressPercent');
+            
+            // Update circle
+            const circumference = 157; // 2 * PI * 25
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Update text
+            percentText.textContent = percent + '%';
+        }
+
+        // Navigation highlighting
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Scroll spy
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
