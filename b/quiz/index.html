@@ -2416,6 +2416,55 @@ h.<span class="method">zeichne</span>(g);  <span class="comment">// Welche zeich
     </div>
 
     <script>
+        // ============================================
+        // Quiz-Optionen zufällig mischen beim Laden
+        // ============================================
+        (function shuffleQuizOptions() {
+            // Fisher-Yates Shuffle Algorithmus
+            function shuffle(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+
+            // Alle Quiz-Fragen durchgehen
+            const questions = document.querySelectorAll('.quiz-question');
+            
+            questions.forEach(question => {
+                const optionsContainer = question.querySelector('.options');
+                if (!optionsContainer) return;
+                
+                const options = Array.from(optionsContainer.querySelectorAll('.option'));
+                if (options.length === 0) return;
+                
+                // Optionen mit ihrem Inhalt und data-value sammeln
+                const optionData = options.map(opt => ({
+                    value: opt.dataset.value,
+                    html: opt.innerHTML
+                }));
+                
+                // Zufällig mischen
+                shuffle(optionData);
+                
+                // Die Marker (A, B, C, D) bleiben in Reihenfolge
+                const markers = ['A', 'B', 'C', 'D'];
+                
+                // Optionen mit neuen Markern aber alten data-values wieder einfügen
+                options.forEach((opt, index) => {
+                    const data = optionData[index];
+                    opt.dataset.value = data.value;
+                    
+                    // Den Marker aktualisieren, aber den Text beibehalten
+                    const markerSpan = opt.querySelector('.option-marker');
+                    const textContent = data.html.replace(/<span class="option-marker">.<\/span>\s*/, '');
+                    
+                    opt.innerHTML = `<span class="option-marker">${markers[index]}</span>${textContent}`;
+                });
+            });
+        })();
+
         // Theme Switcher Logic
         const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
 
