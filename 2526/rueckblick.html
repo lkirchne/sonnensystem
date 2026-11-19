@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sonnensystem – Was ihr gebaut habt</title>
+<link rel="preconnect" href="https://fonts.bunny.net">
+<link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|fira-mono:400,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blau: #004E92; --orange: #FF8E00; --gruen: #89BA17;
+    --orange-text: #A85A00; --gruen-text: #4F6E06;
+    --text: #1C2026; --grau: #5F6670; --hell: #8A9099;
+    --linie: #E2E5E9; --flaeche: #F5F6F8; --raum: #0E1726;
+    --mono: "Fira Mono", ui-monospace, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Inter", system-ui, sans-serif; font-size: 16px; line-height: 1.55;
+    color: var(--text); background: #fff; -webkit-font-smoothing: antialiased;
+  }
+  code, pre { font-family: var(--mono); }
+  a { color: var(--blau); }
+  .breite { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* Kopf */
+  .held { background: var(--raum); color: #E8EDF5; }
+  .held canvas { display: block; width: 100%; height: 230px; }
+  .held-text { padding: 8px 32px 36px; max-width: 1180px; margin: 0 auto; position: relative; }
+  .held h1 { font-size: 36px; line-height: 1.15; margin: 0; font-weight: 700; letter-spacing: -0.02em; }
+  .held p { margin: 10px 0 0; color: #AAB6C8; max-width: 62ch; }
+
+  .einleitung { padding-top: 36px; padding-bottom: 8px; }
+  .einleitung p { max-width: 68ch; margin: 0; }
+  .index { list-style: none; padding: 0; margin: 26px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0 32px; border-top: 1px solid var(--linie); }
+  .index li { border-bottom: 1px solid var(--linie); }
+  .index a { display: flex; gap: 14px; padding: 10px 0; text-decoration: none; color: var(--text); font-size: 15px; }
+  .index a:hover { color: var(--blau); }
+  .index .nr { font-family: var(--mono); color: var(--hell); font-size: 13px; padding-top: 2px; }
+
+  /* Stationen */
+  .station { padding: 64px 0 8px; }
+  .station-kopf { display: flex; gap: 18px; align-items: baseline; }
+  .station-kopf .nr { font-family: var(--mono); font-size: 15px; color: var(--orange-text); }
+  .station h2 { font-size: 26px; line-height: 1.2; margin: 0; letter-spacing: -0.015em; }
+  .von { font-size: 14px; color: var(--grau); margin: 4px 0 0; }
+  .lead { max-width: 68ch; margin: 16px 0 0; }
+  .lead code, .frage code, .info code { font-size: 14px; background: var(--flaeche); padding: 1px 5px; border-radius: 3px; }
+
+  .buehne { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; margin-top: 22px; align-items: start; }
+  .demo canvas {
+    display: block; width: 100%; height: 320px; background: var(--raum); border-radius: 4px;
+    touch-action: none;
+  }
+  .steuer { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 10px; font-size: 14px; color: var(--grau); }
+  .steuer button {
+    font: inherit; font-size: 14px; padding: 5px 11px; border-radius: 3px; cursor: pointer;
+    border: 1px solid #C9CED5; background: #fff; color: var(--text);
+  }
+  .steuer button:hover { border-color: var(--blau); }
+  .steuer button[aria-pressed="true"] { background: var(--blau); border-color: var(--blau); color: #fff; }
+  .steuer label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .steuer input[type="range"] { width: 160px; accent-color: var(--blau); }
+  .steuer output { font-family: var(--mono); font-size: 13px; color: var(--text); }
+  .steuer .hinweis { font-size: 13px; color: var(--hell); }
+
+  .quelltext pre {
+    margin: 0; padding: 14px 16px; overflow-x: auto; background: var(--flaeche);
+    border: 1px solid var(--linie); border-radius: 4px; font-size: 13px; line-height: 1.6; tab-size: 4;
+  }
+  .quelltext .datei { font-family: var(--mono); font-size: 12px; color: var(--hell); margin: 0 0 4px; }
+  .quelltext .datei + pre { margin-bottom: 14px; }
+  .quelltext .zeile-markiert { background: #FFE2B8; display: inline-block; width: 100%; }
+  .k { color: var(--blau); font-weight: 500; } .t { color: #7A3E9D; } .s { color: #2F7A1F; }
+  .n { color: var(--orange-text); } .c { color: #8A9099; font-style: italic; } .a { color: var(--grau); }
+
+  .frage { margin: 18px 0 0; max-width: 68ch; padding: 10px 14px; border-left: 3px solid var(--orange); background: #FFF8EF; }
+  .frage b { font-weight: 600; }
+
+  /* Array-Station */
+  .slots { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .slot {
+    width: 66px; height: 50px; border: 1px solid #C9CED5; border-radius: 3px; background: #fff;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    font-size: 12px; position: relative; transition: background .15s, border-color .15s;
+  }
+  .slot .i { position: absolute; top: 2px; left: 4px; font-family: var(--mono); font-size: 10px; color: var(--hell); }
+  .slot .w { font-weight: 500; }
+  .slot.leer .w { color: var(--hell); font-family: var(--mono); font-weight: 400; }
+  .slot.pruefen { border-color: var(--orange); background: #FFF3E3; }
+  .slot.neu { border-color: var(--gruen); background: #F1F7E3; }
+  .array-label { font-family: var(--mono); font-size: 12px; color: var(--grau); margin-top: 14px; }
+  .info { margin-top: 12px; font-size: 14px; min-height: 44px; }
+  .info.fehler { color: #B3261E; }
+  .array-buehne { background: var(--flaeche); border: 1px solid var(--linie); border-radius: 4px; padding: 14px 16px 16px; }
+
+  .ausblick { margin: 80px 0 0; padding: 40px 0 70px; border-top: 1px solid var(--linie); }
+  .ausblick h2 { font-size: 26px; margin: 0; }
+  .ausblick p { max-width: 68ch; }
+  footer { font-size: 13px; color: var(--hell); padding: 0 0 40px; }
+
+  @media (max-width: 960px) {
+    .buehne { grid-template-columns: 1fr; }
+    .breite, .held-text { padding-left: 20px; padding-right: 20px; }
+    .held h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="held">
+  <canvas id="held"></canvas>
+  <div class="held-text">
+    <h1>Sonnensystem – was ihr gebaut habt</h1>
+    <p>Rückblick auf eure Erweiterungen: zwölf Ideen aus euren Projekten, jeweils mit dem Code und einer Demo zum Ausprobieren.</p>
+  </div>
+</header>
+
+<div class="breite einleitung">
+  <p>Alle Gruppen sind vom selben Ausgangsprojekt gestartet: <code>Himmelskoerper</code>, <code>Planet</code>, <code>Stern</code>, <code>Ringplanet</code>, <code>Asteroid</code> und ein <code>Manager</code> mit Timer. Herausgekommen sind sehr unterschiedliche Programme. Die Demos auf dieser Seite sind in JavaScript nachgebaut, die Code-Ausschnitte stammen aus euren Java-Projekten.</p>
+  <ol class="index" id="index"></ol>
+</div>
+
+<main class="breite">
+
+<!-- 01 -->
+<section class="station" id="komet" data-titel="Ein Komet, der anders fliegt">
+  <div class="station-kopf"><span class="nr">01</span><div><h2>Ein Komet, der anders fliegt</h2><p class="von">aus dem Projekt von Berkay &amp; Eren · Überschreiben, Polymorphie</p></div></div>
+  <p class="lead">Alle Planeten kreisen. Der Komet fliegt geradeaus zu der Stelle, die ihr anklickt. Dafür überschreibt die Klasse <code>Komet</code> die Methode <code>update()</code>. Der Manager ruft weiterhin auf jedem Himmelskörper nur <code>update()</code> auf und muss nichts über Kometen wissen.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-komet"></canvas>
+      <div class="steuer"><span class="hinweis">Klickt irgendwo hin. Trefft ihr einen Planeten?</span><button id="komet-reset">Neu starten</button></div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Komet.java</p>
+<script type="text/x-java">@Override
+public void update() {
+    if (fliegt) {
+        double dx = zielX - getX();
+        double dy = zielY - getY();
+        double abstand = Math.sqrt(dx * dx + dy * dy);
+
+        double schritt = 4;
+        double neuesX = getX() + dx / abstand * schritt;
+        double neuesY = getY() + dy / abstand * schritt;
+        setPosition(neuesX, neuesY);
+    }
+}</script>
+      <p class="datei">Manager.java – unverändert</p>
+<script type="text/x-java">for (int i = 0; i < himmelskoerperListe.length; i++) {
+    if (himmelskoerperListe[i] != null) {
+        himmelskoerperListe[i].update();
+    }
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Im Original zeigt der Schweif immer nach links. Hier zeigt er entgegen der Flugrichtung. Welche Werte aus <code>update()</code> bräuchte man dafür in <code>zeichnen()</code>?</p>
+</section>
+
+<!-- 02 -->
+<section class="station" id="kollision" data-titel="Wann berühren sich zwei Kreise?">
+  <div class="station-kopf"><span class="nr">02</span><div><h2>Wann berühren sich zwei Kreise?</h2><p class="von">aus dem Projekt von Berkay &amp; Eren · Geometrie im Code</p></div></div>
+  <p class="lead">Zwei Kreise berühren sich, sobald der Abstand ihrer Mittelpunkte höchstens so groß ist wie die Summe der beiden Radien. Den Abstand liefert der Satz des Pythagoras. Die Prüfung läuft über <em>alle</em> Himmelskörper der Liste. <code>h != komet</code> verhindert, dass der Komet mit sich selbst kollidiert.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-kollision"></canvas>
+      <div class="steuer"><span class="hinweis">Zieht die Kreise mit der Maus.</span></div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Manager.java</p>
+<script type="text/x-java">if (h != null && h != komet) {
+    double dx = komet.getX() - h.getX();
+    double dy = komet.getY() - h.getY();
+
+    double abstand = Math.sqrt(dx * dx + dy * dy);
+
+    double kollisionsAbstand =
+            (komet.getGroesse() + h.getGroesse()) / 2;
+
+    if (abstand <= kollisionsAbstand) {
+        komet.kollidieren();
+        System.out.println("KOLLISION mit " + h.getName() + "!");
+    }
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> <code>groesse</code> ist der Durchmesser. Warum steht im Code <code>(… + …) / 2</code>?</p>
+</section>
+
+<!-- 03 -->
+<section class="station" id="mond" data-titel="Zwei Monde, die gleich aussehen">
+  <div class="station-kopf"><span class="nr">03</span><div><h2>Zwei Monde, die gleich aussehen</h2><p class="von">aus den Projekten von Tamara sowie Michael &amp; Jakob, Simon &amp; Peter · Überschreiben, Schnittstellen</p></div></div>
+  <p class="lead">Drei Gruppen haben einen Mond gebaut, der die Erde umkreist, auf zwei verschiedene Arten. Links überschreibt der Mond <code>getX()</code> und <code>getY()</code>. Rechts wird die Position der Erde erst in <code>zeichnen()</code> addiert. Auf dem Bildschirm sehen beide gleich aus. Schaltet ein, was <code>getX()</code> und <code>getY()</code> jeweils zurückgeben.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-mond"></canvas>
+      <div class="steuer"><button id="mond-getter" aria-pressed="false">getX() / getY() anzeigen</button></div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">links: Mond.java (Tamara)</p>
+<script type="text/x-java">@Override
+public double getX() {
+    return erde.getX() + getRadius() * Math.cos(getWinkel() - getGeschwindigkeit());
+}</script>
+      <p class="datei">rechts: Mond.java (Michael &amp; Jakob)</p>
+<script type="text/x-java">@Override
+public void zeichnen(Graphics g) {
+    int x = (int) (zentrum.getX() + getX());
+    int y = (int) (zentrum.getY() + getY());
+    ...
+    g.fillOval(x - d / 2, y - d / 2, d, d);
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Der Komet aus Station 01 soll den Mond treffen können. Mit welcher Lösung klappt das, ohne den Manager zu ändern? Und welcher Parametertyp ist besser: <code>Planet erde</code> oder <code>Himmelskoerper zentrum</code>?</p>
+</section>
+
+<!-- 04 -->
+<section class="station" id="ueberladen" data-titel="Zeit vor- und zurückspulen">
+  <div class="station-kopf"><span class="nr">04</span><div><h2>Zeit vor- und zurückspulen</h2><p class="von">aus dem Projekt von Simon &amp; Peter · Überladen</p></div></div>
+  <p class="lead">Statt <code>update()</code> umzuschreiben, gibt es eine zweite Methode mit demselben Namen und einem Parameter. Die alte ruft die neue einfach mit <code>1.0</code> auf. Alles, was bisher funktioniert hat, funktioniert weiter. Und ein negativer Faktor dreht die Zeit um, ohne zusätzlichen Code.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-ueberladen"></canvas>
+      <div class="steuer">
+        <label>Faktor <input id="faktor" type="range" min="-3" max="3" step="0.5" value="1"></label>
+        <output id="faktor-aus">update(1.0)</output>
+      </div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Himmelskoerper.java</p>
+<script type="text/x-java">public void update() {
+    update(1.0);
+}
+
+// Neu: Update mit Zeitfaktor (ermöglicht Vor-/Zurückspulen)
+public void update(double faktor) {
+    x = radius * Math.cos(winkel);
+    y = radius * Math.sin(winkel);
+    winkel += geschwindigkeit * faktor;
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Was ist der Unterschied zwischen <em>Überladen</em> (hier) und <em>Überschreiben</em> (Station 01)?</p>
+</section>
+
+<!-- 05 -->
+<section class="station" id="koordinaten" data-titel="Wo hat die Maus geklickt?">
+  <div class="station-kopf"><span class="nr">05</span><div><h2>Wo hat die Maus geklickt?</h2><p class="von">aus dem Projekt von Berkay &amp; Eren · Koordinatensysteme</p></div></div>
+  <p class="lead">Nach <code>g.translate()</code> liegt der Ursprung in der Mitte der Zeichenfläche. Ein Mausklick liefert aber Koordinaten ab der linken oberen Ecke. Zum Umrechnen zieht man genau das wieder ab, was <code>translate</code> verschoben hat.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-koordinaten"></canvas>
+      <div class="steuer"><span class="hinweis">Bewegt die Maus über die Fläche.</span></div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Manager.java – Zeichnen</p>
+<script type="text/x-java">g.translate(getWidth() / 2, getHeight() / 2);</script>
+      <p class="datei">Manager.java – Mausklick</p>
+<script type="text/x-java">public void mousePressed(MouseEvent e) {
+    double x = e.getX() - zeichenflaeche.getWidth() / 2;
+    double y = e.getY() - zeichenflaeche.getHeight() / 2;
+
+    komet.setZiel(x, y);
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Michael &amp; Jakob zeichnen den Tageszähler <em>vor</em> dem <code>translate</code>. Warum?</p>
+</section>
+
+<!-- 06 -->
+<section class="station" id="kepler" data-titel="Ein Asteroidengürtel nach Kepler">
+  <div class="station-kopf"><span class="nr">06</span><div><h2>Ein Asteroidengürtel nach Kepler</h2><p class="von">aus dem Projekt von Luc · Physik in einer Zeile</p></div></div>
+  <p class="lead">Für tausend zufällige Asteroiden gibt es keine Tabelle mit Umlaufzeiten. Das dritte Keplersche Gesetz hilft: T² ist proportional zu a³. Mit der Erde als Maßstab ergibt das die Formel im Code. Die orangefarbenen Asteroiden starten auf einer geraden Linie. Beobachtet, was mit ihr passiert.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-kepler"></canvas>
+      <div class="steuer">
+        <button id="kepler-an" aria-pressed="true">nach Kepler</button>
+        <button id="kepler-aus" aria-pressed="false">alle gleich schnell</button>
+        <button id="kepler-reset">Linie neu ausrichten</button>
+      </div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Asteroidenguertel.java</p>
+<script type="text/x-java">a.radiusAE = 2.1 + random.nextDouble() * 1.2;
+a.winkel = random.nextDouble() * 2 * Math.PI;
+a.umlaufzeitTage = 365.256 * Math.pow(a.radiusAE, 1.5);</script>
+      <p class="datei">Himmelskoerper.java</p>
+<script type="text/x-java">winkel = (winkel + 2 * Math.PI * vergangeneTage / umlaufzeitTage) % (2 * Math.PI);</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Wofür steht <code>% (2 * Math.PI)</code> in der zweiten Zeile, und was würde ohne passieren?</p>
+</section>
+
+<!-- 07 -->
+<section class="station" id="deltazeit" data-titel="Wenn das Programm kurz hängt">
+  <div class="station-kopf"><span class="nr">07</span><div><h2>Wenn das Programm kurz hängt</h2><p class="von">aus den Projekten von Hannes und Luc · Echte Zeit messen</p></div></div>
+  <p class="lead">Ein Timer mit 50 ms feuert nicht exakt alle 50 ms. Hannes und Luc messen deshalb mit <code>System.nanoTime()</code>, wie viel Zeit wirklich vergangen ist, und bewegen die Planeten entsprechend weit. Luc begrenzt diese Zeit zusätzlich auf 0,1 Sekunden. Lasst das Programm hängen und vergleicht.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-deltazeit"></canvas>
+      <div class="steuer"><button id="haenger">Programm hängt 1 Sekunde</button></div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">links: Manager.java (Hannes)</p>
+<script type="text/x-java">long jetzt = System.nanoTime();
+double sekunden = (jetzt - letzterTick) / 1e9;
+letzterTick = jetzt;</script>
+      <p class="datei">rechts: Manager.java (Luc)</p>
+<script type="text/x-java">long jetzt = System.nanoTime();
+double deltaSekunden = Math.min((jetzt - letzterTick) / 1_000_000_000.0, 0.1);
+letzterTick = jetzt;</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Links springt die Erde, rechts geht eine Sekunde verloren. Welches Verhalten ist „richtiger“? Kommt darauf an: für eine Uhr, für ein Spiel, für eine Simulation?</p>
+</section>
+
+<!-- 08 -->
+<section class="station" id="schichten" data-titel="Planeten in Schichten zeichnen">
+  <div class="station-kopf"><span class="nr">08</span><div><h2>Planeten in Schichten zeichnen</h2><p class="von">aus dem Projekt von Luc · Vererbung als Schablone</p></div></div>
+  <p class="lead">Die Oberklasse zeichnet für jeden Planeten Schatten, Kugel und Glanzlicht und ruft danach eine <em>leere</em> Methode <code>zeichneDetails()</code> auf. Nur die Planeten, die etwas Besonderes haben, überschreiben sie. Bei Jupiter sorgt <em>Clipping</em> dafür, dass die Wolkenbänder nicht über den Rand ragen. Schaltet die Schichten einzeln an und aus.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-schichten"></canvas>
+      <div class="steuer">
+        <button data-planet="erde" aria-pressed="true">Erde</button>
+        <button data-planet="jupiter" aria-pressed="false">Jupiter</button>
+        <button data-planet="saturn" aria-pressed="false">Saturn</button>
+      </div>
+      <div class="steuer">
+        <label><input type="checkbox" data-schicht="schatten" checked> Schatten</label>
+        <label><input type="checkbox" data-schicht="kugel" checked> Kugel</label>
+        <label><input type="checkbox" data-schicht="glanz" checked> Glanzlicht</label>
+        <label><input type="checkbox" data-schicht="details" checked> zeichneDetails()</label>
+        <label id="clip-label"><input type="checkbox" data-schicht="clip" checked> Clipping</label>
+      </div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Himmelskoerper.java</p>
+<script type="text/x-java">public void zeichne(Graphics2D g, double pixelProAE, boolean namenAnzeigen) {
+    // Schatten, Kugel, Glanzlicht – für alle gleich
+    ...
+    zeichneDetails(g, x, y, r);
+}
+
+protected void zeichneDetails(Graphics2D g, double x, double y, int r) { }</script>
+      <p class="datei">Jupiter.java</p>
+<script type="text/x-java">@Override protected void zeichneDetails(Graphics2D g, double x, double y, int r) {
+    Shape old = g.getClip();
+    g.clip(new Ellipse2D.Double(x-r, y-r, r*2, r*2));
+    g.setColor(new Color(160, 103, 79, 145));
+    g.fill(new Rectangle2D.Double(x-r, y-r*.45, r*2, r*.32));
+    g.fill(new Rectangle2D.Double(x-r, y+r*.35, r*2, r*.25));
+    g.setClip(old);
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Im Ausgangsprojekt ruft der <code>Ringplanet</code> zuerst <code>super.zeichnen(g)</code> auf und zeichnet dann den Ring. Wer bestimmt dort die Reihenfolge, und wer hier?</p>
+</section>
+
+<!-- 09 -->
+<section class="station" id="zoom" data-titel="Zoomen und Verschieben">
+  <div class="station-kopf"><span class="nr">09</span><div><h2>Zoomen und Verschieben</h2><p class="von">aus dem Projekt von Luc, Maßstab nach Hannes · Interaktion</p></div></div>
+  <p class="lead">Im echten Maßstab liegt Saturn fast zehnmal so weit draußen wie die Erde. Kein Fenster zeigt beides gut. Die Lösung: Der Maßstab ist eine Variable, <code>pixelProAE</code> (Pixel pro Astronomischer Einheit). Jeder Himmelskörper speichert seinen Bahnradius in AE und rechnet ihn erst beim Zeichnen in Pixel um: Bahnradius mal <code>pixelProAE</code>. Das Mausrad ändert nur diese eine Zahl, und alle Bahnen und Positionen ändern sich mit. Ziehen verschiebt die Ansicht über <code>translate</code>. Bei Hannes ist der Maßstab dagegen eine Konstante.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-zoom"></canvas>
+      <div class="steuer">
+        <button id="zoom-rein">+</button><button id="zoom-raus">−</button><button id="zoom-reset">Reset</button>
+        <output id="zoom-aus">pixelProAE = 40.0</output>
+        <span class="hinweis">Mausrad und Ziehen gehen auch.</span>
+      </div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Manager.java</p>
+<script type="text/x-java">@Override public void mouseWheelMoved(MouseWheelEvent e) {
+    double faktor = Math.pow(1.12, -e.getPreciseWheelRotation());
+    pixelProAE = Math.max(2, Math.min(400, pixelProAE * faktor));
+    repaint();
+}
+
+@Override public void mouseDragged(MouseEvent e) {
+    verschiebungX += e.getX() - letzteMaus.x;
+    verschiebungY += e.getY() - letzteMaus.y;
+    ...
+}</script>
+      <p class="datei">Himmelskoerper.java – hier wirkt pixelProAE</p>
+<script type="text/x-java">public double getX(double pixelProAE) {
+    return Math.cos(winkel) * bahnradiusAE * pixelProAE;
+}
+
+public double getY(double pixelProAE) {
+    return Math.sin(winkel) * bahnradiusAE * pixelProAE;
+}
+
+public void zeichne(Graphics2D g, double pixelProAE, boolean namenAnzeigen) {
+    double x = getX(pixelProAE);
+    double y = getY(pixelProAE);
+    int r = sichtRadius;
+    g.setColor(farbe);
+    g.fill(new Ellipse2D.Double(x - r, y - r, r * 2, r * 2));
+    ...
+}
+
+public void zeichneBahn(Graphics2D g, double pixelProAE) {
+    double r = bahnradiusAE * pixelProAE;
+    g.draw(new Ellipse2D.Double(-r, -r, r * 2, r * 2));
+}</script>
+      <p class="datei">Manager.java – paintComponent()</p>
+<script type="text/x-java">g.translate(getWidth() / 2.0 + verschiebungX,
+            getHeight() / 2.0 + verschiebungY);
+
+for (Himmelskoerper k : koerper) {
+    k.zeichneBahn(g, pixelProAE);
+}
+for (Himmelskoerper k : koerper) {
+    k.zeichne(g, pixelProAE, namenAnzeigen);
+}</script>
+      <p class="datei">zum Vergleich: Manager.java (Hannes), fester Maßstab</p>
+<script type="text/x-java">private static final double PIXEL_PRO_AE = 12;
+
+private double abstand(double ae) {
+    return ae * PIXEL_PRO_AE;
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Warum wird <code>pixelProAE</code> <em>multipliziert</em> und nicht einfach um 1 erhöht?</p>
+</section>
+
+<!-- 10 -->
+<section class="station" id="namen" data-titel="Namen für alle – einmal geschrieben">
+  <div class="station-kopf"><span class="nr">10</span><div><h2>Namen für alle – einmal geschrieben</h2><p class="von">aus dem Projekt von Julian &amp; Alex · Vererbung, Redundanz vermeiden</p></div></div>
+  <p class="lead">Julian &amp; Alex beschriften ihre Himmelskörper mit einer Methode <code>nameZeichnen()</code>, die direkt in der Oberklasse <code>Himmelskoerper</code> steht. Jeder neue Himmelskörper, egal welcher Klasse, bekommt seinen Namen also automatisch. Der Abstand der Beschriftung richtet sich nach der Größe. Die Geschwindigkeiten berechnen sie aus den echten Umlaufzeiten, daher die realistischen Verhältnisse in der Demo.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-namen"></canvas>
+      <div class="steuer">
+        <button id="namen-add">hinzufuegen(new Asteroid(…))</button>
+        <label><input type="checkbox" id="namen-an" checked> nameZeichnen() aufrufen</label>
+      </div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Himmelskoerper.java</p>
+<script type="text/x-java">public void nameZeichnen(Graphics g) {
+    int abstand = (int) (groesse / 2) + 4;
+    g.setColor(Color.WHITE);
+    g.drawString(name, (int) x + abstand, (int) y - abstand);
+}</script>
+      <p class="datei">Manager.java</p>
+<script type="text/x-java">private double geschwindigkeit(double umlaufzeitInJahren) {
+    return 2 * Math.PI / (umlaufzeitInJahren * 400);
+}
+...
+for (int i = 0; i < himmelskoerperListe.length; i++) {
+    if (himmelskoerperListe[i] != null) {
+        himmelskoerperListe[i].zeichnen(g);
+        himmelskoerperListe[i].nameZeichnen(g);
+    }
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> In anderen Projekten stand der Name in jeder <code>zeichnen()</code>-Methode einzeln oder im Manager. Was müsstet ihr jeweils ändern, wenn alle Namen plötzlich grau und kleiner sein sollen?</p>
+</section>
+
+<!-- 11 -->
+<section class="station" id="fehler" data-titel="Fehlersuche: Alle gleich groß">
+  <div class="station-kopf"><span class="nr">11</span><div><h2>Fehlersuche: Alle gleich groß</h2><p class="von">ein typischer Fehler · Attribute benutzen</p></div></div>
+  <p class="lead">Im <code>urknall()</code> bekommt Jupiter die Größe 12, Merkur die Größe 3. Trotzdem sind auf dem Bildschirm alle Planeten gleich groß. Findet die Stelle im Code.</p>
+  <div class="buehne">
+    <div class="demo">
+      <canvas id="c-fehler"></canvas>
+      <div class="steuer"><button id="fehler-loesung" aria-pressed="false">Auflösung zeigen</button></div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Manager.java</p>
+<script type="text/x-java">hinzufuegen(new Planet("Merkur", 3, 50, 0, 0.050, Color.GRAY));
+hinzufuegen(new Planet("Erde", 5, 110, 0, 0.025, Color.BLUE));
+hinzufuegen(new Planet("Jupiter", 12, 210, 0, 0.010, ...));</script>
+      <p class="datei">Planet.java</p>
+<script type="text/x-java" id="fehler-code">@Override
+public void zeichnen(Graphics g) {
+    int x = (int) getX();
+    int y = (int) getY();
+    g.setColor(getFarbe());
+    g.fillOval(x - 5, y - 5, 10, 10);
+}</script>
+      <div id="fehler-fix" hidden>
+        <p class="datei">Planet.java – korrigiert</p>
+<script type="text/x-java">int d = (int) (2 * getGroesse());
+g.fillOval(x - d / 2, y - d / 2, d, d);</script>
+      </div>
+    </div>
+  </div>
+  <p class="frage"><b>Merke:</b> Ein Attribut, das gesetzt, aber nirgends gelesen wird, ist fast immer ein Hinweis auf einen Fehler.</p>
+</section>
+
+<!-- 12 -->
+<section class="station" id="array" data-titel="Was passiert, wenn das Array voll ist?">
+  <div class="station-kopf"><span class="nr">12</span><div><h2>Was passiert, wenn das Array voll ist?</h2><p class="von">das Ausgangsprojekt und die Lösung von Michael &amp; Jakob · Datenstrukturen</p></div></div>
+  <p class="lead">Im Ausgangsprojekt passen genau 10 Himmelskörper in die Liste. Fast alle Gruppen haben mehr gebraucht und das Array auf 15, 20 oder 100 Plätze vergrößert. Michael &amp; Jakob haben eine <code>ArrayList</code> benutzt. Fügt Himmelskörper hinzu, bis es eng wird.</p>
+  <div class="buehne">
+    <div class="demo">
+      <div class="array-buehne">
+        <div class="steuer" style="margin-top:0">
+          <button id="modus-array" aria-pressed="true">Array, Länge 10</button>
+          <button id="modus-liste" aria-pressed="false">ArrayList</button>
+        </div>
+        <div id="array-anzeige"></div>
+        <div class="info" id="array-info"></div>
+        <div class="steuer">
+          <button id="array-add">hinzufuegen(…)</button>
+          <button id="array-reset">Zurücksetzen</button>
+        </div>
+      </div>
+    </div>
+    <div class="quelltext">
+      <p class="datei">Manager.java – Ausgangsprojekt</p>
+<script type="text/x-java">public void hinzufuegen(Himmelskoerper h) {
+    for (int i = 0; i < himmelskoerperListe.length; i++) {
+        if (himmelskoerperListe[i] == null) {
+            himmelskoerperListe[i] = h;
+            return;
+        }
+    }
+}</script>
+      <p class="datei">Manager.java – Michael &amp; Jakob</p>
+<script type="text/x-java">public void hinzufuegen(Himmelskoerper h) {
+    himmelskoerperListe.add(h);
+}</script>
+    </div>
+  </div>
+  <p class="frage"><b>Weiterdenken:</b> Die ArrayList ist auch nur ein Array, das bei Bedarf umzieht. Wie oft muss beim Hinzufügen von 1000 Elementen umkopiert werden, wenn sich die Länge jedes Mal verdoppelt?</p>
+</section>
+
+<section class="ausblick">
+  <h2>Wie geht es weiter?</h2>
+  <p>Eure Himmelskörper standen in einer Liste, und jedes Mal wurden <em>alle</em> der Reihe nach durchlaufen. Für ein Sonnensystem reicht das. Oft ist aber die Reihenfolge entscheidend: Manchmal interessiert nur das, was zuletzt dazukam, manchmal das, was am längsten wartet. Manchmal muss man mitten in einer Folge etwas einfügen oder entfernen, ohne alles umzukopieren.</p>
+  <p>Genau darum geht es in der nächsten Reihe: <b>lineare Datenstrukturen</b>.</p>
+</section>
+
+<footer>Sonnensystem-Projekt · Informatik Q1 · Gymnasium Neue Sandkaul<br>
+Diese Zusammenfassung wurde mithilfe von Claude Opus 5.5 erstellt. Ideen und Prompting: L. Kirchner.</footer>
+</main>
+
+<script>
+/* ------------------------------------------------------------------
+   Allgemeines
+   ------------------------------------------------------------------ */
+const FARBEN = {
+  sonne: "#FFC83D", merkur: "#9D9995", venus: "#E8BE75", erde: "#3477DE",
+  mars: "#D65B38", jupiter: "#D7A87B", saturn: "#DFC691", uranus: "#7EDADE", neptun: "#4161DD",
+  bahn: "rgba(150,170,205,0.20)", schrift: "#C9D3E3", orange: "#FF8E00", gruen: "#89BA17"
+};
+const TAU = Math.PI * 2;
+
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const JAVA_KW = new Set(("abstract boolean break case catch char class continue default do double else extends final finally float for if implements import instanceof int interface long new null private protected public return static super switch this throw throws true false try void while").split(" "));
+function javaHighlight(src) {
+  const re = /(\/\/[^\n]*)|("(?:[^"\\]|\\.)*")|(@\w+)|(\b\d[\d_]*(?:\.\d+)?(?:e\d+)?\b|\.\d+\b)|(\b[A-Za-z_]\w*\b)/g;
+  let out = "", last = 0, m;
+  while ((m = re.exec(src)) !== null) {
+    out += esc(src.slice(last, m.index));
+    const [tok, kom, str, ann, num, wort] = m;
+    if (kom) out += `<span class="c">${esc(kom)}</span>`;
+    else if (str) out += `<span class="s">${esc(str)}</span>`;
+    else if (ann) out += `<span class="a">${esc(ann)}</span>`;
+    else if (num) out += `<span class="n">${esc(num)}</span>`;
+    else if (JAVA_KW.has(wort)) out += `<span class="k">${wort}</span>`;
+    else if (/^[A-Z][a-z]/.test(wort)) out += `<span class="t">${wort}</span>`;
+    else out += esc(tok);
+    last = re.lastIndex;
+  }
+  return out + esc(src.slice(last));
+}
+// Java-Blöcke in <pre> umwandeln
+document.querySelectorAll('script[type="text/x-java"]').forEach(s => {
+  const pre = document.createElement("pre");
+  const code = document.createElement("code");
+  code.innerHTML = javaHighlight(s.textContent.replace(/^\n/, ""));
+  pre.appendChild(code);
+  if (s.id) pre.id = s.id;
+  s.replaceWith(pre);
+});
+
+// Inhaltsverzeichnis
+document.getElementById("index").innerHTML = [...document.querySelectorAll(".station")].map((s, i) =>
+  `<li><a href="#${s.id}"><span class="nr">${String(i + 1).padStart(2, "0")}</span>${s.dataset.titel}</a></li>`).join("");
+
+// Zeichenfläche mit Pixeldichte
+class Flaeche {
+  constructor(cv) { this.cv = cv; this.c = cv.getContext("2d"); this.w = 0; this.h = 0; this.d = 0; }
+  start() {
+    const d = window.devicePixelRatio || 1, w = this.cv.clientWidth, h = this.cv.clientHeight;
+    if (w !== this.w || h !== this.h || d !== this.d) {
+      this.cv.width = Math.round(w * d); this.cv.height = Math.round(h * d);
+      this.w = w; this.h = h; this.d = d;
+    }
+    this.c.setTransform(d, 0, 0, d, 0, 0);
+    this.c.clearRect(0, 0, w, h);
+    return this.c;
+  }
+}
+function kreis(c, x, y, r, farbe) { c.fillStyle = farbe; c.beginPath(); c.arc(x, y, Math.max(r, 0.5), 0, TAU); c.fill(); }
+function ring(c, x, y, r, farbe, breite = 1) { c.strokeStyle = farbe; c.lineWidth = breite; c.beginPath(); c.arc(x, y, r, 0, TAU); c.stroke(); }
+function schrift(c, t, x, y, farbe = FARBEN.schrift, font = "12px Inter, system-ui, sans-serif", ausr = "left") {
+  c.fillStyle = farbe; c.font = font; c.textAlign = ausr; c.fillText(t, x, y);
+}
+const MONO = "12px 'Fira Mono', ui-monospace, monospace";
+function sonne(c, x, y, r, glow) {
+  if (glow) for (let i = 7; i >= 1; i--) kreis(c, x, y, r + i * r * 0.22, `rgba(255,150,35,${0.035 + (7 - i) * 0.006})`);
+  const g = c.createRadialGradient(x - r * 0.2, y - r * 0.2, 1, x, y, r);
+  g.addColorStop(0, "#FFF6B5"); g.addColorStop(0.65, "#FFCF3E"); g.addColorStop(1, "#EE7012");
+  c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
+}
+
+// Animationsschleife: nur sichtbare Stationen laufen
+const animationen = [];
+function animiere(element, fn) {
+  const a = { fn, sichtbar: false };
+  new IntersectionObserver(es => { a.sichtbar = es[0].isIntersecting; }).observe(element);
+  animationen.push(a);
+}
+let letzteZeit = performance.now();
+function schleife(t) {
+  const dt = (t - letzteZeit) / 1000; letzteZeit = t;
+  for (const a of animationen) if (a.sichtbar) a.fn(dt, t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+
+function knopfGruppe(knoepfe, aktiv) { knoepfe.forEach(k => k.setAttribute("aria-pressed", k === aktiv)); }
+
+// Planetensatz für kleine Demos (Radius als Anteil, Winkelgeschwindigkeit in rad/s)
+function planetenSatz() {
+  return [
+    { name: "Merkur", r: 0.24, w: 1.6,  g: 3,   f: FARBEN.merkur, a: 0.5 },
+    { name: "Venus",  r: 0.38, w: 1.05, g: 4.5, f: FARBEN.venus,  a: 2.0 },
+    { name: "Erde",   r: 0.53, w: 0.7,  g: 5,   f: FARBEN.erde,   a: 4.0 },
+    { name: "Mars",   r: 0.68, w: 0.48, g: 4,   f: FARBEN.mars,   a: 1.0 },
+    { name: "Jupiter",r: 0.88, w: 0.2,  g: 10,  f: FARBEN.jupiter,a: 3.0 }
+  ];
+}
+
+/* ------------------------------------------------------------------
+   Kopfbild
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("held"), F = new Flaeche(cv);
+  const sterne = Array.from({ length: 220 }, () => [Math.random(), Math.random(), Math.random() < 0.15 ? 1.4 : 0.8]);
+  const pl = [
+    { r: 60, w: 0.40, g: 3, f: FARBEN.merkur }, { r: 95, w: 0.28, g: 5, f: FARBEN.venus },
+    { r: 130, w: 0.2, g: 5.5, f: FARBEN.erde }, { r: 165, w: 0.14, g: 4, f: FARBEN.mars },
+    { r: 290, w: 0.05, g: 13, f: FARBEN.jupiter }, { r: 390, w: 0.03, g: 11, f: FARBEN.saturn, ring: true },
+    { r: 480, w: 0.02, g: 8, f: FARBEN.uranus }, { r: 560, w: 0.015, g: 8, f: FARBEN.neptun }
+  ].map((p, i) => ({ ...p, a: i * 1.7 }));
+  const ast = Array.from({ length: 500 }, () => { const r = 195 + Math.random() * 70; return { r, a: Math.random() * TAU, w: 0.11 * Math.pow(195 / r, 1.5) }; });
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.1);
+    const c = F.start(), w = F.w, h = F.h, cx = w * 0.5, cy = h * 0.5;
+    for (const s of sterne) kreis(c, s[0] * w, s[1] * h, s[2] * 0.6, "rgba(210,220,255,0.55)");
+    c.save(); c.translate(cx, cy); c.scale(1, 0.42);
+    for (const p of pl) ring(c, 0, 0, p.r, "rgba(150,170,205,0.13)", 1.6);
+    c.restore();
+    for (const a of ast) { a.a += a.w * dt; kreis(c, cx + Math.cos(a.a) * a.r, cy + Math.sin(a.a) * a.r * 0.42, 0.7, "rgba(190,185,175,0.55)"); }
+    const objekte = pl.map(p => { p.a += p.w * dt; return { p, x: cx + Math.cos(p.a) * p.r, y: cy + Math.sin(p.a) * p.r * 0.42 }; });
+    const hinten = objekte.filter(o => o.y < cy), vorn = objekte.filter(o => o.y >= cy);
+    const zeichne = o => {
+      kreis(c, o.x, o.y, o.p.g, o.p.f);
+      if (o.p.ring) { c.save(); c.translate(o.x, o.y); c.scale(1, 0.3); ring(c, 0, 0, o.p.g * 2, "rgba(223,198,145,0.8)", 2.5); c.restore(); }
+    };
+    hinten.forEach(zeichne); sonne(c, cx, cy, 26, true); vorn.forEach(zeichne);
+  });
+})();
+
+/* ------------------------------------------------------------------
+   01 Komet
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-komet"), F = new Flaeche(cv);
+  let pl, komet, meldung;
+  function start() {
+    pl = planetenSatz();
+    komet = { x: null, y: null, zx: 0, zy: 0, fliegt: false, kollidiert: false, rx: -1, ry: 0 };
+    meldung = "";
+  }
+  start();
+  document.getElementById("komet-reset").onclick = start;
+  cv.addEventListener("pointerdown", e => {
+    const x = e.offsetX - F.w / 2, y = e.offsetY - F.h / 2;
+    komet.zx = x; komet.zy = y; komet.fliegt = true; komet.kollidiert = false; meldung = "";
+  });
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.05);
+    const c = F.start(), R = Math.min(F.w, F.h) * 0.46, cx = F.w / 2, cy = F.h / 2;
+    if (komet.x === null) { komet.x = -F.w / 2 + 30; komet.y = -F.h / 2 + 40; }
+    c.save(); c.translate(cx, cy);
+    for (const p of pl) { p.a += p.w * dt; ring(c, 0, 0, p.r * R, FARBEN.bahn); }
+    sonne(c, 0, 0, 14, true);
+    const pos = pl.map(p => ({ name: p.name, x: Math.cos(p.a) * p.r * R, y: Math.sin(p.a) * p.r * R, g: p.g, f: p.f }));
+    for (const p of pos) kreis(c, p.x, p.y, p.g, p.f);
+
+    if (komet.fliegt) {
+      const dx = komet.zx - komet.x, dy = komet.zy - komet.y, ab = Math.hypot(dx, dy), schritt = 170 * dt;
+      if (ab > 0.01) { komet.rx = dx / ab; komet.ry = dy / ab; }
+      if (ab <= schritt) { komet.x = komet.zx; komet.y = komet.zy; komet.fliegt = false; }
+      else { komet.x += dx / ab * schritt; komet.y += dy / ab * schritt; }
+      for (const h of [{ name: "Sonne", x: 0, y: 0, g: 14 }, ...pos]) {
+        if (Math.hypot(komet.x - h.x, komet.y - h.y) <= h.g + 4) {
+          komet.fliegt = false; komet.kollidiert = true; meldung = `KOLLISION mit ${h.name}!`; break;
+        }
+      }
+      ring(c, komet.zx, komet.zy, 4, "rgba(255,142,0,0.6)");
+    }
+    // Schweif entgegen der Flugrichtung
+    const sx = -komet.rx, sy = -komet.ry;
+    for (let i = 1; i <= 3; i++) {
+      const winkel = (i - 2) * 0.25, cs = Math.cos(winkel), sn = Math.sin(winkel);
+      const tx = sx * cs - sy * sn, ty = sx * sn + sy * cs, l = i === 2 ? 42 : 32;
+      const grad = c.createLinearGradient(komet.x, komet.y, komet.x + tx * l, komet.y + ty * l);
+      grad.addColorStop(0, "rgba(220,230,255,0.75)"); grad.addColorStop(1, "rgba(220,230,255,0)");
+      c.strokeStyle = grad; c.lineWidth = 1.5; c.beginPath(); c.moveTo(komet.x, komet.y); c.lineTo(komet.x + tx * l, komet.y + ty * l); c.stroke();
+    }
+    kreis(c, komet.x, komet.y, 4.5, komet.kollidiert ? "#FF4B3E" : "#FFFFFF");
+    c.restore();
+    if (meldung) schrift(c, "> " + meldung, 14, F.h - 14, "#FF8E7F", MONO);
+  });
+})();
+
+/* ------------------------------------------------------------------
+   02 Kollision
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-kollision"), F = new Flaeche(cv);
+  const k = [{ x: null, y: null, r: 52, name: "komet" }, { x: null, y: null, r: 30, name: "h" }];
+  let gezogen = null, dx = 0, dy = 0;
+  cv.addEventListener("pointerdown", e => {
+    for (const o of [...k].reverse()) if (Math.hypot(e.offsetX - o.x, e.offsetY - o.y) <= o.r) {
+      gezogen = o; dx = e.offsetX - o.x; dy = e.offsetY - o.y; cv.setPointerCapture(e.pointerId); break;
+    }
+  });
+  cv.addEventListener("pointermove", e => {
+    if (gezogen) { gezogen.x = Math.max(0, Math.min(F.w, e.offsetX - dx)); gezogen.y = Math.max(0, Math.min(F.h, e.offsetY - dy)); }
+    cv.style.cursor = k.some(o => Math.hypot(e.offsetX - o.x, e.offsetY - o.y) <= o.r) ? "grab" : "default";
+  });
+  cv.addEventListener("pointerup", () => gezogen = null);
+  animiere(cv, () => {
+    const c = F.start();
+    if (k[0].x === null) { k[0].x = F.w * 0.3; k[0].y = F.h * 0.55; k[1].x = F.w * 0.72; k[1].y = F.h * 0.5; }
+    const [a, b] = k, ab = Math.hypot(a.x - b.x, a.y - b.y), summe = a.r + b.r, treffer = ab <= summe;
+    const fuell = treffer ? "rgba(255,75,62,0.25)" : "rgba(52,119,222,0.22)", rand = treffer ? "#FF6B5E" : "#6C9BE8";
+    for (const o of k) { kreis(c, o.x, o.y, o.r, fuell); ring(c, o.x, o.y, o.r, rand, 1.5); kreis(c, o.x, o.y, 2.5, "#fff"); }
+    // Radien
+    c.setLineDash([4, 4]);
+    const ux = (b.x - a.x) / (ab || 1), uy = (b.y - a.y) / (ab || 1);
+    c.strokeStyle = FARBEN.orange; c.lineWidth = 2;
+    c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(a.x + ux * a.r, a.y + uy * a.r); c.stroke();
+    c.beginPath(); c.moveTo(b.x, b.y); c.lineTo(b.x - ux * b.r, b.y - uy * b.r); c.stroke();
+    c.setLineDash([]);
+    c.strokeStyle = "rgba(255,255,255,0.6)"; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
+    // Werte
+    const zeilen = [
+      ["abstand", ab.toFixed(1)],
+      ["kollisionsAbstand", `(${a.r * 2} + ${b.r * 2}) / 2 = ${summe}`],
+      ["abstand <= kollisionsAbstand", treffer ? "true" : "false"]
+    ];
+    zeilen.forEach(([n, v], i) => {
+      schrift(c, n, 14, 24 + i * 19, FARBEN.schrift, MONO);
+      schrift(c, v, 240, 24 + i * 19, i === 2 ? (treffer ? "#FF8E7F" : "#A7D96B") : "#fff", MONO);
+    });
+    schrift(c, "— Radien", 14, F.h - 14, FARBEN.orange, MONO);
+    schrift(c, "— Abstand der Mittelpunkte", 100, F.h - 14, "rgba(255,255,255,0.7)", MONO);
+  });
+})();
+
+/* ------------------------------------------------------------------
+   03 Mond
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-mond"), F = new Flaeche(cv);
+  const knopf = document.getElementById("mond-getter");
+  let zeigen = false, aErde = 0.6, aMond = 0;
+  knopf.onclick = () => { zeigen = !zeigen; knopf.setAttribute("aria-pressed", zeigen); };
+  function kreuz(c, x, y, text) {
+    c.strokeStyle = FARBEN.orange; c.lineWidth = 1.5;
+    c.beginPath(); c.moveTo(x - 9, y); c.lineTo(x + 9, y); c.moveTo(x, y - 9); c.lineTo(x, y + 9); c.stroke();
+    ring(c, x, y, 6, FARBEN.orange, 1.5);
+    schrift(c, text, x + 10, y + 20, FARBEN.orange, MONO);
+  }
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.05);
+    aErde += 0.35 * dt; aMond += 2.6 * dt;
+    const c = F.start(), halb = F.w / 2, rE = Math.min(halb, F.h) * 0.33, rM = 26;
+    c.strokeStyle = "rgba(255,255,255,0.12)"; c.beginPath(); c.moveTo(halb, 0); c.lineTo(halb, F.h); c.stroke();
+    [["Getter überschrieben", true], ["Addition in zeichnen()", false]].forEach(([titel, getter], i) => {
+      const cx = halb * i + halb / 2, cy = F.h / 2 + 12;
+      schrift(c, titel, halb * i + 14, 24, "#fff", "600 13px Inter, system-ui, sans-serif");
+      ring(c, cx, cy, rE, FARBEN.bahn);
+      sonne(c, cx, cy, 11, false);
+      const ex = Math.cos(aErde) * rE, ey = Math.sin(aErde) * rE;
+      const mx = Math.cos(aMond) * rM, my = Math.sin(aMond) * rM;
+      ring(c, cx + ex, cy + ey, rM, "rgba(200,200,200,0.25)");
+      kreis(c, cx + ex, cy + ey, 6, FARBEN.erde);
+      kreis(c, cx + ex + mx, cy + ey + my, 3, "#D9D9D9");
+      if (zeigen) {
+        if (getter) kreuz(c, cx + ex + mx, cy + ey + my, "getX(), getY()");
+        else {
+          kreuz(c, cx + mx, cy + my, "getX(), getY()");
+          schrift(c, "liefert die Position relativ zur Erde", halb * i + 14, F.h - 14, FARBEN.orange, "12px Inter, system-ui, sans-serif");
+        }
+      }
+    });
+  });
+})();
+
+/* ------------------------------------------------------------------
+   04 Überladen
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-ueberladen"), F = new Flaeche(cv);
+  const regler = document.getElementById("faktor"), aus = document.getElementById("faktor-aus");
+  const pl = planetenSatz(); let faktor = 1;
+  regler.oninput = () => { faktor = parseFloat(regler.value); aus.textContent = `update(${faktor.toFixed(1)})`; };
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.05);
+    const c = F.start(), R = Math.min(F.w, F.h) * 0.46;
+    c.save(); c.translate(F.w / 2, F.h / 2);
+    for (const p of pl) {
+      p.a += p.w * faktor * dt;
+      ring(c, 0, 0, p.r * R, FARBEN.bahn);
+      // Spur in Bewegungsrichtung
+      if (faktor !== 0) {
+        c.strokeStyle = p.f; c.globalAlpha = 0.35; c.lineWidth = 2; c.beginPath();
+        const l = Math.min(0.9, Math.abs(faktor) * 0.18) * Math.sign(faktor);
+        c.arc(0, 0, p.r * R, p.a - l, p.a, l < 0); c.stroke(); c.globalAlpha = 1;
+      }
+      kreis(c, Math.cos(p.a) * p.r * R, Math.sin(p.a) * p.r * R, p.g, p.f);
+    }
+    sonne(c, 0, 0, 14, true);
+    c.restore();
+    const text = faktor === 0 ? "Stillstand" : faktor < 0 ? "rückwärts" : faktor > 1 ? "schneller" : faktor < 1 ? "langsamer" : "normal";
+    schrift(c, `faktor = ${faktor.toFixed(1)}  ·  ${text}`, 14, 24, "#fff", MONO);
+  });
+})();
+
+/* ------------------------------------------------------------------
+   05 Koordinaten
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-koordinaten"), F = new Flaeche(cv);
+  let maus = null, klick = null;
+  cv.addEventListener("pointermove", e => maus = { x: e.offsetX, y: e.offsetY });
+  cv.addEventListener("pointerleave", () => maus = null);
+  cv.addEventListener("pointerdown", e => klick = { x: e.offsetX - F.w / 2, y: e.offsetY - F.h / 2 });
+  animiere(cv, () => {
+    const c = F.start(), cx = Math.floor(F.w / 2), cy = Math.floor(F.h / 2);
+    c.strokeStyle = "rgba(150,170,205,0.09)"; c.lineWidth = 1;
+    for (let x = cx % 40; x < F.w; x += 40) { c.beginPath(); c.moveTo(x + 0.5, 0); c.lineTo(x + 0.5, F.h); c.stroke(); }
+    for (let y = cy % 40; y < F.h; y += 40) { c.beginPath(); c.moveTo(0, y + 0.5); c.lineTo(F.w, y + 0.5); c.stroke(); }
+    c.strokeStyle = "rgba(255,142,0,0.55)";
+    c.beginPath(); c.moveTo(0, cy + 0.5); c.lineTo(F.w, cy + 0.5); c.moveTo(cx + 0.5, 0); c.lineTo(cx + 0.5, F.h); c.stroke();
+    kreis(c, 3, 3, 3, "#fff");
+    schrift(c, "(0, 0) für die Maus", 10, 18, "rgba(255,255,255,0.7)", MONO);
+    schrift(c, "(0, 0) nach translate", cx + 8, cy - 8, FARBEN.orange, MONO);
+    sonne(c, cx, cy, 9, false);
+    if (klick) { kreis(c, cx + klick.x, cy + klick.y, 4, "#fff"); schrift(c, `Ziel (${Math.round(klick.x)}, ${Math.round(klick.y)})`, cx + klick.x + 8, cy + klick.y + 16, "#fff", MONO); }
+    if (maus) {
+      c.setLineDash([3, 4]); c.strokeStyle = "rgba(255,255,255,0.55)";
+      c.beginPath(); c.moveTo(0, 0); c.lineTo(maus.x, maus.y); c.stroke(); c.setLineDash([]);
+      c.strokeStyle = FARBEN.orange; c.lineWidth = 1.5;
+      c.beginPath(); c.moveTo(cx, cy); c.lineTo(maus.x, maus.y); c.stroke();
+      kreis(c, maus.x, maus.y, 3, "#fff");
+      schrift(c, `e.getX(), e.getY()  = (${Math.round(maus.x)}, ${Math.round(maus.y)})`, 14, F.h - 34, "#fff", MONO);
+      schrift(c, `x, y nach Umrechnung = (${Math.round(maus.x - F.w / 2)}, ${Math.round(maus.y - F.h / 2)})`, 14, F.h - 14, FARBEN.orange, MONO);
+    } else {
+      schrift(c, "Maus über die Fläche bewegen, klicken setzt ein Ziel", 14, F.h - 14, FARBEN.schrift, MONO);
+    }
+  });
+})();
+
+/* ------------------------------------------------------------------
+   06 Kepler
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-kepler"), F = new Flaeche(cv);
+  const an = document.getElementById("kepler-an"), aus = document.getElementById("kepler-aus");
+  let kepler = true;
+  const ast = [];
+  for (let i = 0; i < 900; i++) ast.push({ r: 0.42 + Math.random() * 0.5, a: Math.random() * TAU, markiert: false });
+  for (let i = 0; i < 70; i++) ast.push({ r: 0.42 + (i / 69) * 0.5, a: 0, markiert: true });
+  an.onclick = () => { kepler = true; knopfGruppe([an, aus], an); };
+  aus.onclick = () => { kepler = false; knopfGruppe([an, aus], aus); };
+  document.getElementById("kepler-reset").onclick = () => ast.forEach(a => { if (a.markiert) a.a = 0; });
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.05);
+    const c = F.start(), R = Math.min(F.w, F.h) * 0.47;
+    c.save(); c.translate(F.w / 2, F.h / 2);
+    ring(c, 0, 0, 0.3 * R, FARBEN.bahn); // Mars
+    for (const a of ast) {
+      const w = kepler ? 0.55 * Math.pow(0.42 / a.r, 1.5) : 0.38;
+      a.a = (a.a + w * dt) % TAU;
+      kreis(c, Math.cos(a.a) * a.r * R, Math.sin(a.a) * a.r * R, a.markiert ? 2 : 0.9, a.markiert ? FARBEN.orange : "rgba(200,190,175,0.6)");
+    }
+    kreis(c, 0.3 * R, 0, 3.5, FARBEN.mars);
+    sonne(c, 0, 0, 12, true);
+    c.restore();
+    schrift(c, kepler ? "T = 365,256 · a^1,5  →  außen langsamer" : "alle mit derselben Winkelgeschwindigkeit", 14, 24, "#fff", MONO);
+  });
+})();
+
+/* ------------------------------------------------------------------
+   07 Delta-Zeit
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-deltazeit"), F = new Flaeche(cv);
+  const seiten = [0, 1].map(() => ({ a: 0, aMars: 2, zeit: 0, spur: [] }));
+  let haengtBis = 0, haengtSeit = 0, nachHaenger = false, overlayGezeichnet = false;
+  document.getElementById("haenger").onclick = () => {
+    const jetzt = performance.now(); haengtSeit = jetzt; haengtBis = jetzt + 1000; overlayGezeichnet = false;
+  };
+  animiere(cv, (dt, t) => {
+    if (t < haengtBis) {
+      if (!overlayGezeichnet) {
+        const c = F.c; c.fillStyle = "rgba(14,23,38,0.55)"; c.fillRect(0, 0, F.w, F.h);
+        schrift(c, "Programm reagiert nicht …", F.w / 2, F.h / 2, "#fff", "600 14px Inter, system-ui, sans-serif", "center");
+        overlayGezeichnet = true;
+      }
+      nachHaenger = true; return;
+    }
+    let roh = dt;
+    if (nachHaenger) { roh = (t - haengtSeit) / 1000; nachHaenger = false; }
+    else roh = Math.min(dt, 0.1);
+    const deltas = [roh, Math.min(roh, 0.1)];
+    const c = F.start(), halb = F.w / 2, R = Math.min(halb, F.h) * 0.27;
+    c.strokeStyle = "rgba(255,255,255,0.12)"; c.beginPath(); c.moveTo(halb, 0); c.lineTo(halb, F.h); c.stroke();
+    ["ohne Begrenzung", "mit Math.min(…, 0.1)"].forEach((titel, i) => {
+      const s = seiten[i], d = deltas[i], cx = halb * i + halb / 2, cy = F.h / 2 + 10;
+      s.a += 1.4 * d; s.aMars += 0.75 * d; s.zeit += d;
+      s.spur.push(s.a); if (s.spur.length > 40) s.spur.shift();
+      schrift(c, titel, halb * i + 14, 24, "#fff", "600 13px Inter, system-ui, sans-serif");
+      schrift(c, `simulierte Zeit: ${s.zeit.toFixed(1)} s`, halb * i + 14, F.h - 14, FARBEN.schrift, MONO);
+      ring(c, cx, cy, R, FARBEN.bahn); ring(c, cx, cy, R * 1.45, FARBEN.bahn);
+      s.spur.forEach((a, k) => kreis(c, cx + Math.cos(a) * R, cy + Math.sin(a) * R, 1.6, `rgba(52,119,222,${k / s.spur.length * 0.7})`));
+      sonne(c, cx, cy, 10, false);
+      kreis(c, cx + Math.cos(s.a) * R, cy + Math.sin(s.a) * R, 6, FARBEN.erde);
+      kreis(c, cx + Math.cos(s.aMars) * R * 1.45, cy + Math.sin(s.aMars) * R * 1.45, 4.5, FARBEN.mars);
+    });
+  });
+})();
+
+/* ------------------------------------------------------------------
+   08 Schichten
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-schichten"), F = new Flaeche(cv);
+  const planetKnoepfe = [...document.querySelectorAll("[data-planet]")];
+  const schichten = {};
+  document.querySelectorAll("[data-schicht]").forEach(cb => { schichten[cb.dataset.schicht] = cb.checked; cb.onchange = () => schichten[cb.dataset.schicht] = cb.checked; });
+  const clipLabel = document.getElementById("clip-label");
+  let planet = "erde";
+  const farbe = { erde: "#3477DE", jupiter: "#D7A87B", saturn: "#DFC691" };
+  planetKnoepfe.forEach(k => k.onclick = () => { planet = k.dataset.planet; knopfGruppe(planetKnoepfe, k); clipLabel.style.visibility = planet === "jupiter" ? "visible" : "hidden"; });
+  clipLabel.style.visibility = "hidden";
+  let drehung = 0;
+  animiere(cv, dt => {
+    drehung += Math.min(dt, 0.05) * 0.15;
+    const c = F.start(), r = Math.min(F.h * 0.27, F.w * 0.2), x = F.w * 0.36, y = F.h / 2;
+    const liste = [];
+    if (schichten.schatten) { kreis(c, x + 6, y + 6, r, "rgba(0,0,0,0.5)"); }
+    liste.push(["Schatten", "Himmelskoerper", schichten.schatten]);
+    if (schichten.kugel) kreis(c, x, y, r, farbe[planet]);
+    else ring(c, x, y, r, "rgba(255,255,255,0.25)");
+    liste.push(["Kugel", "Himmelskoerper", schichten.kugel]);
+    if (schichten.glanz) { c.fillStyle = "rgba(255,255,255,0.28)"; c.beginPath(); c.ellipse(x - r * 0.25, y - r * 0.42, r * 0.3, r * 0.22, -0.4, 0, TAU); c.fill(); }
+    liste.push(["Glanzlicht", "Himmelskoerper", schichten.glanz]);
+    if (schichten.details) {
+      if (planet === "erde") {
+        c.save(); c.beginPath(); c.arc(x, y, r, 0, TAU); c.clip();
+        c.fillStyle = "#52BA6B";
+        const v = (drehung * r * 2) % (r * 4) - r * 2;
+        [[-0.6, -0.4, 0.45, 0.3], [0.15, 0.1, 0.32, 0.35], [-0.2, 0.55, 0.25, 0.15]].forEach(([ox, oy, rx, ry]) => {
+          for (const off of [0, r * 4]) { c.beginPath(); c.ellipse(x + ox * r + v + off - r * 2 + r * 2, y + oy * r, rx * r, ry * r, 0.3, 0, TAU); c.fill(); }
+        });
+        c.restore();
+      } else if (planet === "jupiter") {
+        c.save();
+        if (schichten.clip) { c.beginPath(); c.arc(x, y, r, 0, TAU); c.clip(); }
+        c.fillStyle = "rgba(160,103,79,0.6)";
+        c.fillRect(x - r * 1.4, y - r * 0.45, r * 2.8, r * 0.32);
+        c.fillRect(x - r * 1.4, y + r * 0.35, r * 2.8, r * 0.25);
+        c.fillStyle = "#B0543A"; c.beginPath(); c.ellipse(x + r * 0.45, y + r * 0.25, r * 0.32, r * 0.15, 0, 0, TAU); c.fill();
+        c.restore();
+      } else {
+        c.save(); c.translate(x, y); c.rotate(-0.25); c.scale(1, 0.33);
+        ring(c, 0, 0, r * 1.75, "rgba(204,185,141,0.85)", 7); ring(c, 0, 0, r * 2.05, "rgba(245,226,175,0.8)", 3);
+        c.restore();
+      }
+    }
+    const kl = planet[0].toUpperCase() + planet.slice(1);
+    liste.push(["zeichneDetails()", kl, schichten.details]);
+    // Legende
+    const lx = F.w * 0.66;
+    schrift(c, "Reihenfolge beim Zeichnen", lx, 40, "#fff", "600 13px Inter, system-ui, sans-serif");
+    liste.forEach(([n, k, an], i) => {
+      const yy = 70 + i * 40;
+      schrift(c, `${i + 1}. ${n}`, lx, yy, an ? "#fff" : "rgba(255,255,255,0.35)", MONO);
+      schrift(c, k === "Himmelskoerper" ? "in Himmelskoerper" : `in ${k} (überschrieben)`, lx, yy + 16, k === "Himmelskoerper" ? "#8FA3BF" : FARBEN.orange, "12px Inter, system-ui, sans-serif");
+    });
+  });
+})();
+
+/* ------------------------------------------------------------------
+   09 Zoom
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-zoom"), F = new Flaeche(cv);
+  const aus = document.getElementById("zoom-aus");
+  const pl = [
+    ["Merkur", 0.387, 87.97, FARBEN.merkur, 3], ["Venus", 0.723, 224.7, FARBEN.venus, 4.5], ["Erde", 1, 365.256, FARBEN.erde, 5],
+    ["Mars", 1.524, 686.98, FARBEN.mars, 4], ["Jupiter", 5.203, 4332.6, FARBEN.jupiter, 10], ["Saturn", 9.537, 10759, FARBEN.saturn, 9]
+  ].map(([name, ae, T, f, g], i) => ({ name, ae, T, f, g, a: i * 1.3 }));
+  const START = 40;
+  let pixelProAE = START, vx = 0, vy = 0, letzte = null;
+  const setze = z => { pixelProAE = Math.max(2, Math.min(400, z)); aus.textContent = `pixelProAE = ${pixelProAE.toFixed(1)}`; };
+  cv.addEventListener("wheel", e => { e.preventDefault(); setze(pixelProAE * Math.pow(1.12, -Math.sign(e.deltaY))); }, { passive: false });
+  cv.addEventListener("pointerdown", e => { letzte = { x: e.offsetX, y: e.offsetY }; cv.setPointerCapture(e.pointerId); cv.style.cursor = "grabbing"; });
+  cv.addEventListener("pointermove", e => { if (letzte) { vx += e.offsetX - letzte.x; vy += e.offsetY - letzte.y; letzte = { x: e.offsetX, y: e.offsetY }; } });
+  cv.addEventListener("pointerup", () => { letzte = null; cv.style.cursor = "grab"; });
+  cv.style.cursor = "grab";
+  document.getElementById("zoom-rein").onclick = () => setze(pixelProAE * 1.4);
+  document.getElementById("zoom-raus").onclick = () => setze(pixelProAE / 1.4);
+  document.getElementById("zoom-reset").onclick = () => { setze(START); vx = 0; vy = 0; };
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.05);
+    const c = F.start();
+    c.save(); c.translate(F.w / 2 + vx, F.h / 2 + vy);
+    for (const p of pl) {
+      p.a += TAU * dt * 40 / p.T;
+      const r = p.ae * pixelProAE;
+      ring(c, 0, 0, r, FARBEN.bahn);
+      const x = Math.cos(p.a) * r, y = Math.sin(p.a) * r;
+      if (p.name === "Erde") {
+        c.strokeStyle = FARBEN.orange; c.lineWidth = 1.5; c.setLineDash([4, 3]);
+        c.beginPath(); c.moveTo(0, 0); c.lineTo(x, y); c.stroke(); c.setLineDash([]);
+      }
+      kreis(c, x, y, p.g, p.f);
+      if (p.name === "Saturn") { c.save(); c.translate(x, y); c.scale(1, 0.32); ring(c, 0, 0, p.g * 1.9, "rgba(223,198,145,0.8)", 2.5); c.restore(); }
+      schrift(c, p.name, x + p.g + 4, y - p.g, FARBEN.schrift);
+    }
+    sonne(c, 0, 0, 13, true);
+    c.restore();
+    schrift(c, `Bahnradius Erde: 1 AE · ${pixelProAE.toFixed(1)} = ${pixelProAE.toFixed(0)} px`, 14, 24, FARBEN.orange, MONO);
+    schrift(c, "1 AE = 149,6 Mio. km  ·  Abstände maßstäblich, Größen nicht", 14, F.h - 14, FARBEN.schrift, MONO);
+  });
+})();
+
+/* ------------------------------------------------------------------
+   10 Namen
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-namen"), F = new Flaeche(cv);
+  const anBox = document.getElementById("namen-an"), add = document.getElementById("namen-add");
+  const sterne = Array.from({ length: 140 }, () => [Math.random(), Math.random()]);
+  // Umlaufzeit in Jahren -> wie geschwindigkeit(): eine Erdumrundung = 400 Ticks, hier 6 s
+  const w = T => TAU / (T * 6);
+  const koerper = [
+    { name: "Merkur", r: 0.2, T: 0.241, g: 6, f: FARBEN.merkur, a: 0.5 },
+    { name: "Venus", r: 0.32, T: 0.615, g: 10, f: FARBEN.venus, a: 2.0 },
+    { name: "Erde", r: 0.44, T: 1.0, g: 10, f: FARBEN.erde, a: 4.0 },
+    { name: "Mars", r: 0.56, T: 1.881, g: 8, f: FARBEN.mars, a: 1.0 },
+    { name: "Jupiter", r: 0.88, T: 11.86, g: 22, f: FARBEN.jupiter, a: 3.0 }
+  ];
+  const neue = [["Ceres", 0.7, 4.6], ["Vesta", 0.66, 3.63], ["Pallas", 0.74, 4.62], ["Hygiea", 0.77, 5.57], ["Juno", 0.69, 4.36]];
+  let ni = 0;
+  add.onclick = () => {
+    if (ni >= neue.length) return;
+    const [name, r, T] = neue[ni++];
+    koerper.push({ name, r, T, g: 4, f: "#B9B2A6", a: Math.random() * TAU, asteroid: true });
+    if (ni >= neue.length) { add.disabled = true; add.textContent = "Gürtel ist voll"; }
+  };
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.05);
+    const c = F.start(), R = Math.min(F.w, F.h) * 0.46;
+    for (const s of sterne) kreis(c, s[0] * F.w, s[1] * F.h, 0.6, "rgba(255,255,255,0.6)");
+    c.save(); c.translate(F.w / 2, F.h / 2);
+    sonne(c, 0, 0, 13, false);
+    for (const k of koerper) {
+      k.a += w(k.T) * dt;
+      const x = Math.cos(k.a) * k.r * R, y = Math.sin(k.a) * k.r * R;
+      if (!k.asteroid) ring(c, 0, 0, k.r * R, FARBEN.bahn);
+      if (k.asteroid) { c.fillStyle = k.f; c.fillRect(x - 2, y - 2, 4, 4); }
+      else kreis(c, x, y, k.g / 2, k.f);
+      if (anBox.checked) {
+        const abstand = k.g / 2 + 4;
+        schrift(c, k.name, x + abstand, y - abstand, "#fff");
+      }
+    }
+    c.restore();
+  });
+})();
+
+/* ------------------------------------------------------------------
+   11 Fehlersuche
+   ------------------------------------------------------------------ */
+(() => {
+  const cv = document.getElementById("c-fehler"), F = new Flaeche(cv);
+  const knopf = document.getElementById("fehler-loesung");
+  let geloest = false;
+  const code = document.querySelector("#fehler-code code");
+  const original = code.innerHTML.split("\n");
+  knopf.onclick = () => {
+    geloest = !geloest; knopf.setAttribute("aria-pressed", geloest);
+    knopf.textContent = geloest ? "Fehler wieder einbauen" : "Auflösung zeigen";
+    document.getElementById("fehler-fix").hidden = !geloest;
+    code.innerHTML = original.map(z => geloest && z.includes("fillOval") ? `<span class="zeile-markiert">${z}</span>` : z).join("\n");
+  };
+  const pl = [
+    { name: "Merkur", r: 0.24, w: 1.2, g: 3, f: FARBEN.merkur, a: 0.4 },
+    { name: "Venus", r: 0.38, w: 0.85, g: 5, f: FARBEN.venus, a: 2.1 },
+    { name: "Erde", r: 0.53, w: 0.6, g: 5, f: FARBEN.erde, a: 4.0 },
+    { name: "Mars", r: 0.68, w: 0.45, g: 4, f: FARBEN.mars, a: 1.0 },
+    { name: "Jupiter", r: 0.88, w: 0.22, g: 12, f: FARBEN.jupiter, a: 3.0 }
+  ];
+  animiere(cv, dt => {
+    dt = Math.min(dt, 0.05);
+    const c = F.start(), R = Math.min(F.w, F.h) * 0.45;
+    c.save(); c.translate(F.w / 2, F.h / 2);
+    sonne(c, 0, 0, 12, false);
+    for (const p of pl) {
+      p.a += p.w * dt;
+      ring(c, 0, 0, p.r * R, FARBEN.bahn);
+      const x = Math.cos(p.a) * p.r * R, y = Math.sin(p.a) * p.r * R, rad = geloest ? p.g : 5;
+      kreis(c, x, y, rad, p.f);
+      schrift(c, `${p.name} (${p.g})`, x + rad + 4, y - rad, FARBEN.schrift);
+    }
+    c.restore();
+  });
+})();
+
+/* ------------------------------------------------------------------
+   12 Array vs. ArrayList
+   ------------------------------------------------------------------ */
+(() => {
+  const NAMEN = ["Sonne", "Merkur", "Venus", "Erde", "Mond", "Mars", "Ceres", "Jupiter", "Saturn", "Uranus", "Neptun", "Halley", "Vesta", "Pallas", "Pluto"];
+  const anzeige = document.getElementById("array-anzeige"), info = document.getElementById("array-info");
+  const addKnopf = document.getElementById("array-add");
+  const kArray = document.getElementById("modus-array"), kListe = document.getElementById("modus-liste");
+  let modus = "array", feld, naechster, beschaeftigt = false, verloren;
+
+  function reset() {
+    feld = new Array(10).fill(null); naechster = 0; verloren = []; beschaeftigt = false;
+    info.textContent = ""; info.className = "info";
+    zeichne(); knopfText();
+  }
+  function knopfText() {
+    addKnopf.textContent = naechster < NAMEN.length ? `hinzufuegen(${NAMEN[naechster]})` : "keine weiteren Himmelskörper";
+    addKnopf.disabled = naechster >= NAMEN.length;
+  }
+  function slotsHTML(arr, name) {
+    return `<div class="array-label">${name}</div><div class="slots">` + arr.map((w, i) =>
+      `<div class="slot ${w === null ? "leer" : ""}" data-i="${i}"><span class="i">${i}</span><span class="w">${w === null ? "null" : w}</span></div>`).join("") + "</div>";
+  }
+  function belegt() { return feld.filter(x => x !== null).length; }
+  function zeichne(zusatz) {
+    const kopf = modus === "array"
+      ? `Himmelskoerper[] himmelskoerperListe  ·  length = ${feld.length}`
+      : `ArrayList  ·  size() = ${belegt()}  ·  internes Array: length = ${feld.length}`;
+    anzeige.innerHTML = slotsHTML(feld, kopf) + (zusatz ? slotsHTML(zusatz, `neues Array: length = ${zusatz.length}`) : "") +
+      (verloren.length ? `<div class="array-label" style="color:#B3261E">verloren: ${verloren.join(", ")}</div>` : "");
+  }
+  const warte = ms => new Promise(r => setTimeout(r, ms));
+
+  async function hinzufuegen() {
+    if (beschaeftigt || naechster >= NAMEN.length) return;
+    beschaeftigt = true; info.className = "info";
+    const name = NAMEN[naechster++];
+    if (modus === "liste" && belegt() < feld.length) {
+      const i = belegt(); feld[i] = name; zeichne();
+      anzeige.querySelectorAll(".slots")[0].children[i].classList.add("neu");
+      info.textContent = `add(${name}) → Platz ${i}, kein Suchen nötig: die Liste kennt ihre Größe.`;
+      beschaeftigt = false; knopfText(); return;
+    }
+    // Suche nach freiem Platz – wie im Ausgangsprojekt
+    for (let i = 0; i < feld.length; i++) {
+      const slot = anzeige.querySelectorAll(".slots")[0].children[i];
+      slot.classList.add("pruefen");
+      await warte(feld[i] === null ? 160 : 45);
+      if (feld[i] === null) {
+        feld[i] = name; zeichne();
+        anzeige.querySelectorAll(".slots")[0].children[i].classList.add("neu");
+        info.textContent = `Platz ${i} war null → ${name} eingetragen.`;
+        beschaeftigt = false; knopfText(); return;
+      }
+      slot.classList.remove("pruefen");
+    }
+    // Kein Platz frei
+    if (modus === "array") {
+      verloren.push(name); zeichne();
+      info.className = "info fehler";
+      info.innerHTML = `Die Schleife findet keinen freien Platz und endet. <b>${name}</b> wird nie eingetragen – ohne Fehlermeldung.`;
+    } else {
+      info.innerHTML = `Internes Array voll → neues Array mit doppelter Länge anlegen und alle ${feld.length} Elemente umkopieren …`;
+      const neu = new Array(feld.length * 2).fill(null);
+      zeichne(neu);
+      for (let i = 0; i < feld.length; i++) {
+        neu[i] = feld[i]; zeichne(neu);
+        anzeige.querySelectorAll(".slots")[1].children[i].classList.add("neu");
+        await warte(90);
+      }
+      await warte(300);
+      const alt = feld.length;
+      feld = neu; feld[alt] = name; zeichne();
+      anzeige.querySelectorAll(".slots")[0].children[alt].classList.add("neu");
+      info.innerHTML = `Umzug fertig. ${name} steht auf Platz ${alt}. Für euch sah das nur nach <code>add()</code> aus.`;
+    }
+    beschaeftigt = false; knopfText();
+  }
+  addKnopf.onclick = hinzufuegen;
+  document.getElementById("array-reset").onclick = reset;
+  kArray.onclick = () => { modus = "array"; knopfGruppe([kArray, kListe], kArray); reset(); };
+  kListe.onclick = () => { modus = "liste"; knopfGruppe([kArray, kListe], kListe); reset(); };
+  reset();
+})();
+</script>
+</body>
+</html>
